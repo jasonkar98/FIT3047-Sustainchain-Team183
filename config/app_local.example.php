@@ -47,10 +47,10 @@ return [
              */
             //'port' => 'non_standard_port_number',
 
-            'username' => 'my_app',
-            'password' => 'secret',
+            'username' => 'sustainchain',
+            'password' => 'fit3047sustainchain',
 
-            'database' => 'my_app',
+            'database' => 'sustainchain',
             /*
              * If not using the default 'public' schema with the PostgreSQL driver
              * set it here.
