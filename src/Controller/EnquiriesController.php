@@ -20,6 +20,9 @@ class EnquiriesController extends AppController
         $query = $this->Enquiries->find();
         $enquiries = $this->paginate($query);
 
+        // Load Turnstile component for CAPTCHA
+        $this->loadComponent('Turnstile');
+
         $this->set(compact('enquiries'));
     }
 
@@ -46,6 +49,24 @@ class EnquiriesController extends AppController
         $enquiry = $this->Enquiries->newEmptyEntity();
         if ($this->request->is('post')) {
             $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
+
+
+            // Validate Turnstile response with CloudFlare
+            $turnstileToken = $this->request->getData('cf-turnstile-response');
+            if ($turnstileToken) {
+
+                $turnstileResponse = $this->Turnstile->validateTurnstile($turnstileToken, $this->request->clientIp());
+                // On failed validation, send user back to reset password page and try again
+                if (!$turnstileResponse || !$turnstileResponse['success']) {
+                    $this->log('Turnstile Response Error: ' . json_encode($turnstileResponse));
+                    $this->Flash->error('CAPTCHA challenge failed. Please try again.');
+
+                    $this->set(compact('enquiry')); // Need to return the $user entity so the form is autofilled
+
+                    return $this->render(); // Skip the rest of the controller and render the view
+                }
+            }
+
             if ($this->Enquiries->save($enquiry)) {
                 $this->Flash->success(__('The enquiry has been saved.'));
 
