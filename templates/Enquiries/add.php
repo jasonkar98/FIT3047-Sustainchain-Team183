@@ -27,8 +27,8 @@ $this->Html->meta([
             <fieldset>
                 <legend><?= __('Add Enquiry') ?></legend>
                 <?php
-                    echo $this->Form->control('full_name', ['label' => 'Full Name']);
-                    echo $this->Form->control('email', ['label' => 'Email Address']);
+                    echo $this->Form->control('full_name', ['label' => 'Your Full Name']);
+                    echo $this->Form->control('email', ['label' => 'Enquiry Recipient Email Address']);
 //                    echo $this->Form->control('date');
                     echo $this->Form->control('subject', ['label' => 'Enquiry Title']);
                     echo $this->Form->control('body', ['label' => 'What Is Your Enquiry?']);
