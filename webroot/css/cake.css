@@ -30,11 +30,13 @@
     --color-message-info-bg: #eff8ff;
     --color-message-info-text: #2779bd;
     --color-message-info-border: #6cb2eb;
+
+    --color-sustainchain-green: #007a59;
 }
 
 .button, button, input[type='button'], input[type='reset'], input[type='submit'] {
-    background-color: var(--color-cakephp-red);
-    border-color: var(--color-cakephp-red);
+    background-color: var(--color-sustainchain-green);
+    border-color: var(--color-sustainchain-green);
 }
 
 body {
@@ -122,7 +124,7 @@ th {
 }
 .top-nav-title a {
     font-size: 2.4rem;
-    color: var(--color-cakephp-red);
+    color: var(--color-sustainchain-green);
 }
 .top-nav-title span {
     color: var(--color-cakephp-gray);

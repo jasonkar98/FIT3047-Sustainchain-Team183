@@ -47,10 +47,10 @@ return [
              */
             //'port' => 'non_standard_port_number',
 
-            'username' => 'my_app',
-            'password' => 'secret',
+            'username' => 'sustainchain',
+            'password' => 'fit3047sustainchain',
 
-            'database' => 'my_app',
+            'database' => 'sustainchain',
             /*
              * If not using the default 'public' schema with the PostgreSQL driver
              * set it here.
@@ -94,4 +94,34 @@ return [
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
+
+    /*
+  * Configurations for CAPTCHA services
+  */
+    'Captcha' => [
+        'turnstile' => [
+            /*
+             * Testing site keys
+             * - Widget visible, always passes    1x00000000000000000000AA
+             * - Widget visible, always fails     2x00000000000000000000AB
+             * - Widget invisible, always passes  1x00000000000000000000BB
+             * - Widget invisible, always fails   2x00000000000000000000BB
+             * - Force interactive challenge      3x00000000000000000000FF
+             *
+             * Use production keys if no longer in testing mode
+             */
+            'siteKey' => '3x00000000000000000000FF',
+            /*
+             * Testing secret keys
+             * - Always pass validation               1x0000000000000000000000000000000AA
+             * - Always fail validation               2x0000000000000000000000000000000AA
+             * - Return 'token already spent' error   3x0000000000000000000000000000000AA
+             *
+             * Use production keys if no longer in testing mode
+             */
+            'secretKey' => '1x0000000000000000000000000000000AA',
+        ],
+    ],
+
+
 ];
