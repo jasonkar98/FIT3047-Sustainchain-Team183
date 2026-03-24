@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 /**
- * Enquiries Controller
+ * enquiries Controller
  *
- * @property \App\Model\Table\EnquiriesTable $Enquiries
+ * @property \App\Model\Table\EnquiriesTable $enquiries
  */
 class EnquiriesController extends AppController
 {
@@ -17,7 +17,7 @@ class EnquiriesController extends AppController
      */
     public function index()
     {
-        $query = $this->Enquiries->find();
+        $query = $this->enquiries->find();
         $enquiries = $this->paginate($query);
 
         // Load Turnstile component for CAPTCHA
@@ -35,7 +35,7 @@ class EnquiriesController extends AppController
      */
     public function view($id = null)
     {
-        $enquiry = $this->Enquiries->get($id, contain: []);
+        $enquiry = $this->enquiries->get($id, contain: []);
         $this->set(compact('enquiry'));
     }
 
@@ -46,9 +46,9 @@ class EnquiriesController extends AppController
      */
     public function add()
     {
-        $enquiry = $this->Enquiries->newEmptyEntity();
+        $enquiry = $this->enquiries->newEmptyEntity();
         if ($this->request->is('post')) {
-            $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
+            $enquiry = $this->enquiries->patchEntity($enquiry, $this->request->getData());
 
 
             // Validate Turnstile response with CloudFlare
@@ -67,7 +67,7 @@ class EnquiriesController extends AppController
                 }
             }
 
-            if ($this->Enquiries->save($enquiry)) {
+            if ($this->enquiries->save($enquiry)) {
                 $this->Flash->success(__('The enquiry has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -86,10 +86,10 @@ class EnquiriesController extends AppController
      */
     public function edit($id = null)
     {
-        $enquiry = $this->Enquiries->get($id, contain: []);
+        $enquiry = $this->enquiries->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
-            if ($this->Enquiries->save($enquiry)) {
+            $enquiry = $this->enquiries->patchEntity($enquiry, $this->request->getData());
+            if ($this->enquiries->save($enquiry)) {
                 $this->Flash->success(__('The enquiry has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -109,8 +109,8 @@ class EnquiriesController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $enquiry = $this->Enquiries->get($id);
-        if ($this->Enquiries->delete($enquiry)) {
+        $enquiry = $this->enquiries->get($id);
+        if ($this->enquiries->delete($enquiry)) {
             $this->Flash->success(__('The enquiry has been deleted.'));
         } else {
             $this->Flash->error(__('The enquiry could not be deleted. Please, try again.'));

@@ -939,10 +939,11 @@ $this->disableAutoLayout();
     </a>
 
     <ul class="nav-links">
-        <li><a href="#innovators">Discover Innovators</a></li>
-        <li><a href="#marketplace">Marketplace</a></li>
+        <li><a href="#about">About</a></li>
         <li><a href="#mission">Our Mission</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="/innovators">Discover Innovators</a></li>
+        <li><a href="/marketplace">Marketplace</a></li>
+        <li><?= $this->Html->link('Enquire', ['controller' => 'Enquiries', 'action' => 'index']) ?></li>
     </ul>
 
     <div class="nav-right">
@@ -999,7 +1000,7 @@ $this->disableAutoLayout();
 </section>
 
 <!-- ════════════════ PLATFORM PILLARS ════════════════ -->
-<section class="pillars" id="platform">
+<section class="pillars" id="about">
     <div class="section-header">
         <p class="t-label section-tag">The Platform</p>
         <h2 class="section-title t-display">
@@ -1129,7 +1130,7 @@ $this->disableAutoLayout();
             A greener future<br>starts with <em>better trade</em>
         </h2>
         <p class="section-body">
-            Led by Olivia Anderson, SustainChain was founded on the belief that commerce can be a force
+            SustainChain was founded on the belief that commerce can be a force
             for good. By connecting every participant in the supply chain - from the farmer growing the crop
             to the consumer at the door — we make sustainability the default, not the exception.
         </p>
@@ -1209,9 +1210,9 @@ $this->disableAutoLayout();
         <div class="footer-col">
             <h4>Company</h4>
             <ul>
-                <li><a href="#mission">Our Mission</a></li>
-                <li><a href="/pages/about">About</a></li>
-                <li><a href="/pages/contact">Contact</a></li>
+                <li><a href="/mission">Our Mission</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/enquiries">Enquire</a></li>
                 <li><a href="/users/login">Log in</a></li>
             </ul>
         </div>
