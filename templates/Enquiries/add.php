@@ -18,8 +18,8 @@ $this->Html->meta([
     'link' => 'https://challenges.cloudflare.com',
     'rel' => 'preconnect',
 ]);
-
 ?>
+
 <div class="row">
     <div class="column column-80">
         <div class="enquiries form content">
