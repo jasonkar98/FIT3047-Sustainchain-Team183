@@ -70,4 +70,11 @@ class PagesController extends AppController
             throw new NotFoundException();
         }
     }
+
+    public function landingPage()
+    {
+        if (!Configure::read('debug')) {
+            throw new NotFoundException();
+        }
+    }
 }
