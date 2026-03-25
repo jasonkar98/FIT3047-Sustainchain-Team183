@@ -25,7 +25,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $this->fetch('title') ?></title>
     <?= $this->fetch('meta') ?>
-    <?= $this->Html->css(['nav', 'app']) ?>
+    <?= $this->Html->css(['app', 'nav']) ?>
 </head>
 
 
@@ -46,8 +46,16 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </ul>
 
     <div class="nav-right">
-        <?= $this->Html->link('Log in', ['controller' => 'Auth', 'action' => 'login'], ['class' => 'btn btn-outline']) ?>
-        <?= $this->Html->link('Join SustainChain', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'btn btn-lime']) ?>
+        <?php $identity = $this->request->getAttribute('identity'); ?>
+        <?php if ($identity): ?>
+            <span class="nav-user">
+                <?= h($identity->email) ?>
+            </span>
+            <?= $this->Html->link('Log out', ['controller' => 'Auth', 'action' => 'logout'], ['class' => 'btn btn-outline']) ?>
+        <?php else: ?>
+            <?= $this->Html->link('Log in', ['controller' => 'Auth', 'action' => 'login'], ['class' => 'btn btn-outline']) ?>
+            <?= $this->Html->link('Join SustainChain', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'btn btn-lime']) ?>
+        <?php endif; ?>
     </div>
     </nav>
     <main class="main">
@@ -60,3 +68,5 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </footer>
 </body>
 </html>
+
+
