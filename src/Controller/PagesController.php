@@ -32,6 +32,18 @@ use Cake\View\Exception\MissingTemplateException;
 class PagesController extends AppController
 {
     /**
+     * Initialize controller
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        
+        $this->Authentication->allowUnauthenticated(['display', 'landingPage']);
+    }
+
+    /**
      * Displays a view
      *
      * @param string ...$path Path segments.
@@ -71,10 +83,8 @@ class PagesController extends AppController
         }
     }
 
-    public function landingPage()
+    public function landingPage(): ?Response
     {
-        if (!Configure::read('debug')) {
-            throw new NotFoundException();
-        }
+        return $this->render('landing_page');
     }
 }

@@ -46,8 +46,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </ul>
 
     <div class="nav-right">
-        <a href="/users/login" class="btn btn-outline">Log in</a>
-        <a href="/users/register" class="btn btn-lime">Join SustainChain</a>
+        <?= $this->Html->link('Log in', ['controller' => 'Auth', 'action' => 'login'], ['class' => 'btn btn-outline']) ?>
+        <?= $this->Html->link('Join SustainChain', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'btn btn-lime']) ?>
     </div>
     </nav>
     <main class="main">
