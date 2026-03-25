@@ -7,46 +7,50 @@
 $this->layout = 'login';
 $this->assign('title', 'Register new user');
 ?>
-<div class="container register">
-    <div class="users form content">
+<div class="auth-page">
+    <section class="auth-hero">
+        <p class="auth-tagline">Sustainable future, connected supply chains</p>
+        <h1>Sustain Chain</h1>
+        <p class="auth-subtitle">Create your account and join a more natural way to collaborate.</p>
+    </section>
 
-        <?= $this->Form->create($user) ?>
+    <section class="auth-card">
+        <h2>Create account</h2>
+        <p class="auth-card-subtitle">Set up your profile to get started.</p>
 
-        <fieldset>
-            <legend>Register new user</legend>
+        <?= $this->Flash->render() ?>
+        <?= $this->Form->create($user, ['class' => 'auth-form']) ?>
 
-            <?= $this->Flash->render() ?>
+        <?= $this->Form->control('email', ['placeholder' => 'name@company.com']); ?>
 
-            <?= $this->Form->control('email'); ?>
+        <div class="auth-grid">
+            <?= $this->Form->control('first_name', ['label' => 'First name', 'placeholder' => 'Ava']); ?>
+            <?= $this->Form->control('last_name', ['label' => 'Last name', 'placeholder' => 'Patel']); ?>
+        </div>
 
-            <div class="row">
-                <?= $this->Form->control('first_name', ['templateVars' => ['container_class' => 'column']]); ?>
-                <?= $this->Form->control('last_name', ['templateVars' => ['container_class' => 'column']]); ?>
-            </div>
+        <div class="auth-grid">
+            <?php
+            echo $this->Form->control('password', [
+                'value' => '', // Ensure password is not sent back to the client
+                'placeholder' => 'Create password',
+            ]);
+            echo $this->Form->control('password_confirm', [
+                'type' => 'password',
+                'value' => '', // Ensure password is not sent back to the client
+                'label' => 'Retype Password',
+                'placeholder' => 'Repeat password',
+            ]);
+            ?>
+        </div>
 
-            <div class="row">
-                <?php
-                echo $this->Form->control('password', [
-                    'value' => '',  // Ensure password is not sending back to the client side
-                    'templateVars' => ['container_class' => 'column']
-                ]);
-                // Validate password by repeating it
-                echo $this->Form->control('password_confirm', [
-                    'type' => 'password',
-                    'value' => '',  // Ensure password is not sending back to the client side
-                    'label' => 'Retype Password',
-                    'templateVars' => ['container_class' => 'column']
-                ]);
-                ?>
-            </div>
+        <?= $this->Form->control('avatar', ['type' => 'file', 'label' => 'Profile photo (optional)']); ?>
 
-            <?= $this->Form->control('avatar', ['type' => 'file']); ?>
-
-        </fieldset>
-
-        <?= $this->Form->button('Register') ?>
-        <?= $this->Html->link('Back to login', ['controller' => 'Auth', 'action' => 'login'], ['class' => 'button button-outline float-right']) ?>
+        <?= $this->Form->button('Register', ['class' => 'button auth-primary-btn']) ?>
         <?= $this->Form->end() ?>
 
-    </div>
+        <div class="auth-links">
+            <?= $this->Html->link('Back to login', ['controller' => 'Auth', 'action' => 'login']) ?>
+            <?= $this->Html->link('Go to Homepage', '/') ?>
+        </div>
+    </section>
 </div>
