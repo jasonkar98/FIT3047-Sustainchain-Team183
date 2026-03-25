@@ -30,7 +30,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
 
 <body>
-<!-- ════════════════ NAV ════════════════ -->
+<!-- global navigation bar -->
 <nav class="nav">
     <a href="/team183-onboarding-project/landingPage" class="nav-logo">
         <div class="nav-logo-icon">🌿</div>

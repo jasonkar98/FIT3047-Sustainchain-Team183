@@ -29,7 +29,7 @@ $this->assign('title', 'SustainChain');
             </p>
 
             <div class="hero-actions">
-                <a href="/users/register" class="btn btn-lime btn-lg">Shop now</a>
+                <?= $this->Html->link('Shop now', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'btn btn-lime btn-lg']) ?>
             </div>
         </div>
 
@@ -226,8 +226,8 @@ $this->assign('title', 'SustainChain');
             committed to a greener future.
         </p>
         <div class="cta-actions">
-            <a href="/users/register" class="btn btn-lime btn-lg">Create an account →</a>
-            <a href="/users/login" class="btn btn-outline btn-lg">Sign in</a>
+            <?= $this->Html->link('Sign in', ['controller' => 'Auth', 'action' => 'login'], ['class' => 'btn btn-outline btn-lg']) ?>
+            <?= $this->Html->link('Create an account', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'btn btn-lime btn-lg']) ?>
         </div>
     </div>
 </section>
