@@ -1,6 +1,4 @@
-/* ══════════════════════════════════════
-   RESET & TOKENS
-══════════════════════════════════════ */
+/* colors */
 *,
 *::before,
 *::after {
@@ -85,9 +83,7 @@ a {
     text-transform: uppercase;
 }
 
-/* ══════════════════════════════════════
-   HERO
-══════════════════════════════════════ */
+/* hero */
 .hero {
     min-height: 100svh;
     background: var(--g0);
@@ -238,9 +234,7 @@ a {
     }
 }
 
-/* ══════════════════════════════════════
-   BUTTONS
-══════════════════════════════════════ */
+/* buttons */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -286,9 +280,7 @@ a {
     border-radius: var(--r16);
 }
 
-/* ══════════════════════════════════════
-   PLATFORM PILLARS
-══════════════════════════════════════ */
+/* about section */
 .pillars {
     padding: 7rem 2.5rem;
     max-width: 1180px;
@@ -412,9 +404,7 @@ a {
     color: var(--g2);
 }
 
-/* ══════════════════════════════════════
-   DISCOVER INNOVATORS
-══════════════════════════════════════ */
+/* innovators section */
 .innovators {
     background: var(--g0);
     padding: 7rem 2.5rem;
@@ -522,9 +512,7 @@ a {
     gap: 0.75rem;
 }
 
-/* ══════════════════════════════════════
-   MARKETPLACE MODES
-══════════════════════════════════════ */
+/* marketplace section */
 .modes {
     background: var(--s1);
     padding: 7rem 2.5rem;
@@ -638,9 +626,7 @@ a {
     color: var(--e1);
 }
 
-/* ══════════════════════════════════════
-   MISSION
-══════════════════════════════════════ */
+/* about section */
 .mission {
     padding: 7rem 2.5rem;
     max-width: 760px;
@@ -697,9 +683,7 @@ a {
     line-height: 1.5;
 }
 
-/* ══════════════════════════════════════
-   FINAL CTA
-══════════════════════════════════════ */
+/* account reg section */
 .final-cta {
     padding: 7rem 2.5rem;
     max-width: 1180px;
@@ -755,9 +739,7 @@ a {
     flex-wrap: wrap;
 }
 
-/* ══════════════════════════════════════
-   FOOTER
-══════════════════════════════════════ */
+/* footer section */
 .footer {
     background: var(--ink);
     padding: 3.5rem 2.5rem;
@@ -830,9 +812,7 @@ a {
     color: rgba(255, 255, 255, 0.2);
 }
 
-/* ══════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════ */
+/* animations */
 @media (max-width: 1024px) {
     .pillars-grid {
         grid-template-columns: 1fr 1fr;

@@ -1,14 +1,13 @@
 <?php
 /**
- * SustainChain — Landing Page
- * templates/Pages/home.php
+ * Landing Page
  */
 use Cake\Core\Configure;
 
-$this->assign('title', 'SustainChain — Where Ethical Commerce Grows');
+$this->assign('title', 'SustainChain');
 ?>
 
-<!-- ════════════════ HERO ════════════════ -->
+<!-- hero -->
 <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-inner">
@@ -53,7 +52,7 @@ $this->assign('title', 'SustainChain — Where Ethical Commerce Grows');
 </section>
 
 
-<!-- ════════════════ PLATFORM PILLARS ════════════════ -->
+<!-- about -->
 <section class="pillars" id="about">
     <div class="section-header">
         <p class="t-label section-tag">The Platform</p>
@@ -100,7 +99,7 @@ $this->assign('title', 'SustainChain — Where Ethical Commerce Grows');
 </section>
 
 
-<!-- ════════════════ DISCOVER INNOVATORS ════════════════ -->
+<!-- discover innovators -->
 <section class="innovators" id="innovators">
     <div class="innovators-bg"></div>
     <div class="innovators-inner">
@@ -140,7 +139,7 @@ $this->assign('title', 'SustainChain — Where Ethical Commerce Grows');
 </section>
 
 
-<!-- ════════════════ MARKETPLACE MODES ════════════════ -->
+<!-- marketplace -->
 <section class="modes" id="marketplace">
     <div class="modes-inner">
         <p class="t-label section-tag">Marketplace</p>
@@ -177,7 +176,7 @@ $this->assign('title', 'SustainChain — Where Ethical Commerce Grows');
 </section>
 
 
-<!-- ════════════════ MISSION ════════════════ -->
+<!-- misson/features -->
 <section class="mission" id="mission">
     <div class="mission-text">
         <p class="t-label section-tag">Our Mission</p>
@@ -214,7 +213,7 @@ $this->assign('title', 'SustainChain — Where Ethical Commerce Grows');
 </section>
 
 
-<!-- ════════════════ FINAL CTA ════════════════ -->
+<!-- login/register -->
 <section class="final-cta">
     <div class="cta-blob">
         <p class="t-label section-tag" style="margin-bottom:.75rem">Get started today</p>
@@ -234,7 +233,7 @@ $this->assign('title', 'SustainChain — Where Ethical Commerce Grows');
 </section>
 
 
-<!-- ════════════════ FOOTER ════════════════ -->
+<!-- footer -->
 <footer class="footer">
     <div class="footer-inner">
         <div class="footer-brand">

@@ -10,17 +10,30 @@ $debug = Configure::read('debug');
 $this->layout = 'login';
 $this->assign('title', 'Login');
 ?>
+
 <div class="auth-page">
     <section class="auth-hero">
-        <p class="auth-tagline">Sustainable future, connected supply chains</p>
-        <h1>Sustain Chain</h1>
-        <p class="auth-subtitle">Track responsibly. Grow naturally. Build resilient teams.</p>
+        <div class="hero-eyebrow">
+            <span class="eyebrow-dot"></span>
+            Sustainable supply chain
+        </div>
+        <h1>Sustain<em>Chain</em></h1>
+        <p class="auth-subtitle">Sustainable future, connected supply chains.</p>
+        <div class="auth-stats">
+            <div class="stat-pill">
+                <div class="stat-num">4.2k</div>
+                <div class="stat-desc">Active suppliers tracked</div>
+            </div>
+            <div class="stat-pill">
+                <div class="stat-num">98%</div>
+                <div class="stat-desc">Audit compliance rate</div>
+            </div>
+        </div>
     </section>
 
     <section class="auth-card">
-        <h2>Welcome back</h2>
-        <p class="auth-card-subtitle">Sign in to continue to your dashboard.</p>
-
+        <p class="card-eyebrow">Welcome back</p>
+        <h2>Sign in</h2>
         <?= $this->Flash->render() ?>
         <?= $this->Form->create(null, ['class' => 'auth-form']) ?>
         <?php
@@ -50,7 +63,6 @@ $this->assign('title', 'Login');
         ?>
         <?= $this->Form->button('Login', ['class' => 'button auth-primary-btn']) ?>
         <?= $this->Form->end() ?>
-
         <div class="auth-links">
             <?= $this->Html->link('Forgot password?', ['controller' => 'Auth', 'action' => 'forgetPassword']) ?>
             <?= $this->Html->link('Register new user', ['controller' => 'Auth', 'action' => 'register']) ?>
