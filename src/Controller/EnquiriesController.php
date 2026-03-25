@@ -10,6 +10,12 @@ namespace App\Controller;
  */
 class EnquiriesController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('Turnstile');
+    }
+
     /**
      * Index method
      *
@@ -19,9 +25,6 @@ class EnquiriesController extends AppController
     {
         $query = $this->Enquiries->find();
         $enquiries = $this->paginate($query);
-
-        // Load Turnstile component for CAPTCHA
-        $this->loadComponent('Turnstile');
 
         $this->set(compact('enquiries'));
     }

@@ -32,7 +32,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
 <!-- ════════════════ NAV ════════════════ -->
 <nav class="nav">
-    <a href="/" class="nav-logo">
+    <a href="/team183-onboarding-project/landingPage" class="nav-logo">
         <div class="nav-logo-icon">🌿</div>
         <span class="nav-logo-name">Sustain<span>Chain</span></span>
     </a>
@@ -42,7 +42,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <li><a href="#mission">Our Mission</a></li>
         <li><a href="#marketplace">Marketplace</a></li>
         <li><a href="#innovators">Discover Innovators</a></li>
-        <li><?= $this->Html->link('Enquire', ['controller' => 'Enquiries', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link('Enquire', ['controller' => 'Enquiries', 'action' => 'add']) ?></li>
     </ul>
 
     <div class="nav-right">
