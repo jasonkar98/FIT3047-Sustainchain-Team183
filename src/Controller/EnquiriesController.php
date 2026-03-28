@@ -14,7 +14,7 @@ class EnquiriesController extends AppController
     {
         parent::initialize();
         $this->loadComponent('Turnstile');
-        $this->Authentication->allowUnauthenticated(['index', 'view', 'add']);
+        $this->Authentication->allowUnauthenticated(['add']);
     }
 
     /**
