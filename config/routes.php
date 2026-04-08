@@ -63,7 +63,11 @@ return function (RouteBuilder $routes): void {
          * ...and connect the rest of 'Pages' controller's URLs.
          */
         $builder->connect('/pages/*', 'Pages::display');
-
+        $builder->connect('/dashboard', ['controller' => 'Dashboard', 'action' => 'index']);
+        $builder->connect('/products', ['controller' => 'Products', 'action' => 'index']);
+        $builder->connect('/products/{id}', ['controller' => 'Products', 'action' => 'view'])
+        ->setPatterns(['id' => '\d+'])
+        ->setPass(['id']);
         /*
          * Connect catchall routes for all controllers.
          *
