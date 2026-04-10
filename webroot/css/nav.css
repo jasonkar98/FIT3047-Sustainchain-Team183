@@ -5,10 +5,11 @@
     --white: #ffffff;
     --r999: 999px;
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --nav-height: 68px;
 }
 
 .nav {
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     right: 0;
@@ -21,6 +22,7 @@
     backdrop-filter: blur(18px) saturate(1.4);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     transition: padding 0.3s;
+    height: var(--nav-height);
 }
 
 .nav-logo {
