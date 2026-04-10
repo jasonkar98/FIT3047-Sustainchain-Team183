@@ -8,12 +8,15 @@ use Cake\ORM\Entity;
 /**
  * Product Entity
  *
- * @property int $product_id
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property string $price
+ * @property string $category
  * @property int $seller_id
- * @property string $product_name
- * @property string $seller_name
- * @property string $product_image
- * @property string $product_description
+ * @property string|null $image_url
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  */
 class Product extends Entity
 {
@@ -27,10 +30,13 @@ class Product extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
+        'name' => true,
+        'description' => true,
+        'price' => true,
+        'category' => true,
         'seller_id' => true,
-        'product_name' => true,
-        'seller_name' => true,
-        'product_image' => true,
-        'product_description' => true,
+        'image_url' => true,
+        'created' => true,
+        'modified' => true,
     ];
 }

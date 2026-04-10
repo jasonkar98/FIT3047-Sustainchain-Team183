@@ -11,24 +11,28 @@
         <table>
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('product_id') ?></th>
+                    <th><?= $this->Paginator->sort('id') ?></th>
+                    <th><?= $this->Paginator->sort('name') ?></th>
+                    <th><?= $this->Paginator->sort('price') ?></th>
+                    <th><?= $this->Paginator->sort('category') ?></th>
                     <th><?= $this->Paginator->sort('seller_id') ?></th>
-                    <th><?= $this->Paginator->sort('product_name') ?></th>
-                    <th><?= $this->Paginator->sort('seller_name') ?></th>
-                    <th><?= $this->Paginator->sort('product_image') ?></th>
-                    <th><?= $this->Paginator->sort('product_description') ?></th>
+                    <th><?= $this->Paginator->sort('image_url') ?></th>
+                    <th><?= $this->Paginator->sort('created') ?></th>
+                    <th><?= $this->Paginator->sort('modified') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($products as $product): ?>
                 <tr>
-                    <td><?= $this->Number->format($product->product_id) ?></td>
+                    <td><?= $this->Number->format($product->id) ?></td>
+                    <td><?= h($product->name) ?></td>
+                    <td><?= $this->Number->format($product->price) ?></td>
+                    <td><?= h($product->category) ?></td>
                     <td><?= $this->Number->format($product->seller_id) ?></td>
-                    <td><?= h($product->product_name) ?></td>
-                    <td><?= h($product->seller_name) ?></td>
-                    <td><?= h($product->product_image) ?></td>
-                    <td><?= h($product->product_description) ?></td>
+                    <td><?= h($product->image_url) ?></td>
+                    <td><?= h($product->created) ?></td>
+                    <td><?= h($product->modified) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $product->product_id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $product->product_id]) ?>

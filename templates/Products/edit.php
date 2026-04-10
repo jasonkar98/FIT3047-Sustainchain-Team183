@@ -22,11 +22,13 @@
             <fieldset>
                 <legend><?= __('Edit Product') ?></legend>
                 <?php
+                    echo $this->Form->control('id');
+                    echo $this->Form->control('name');
+                    echo $this->Form->control('description');
+                    echo $this->Form->control('price');
+                    echo $this->Form->control('category');
                     echo $this->Form->control('seller_id');
-                    echo $this->Form->control('product_name');
-                    echo $this->Form->control('seller_name');
-                    echo $this->Form->control('product_image');
-                    echo $this->Form->control('product_description');
+                    echo $this->Form->control('image_url');
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

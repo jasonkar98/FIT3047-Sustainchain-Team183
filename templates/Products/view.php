@@ -19,30 +19,44 @@
             <h3><?= h($product->product_name) ?></h3>
             <table>
                 <tr>
-                    <th><?= __('Product Name') ?></th>
-                    <td><?= h($product->product_name) ?></td>
+                    <th><?= __('Name') ?></th>
+                    <td><?= h($product->name) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Seller Name') ?></th>
-                    <td><?= h($product->seller_name) ?></td>
+                    <th><?= __('Category') ?></th>
+                    <td><?= h($product->category) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Product Image') ?></th>
-                    <td><?= h($product->product_image) ?></td>
+                    <th><?= __('Image Url') ?></th>
+                    <td><?= h($product->image_url) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Product Description') ?></th>
-                    <td><?= h($product->product_description) ?></td>
+                    <th><?= __('Id') ?></th>
+                    <td><?= $this->Number->format($product->id) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Product Id') ?></th>
-                    <td><?= $this->Number->format($product->product_id) ?></td>
+                    <th><?= __('Price') ?></th>
+                    <td><?= $this->Number->format($product->price) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Seller Id') ?></th>
                     <td><?= $this->Number->format($product->seller_id) ?></td>
                 </tr>
+                <tr>
+                    <th><?= __('Created') ?></th>
+                    <td><?= h($product->created) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Modified') ?></th>
+                    <td><?= h($product->modified) ?></td>
+                </tr>
             </table>
+            <div class="text">
+                <strong><?= __('Description') ?></strong>
+                <blockquote>
+                    <?= $this->Text->autoParagraph(h($product->description)); ?>
+                </blockquote>
+            </div>
         </div>
     </div>
 </div>

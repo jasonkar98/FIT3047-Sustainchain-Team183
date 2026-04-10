@@ -24,6 +24,8 @@ use Cake\Validation\Validator;
  * @method iterable<\App\Model\Entity\Product>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\Product> saveManyOrFail(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\Product>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\Product>|false deleteMany(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\Product>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\Product> deleteManyOrFail(iterable $entities, array $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ProductsTable extends Table
 {
@@ -40,6 +42,8 @@ class ProductsTable extends Table
         $this->setTable('products');
         $this->setDisplayField('product_name');
         $this->setPrimaryKey('product_id');
+
+        $this->addBehavior('Timestamp');
     }
 
     /**
@@ -51,33 +55,36 @@ class ProductsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
+            ->scalar('name')
+            ->maxLength('name', 255)
+            ->requirePresence('name', 'create')
+            ->notEmptyString('name');
+
+        $validator
+            ->scalar('description')
+            ->requirePresence('description', 'create')
+            ->notEmptyString('description');
+
+        $validator
+            ->decimal('price')
+            ->requirePresence('price', 'create')
+            ->notEmptyString('price');
+
+        $validator
+            ->scalar('category')
+            ->maxLength('category', 100)
+            ->requirePresence('category', 'create')
+            ->notEmptyString('category');
+
+        $validator
             ->integer('seller_id')
             ->requirePresence('seller_id', 'create')
             ->notEmptyString('seller_id');
 
         $validator
-            ->scalar('product_name')
-            ->maxLength('product_name', 50)
-            ->requirePresence('product_name', 'create')
-            ->notEmptyString('product_name');
-
-        $validator
-            ->scalar('seller_name')
-            ->maxLength('seller_name', 50)
-            ->requirePresence('seller_name', 'create')
-            ->notEmptyString('seller_name');
-
-        $validator
-            ->scalar('product_image')
-            ->maxLength('product_image', 255)
-            ->requirePresence('product_image', 'create')
-            ->notEmptyFile('product_image');
-
-        $validator
-            ->scalar('product_description')
-            ->maxLength('product_description', 500)
-            ->requirePresence('product_description', 'create')
-            ->notEmptyString('product_description');
+            ->scalar('image_url')
+            ->maxLength('image_url', 500)
+            ->allowEmptyString('image_url');
 
         return $validator;
     }
