@@ -320,6 +320,7 @@
     padding: 1.5rem;
     position: sticky;
     top: 1.5rem;
+    margin-top: calc(38px + 1.25rem); /* ← ADDED */
 }
 
 .filter-heading {
@@ -331,9 +332,9 @@
 }
 
 .filter-group {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--s2);
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.5px solid var(--s2);
 }
 
 .filter-group:last-of-type {
@@ -423,11 +424,13 @@
 
 .btn-clear-all {
     display: block;
-    text-align: center;
+    text-align: left;
     font-size: 0.8rem;
     color: var(--g3);
     text-decoration: underline;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--s2);
     cursor: pointer;
 }
 
@@ -446,4 +449,32 @@
         width: 100%;
         position: static;
     }
+}
+
+/* ── Sort row ────────────────────────────────────────────── */
+.sort-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.25rem;
+    align-items: center;
+}
+ 
+.sort-select {
+    appearance: none;
+    background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23556652' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 12px center;
+    border: 1px solid var(--s2);
+    border-radius: var(--r999);
+    padding: 0.5rem 2.25rem 0.5rem 1rem;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--g0);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.18s;
+}
+ 
+.sort-select:hover,
+.sort-select:focus {
+    border-color: var(--g3);
 }

@@ -46,13 +46,6 @@ $this->Html->css('marketplace', ['block' => true]);
     </div>
 <?php endif; ?>
 
-<!-- Results heading -->
-<?php if (!empty($this->request->getQuery('keyword')) && !$products->isEmpty()): ?>
-    <div class="search-results-label">
-        Here are our results for <strong><?= h($this->request->getQuery('keyword')) ?></strong>
-    </div>
-<?php endif; ?>
-
 <!-- Body: sidebar + product grid -->
 <div class="marketplace-body">
     <?= $this->Form->create(null, ['type' => 'get', 'url' => ['action' => 'index'], 'id' => 'filter-form']) ?>
@@ -85,7 +78,6 @@ $this->Html->css('marketplace', ['block' => true]);
                 <?php if (!empty($search['category'])): ?>
                     <a href="<?= $this->Url->build(['action' => 'index'] + ['?' => ['keyword' => $search['keyword'] ?? '']]) ?>" class="filter-clear-link">Clear category</a>
                 <?php endif; ?>
-                <button type="submit" class="btn-apply" style="margin-top: 0.75rem;">Apply</button>
             </div>
 
             <!-- Price range -->
@@ -123,6 +115,17 @@ $this->Html->css('marketplace', ['block' => true]);
 
         <!-- Products -->
         <div class="products-col">
+            <!-- sorting -->
+            <div class="sort-row">
+                <select name="sort" class="sort-select" onchange="this.closest('form').submit()">
+                    <option value="newest"    <?= ($search['sort'] ?? 'newest') === 'newest'    ? 'selected' : '' ?>>Newest arrivals</option>
+                    <option value="price_asc" <?= ($search['sort'] ?? '') === 'price_asc'  ? 'selected' : '' ?>>Price: Low to High</option>
+                    <option value="price_desc"<?= ($search['sort'] ?? '') === 'price_desc' ? 'selected' : '' ?>>Price: High to Low</option>
+                    <option value="name_asc"  <?= ($search['sort'] ?? '') === 'name_asc'   ? 'selected' : '' ?>>A–Z by name</option>
+                    <option value="name_desc" <?= ($search['sort'] ?? '') === 'name_desc'  ? 'selected' : '' ?>>Z–A by name</option>
+                </select>
+            </div>
+
             <?php if ($products->isEmpty()): ?>
                 <div class="marketplace-empty">
                     <?php if (!empty($search['category']) || !empty($search['price_min']) || !empty($search['price_max'])): ?>

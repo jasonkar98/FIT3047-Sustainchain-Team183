@@ -35,6 +35,19 @@ class ProductsController extends AppController
         $query->where(['Products.price <=' => (float)$search['price_max']]);
     }
 
+       // Sorting
+    $sortOptions = [
+        'price_asc'  => ['Products.price' => 'ASC'],
+        'price_desc' => ['Products.price' => 'DESC'],
+        'newest'     => ['Products.created' => 'DESC'],
+        'name_asc'   => ['Products.name' => 'ASC'],
+        'name_desc'  => ['Products.name' => 'DESC'],
+    ];
+    $sort = $search['sort'] ?? 'newest';
+    if (isset($sortOptions[$sort])) {
+        $query->orderBy($sortOptions[$sort]);
+    }
+
     // Get distinct categories for sidebar
     $conn = $this->Products->getConnection();
     $result = $conn->execute('SELECT DISTINCT category FROM products WHERE category IS NOT NULL ORDER BY category');
