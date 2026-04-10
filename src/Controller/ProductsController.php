@@ -8,15 +8,37 @@ class ProductsController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        // Products listing and detail are public (no login required)
         $this->Authentication->allowUnauthenticated(['index', 'view']);
     }
 
     public function index(): void
     {
-        // paginate() loads products from the database, 12 per page
-        $products = $this->paginate($this->Products, ['limit' => 12]);
+        $query = $this->Products->find();
 
-        $this->set(compact('products'));
+        $search = $this->request->getQuery();
+
+        // Keyword search
+        if (!empty($search['keyword'])) {
+            $keyword = '%' . trim($search['keyword']) . '%';
+            $query->where([
+                'OR' => [
+                    'Products.name LIKE'        => $keyword,
+                    'Products.description LIKE' => $keyword,
+                    'Products.category LIKE'    => $keyword,
+                ]
+            ]);
+        }
+
+        // Price range filter
+        if (!empty($search['price_min'])) {
+            $query->where(['Products.price >=' => (float)$search['price_min']]);
+        }
+        if (!empty($search['price_max'])) {
+            $query->where(['Products.price <=' => (float)$search['price_max']]);
+        }
+
+        $products = $this->paginate($query, ['limit' => 12]);
+
+        $this->set(compact('products', 'search'));
     }
 }

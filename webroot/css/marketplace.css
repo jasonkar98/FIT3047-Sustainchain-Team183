@@ -218,3 +218,74 @@
         grid-template-columns: 1fr;
     }
 }
+
+.marketplace-search {
+    background: var(--s1);
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.search-filter-row {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--s2);
+    border-radius: var(--r999);
+    padding: 6px 6px 6px 1.5rem;
+    width: 100%;
+    max-width: 580px;
+    gap: 8px;
+}
+
+.search-input {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    flex: 1;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-size: 0.95rem;
+    color: var(--g0);
+    padding: 0;
+    width: 100%;
+}
+
+.search-input::placeholder {
+    color: var(--muted);
+}
+
+.search-filter-row .btn.btn-lime {
+    border-radius: var(--r999) !important;
+    padding: 0.65rem 1.5rem !important;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.btn-outline {
+    background: transparent;
+    border: none;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-size: 0.85rem;
+    color: var(--g3);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0 8px;
+    white-space: nowrap;
+}
+
+.search-results-label {
+    text-align: center;
+    padding: 2.5rem 2.5rem 0;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--g0);
+}
+
+.search-results-label strong {
+    font-weight: 700;
+}

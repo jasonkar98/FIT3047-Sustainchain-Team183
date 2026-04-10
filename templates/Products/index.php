@@ -16,6 +16,36 @@ $this->Html->css('marketplace', ['block' => true]);
     </div>
 </div>
 
+<!-- Search & Filter bar -->
+<div class="marketplace-search">
+    <?= $this->Form->create(null, ['type' => 'get', 'url' => ['action' => 'index']]) ?>
+
+    <div class="search-filter-row">
+
+        <?= $this->Form->text('keyword', [
+            'placeholder' => 'Search products...',
+            'value'       => $this->request->getQuery('keyword') ?? '',
+            'class'       => 'search-input',
+        ]) ?>
+
+        <?= $this->Form->button('Search', ['class' => 'btn btn-lime']) ?>
+
+        <?php if ($this->request->getQuery('keyword')): ?>
+    <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn-outline">Clear</a>
+<?php endif; ?>
+
+    </div>
+
+    <?= $this->Form->end() ?>
+</div>
+
+
+<?php if (!empty($this->request->getQuery('keyword'))): ?>
+    <div class="search-results-label">
+        Here are our results for "<strong><?= h($this->request->getQuery('keyword')) ?></strong>"
+    </div>
+<?php endif; ?>
+
 <!-- Product grid -->
 <div class="marketplace-body">
 
@@ -68,3 +98,11 @@ $this->Html->css('marketplace', ['block' => true]);
     <?php endif; ?>
 
 </div>
+
+<script>
+    document.querySelector('.search-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            this.closest('form').submit();
+        }
+    });
+</script>
