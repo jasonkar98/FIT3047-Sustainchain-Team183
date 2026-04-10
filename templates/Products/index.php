@@ -125,12 +125,15 @@ $this->Html->css('marketplace', ['block' => true]);
         <div class="products-col">
             <?php if ($products->isEmpty()): ?>
                 <div class="marketplace-empty">
-                    <?php if (!empty($this->request->getQuery('keyword')) || !empty($search['category']) || !empty($search['price_min']) || !empty($search['price_max'])): ?>
-                        <p>No results found for your search.</p>
+                    <?php if (!empty($search['category']) || !empty($search['price_min']) || !empty($search['price_max'])): ?>
+                        <p>No results found for your filters.</p>
                         <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-lime">Clear filters</a>
+                    <?php elseif (!empty($this->request->getQuery('keyword'))): ?>
+                        <p>No results found for your search.</p>
+                        <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn btn-lime">Back to All Products</a>
                     <?php else: ?>
                         <p>No products available yet. Check back soon!</p>
-                        <a href="/" class="btn btn-lime">Back to Home</a>
+                        <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn btn-lime">Back to All Products</a>
                     <?php endif; ?>
                 </div>
             <?php else: ?>

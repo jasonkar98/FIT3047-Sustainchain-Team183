@@ -219,6 +219,12 @@
     }
 }
 
+.marketplace-search form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .marketplace-search {
     background: var(--s1);
     padding: 1.5rem 2.5rem;
@@ -234,8 +240,13 @@
     border-radius: var(--r999);
     padding: 6px 6px 6px 1.5rem;
     width: 100%;
-    max-width: 900px;
+    max-width: 830px;
     gap: 8px;
+}
+
+.marketplace-search .container {
+    max-width: 1200px;
+    width: 100%;
 }
 
 .search-input {
