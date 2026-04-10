@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\I18n\DateTime;
+
 /**
  * Products Controller
  *
@@ -45,11 +47,38 @@ class ProductsController extends AppController
     {
         $product = $this->Products->newEmptyEntity();
         if ($this->request->is('post')) {
-            $product = $this->Products->patchEntity($product, $this->request->getData());
+            $data = $this->request->getData();
+
+            // Getting the User ID
+            $user = $this->Authentication->getIdentity();
+            $userId = $user->getIdentifier();
+            $data['seller_id'] = $userId;
+
+            // Adding the Image
+            
+            $image = $data['image'];
+            $image_name = $image->getClientFilename();
+
+            // Target directory - ensure this folder exists/has permissions
+            $targetPath = WWW_ROOT . '/img/products/' . $image_name;
+            
+            if (!empty($image_name)) {
+                // Move file to webroot folder
+                $image->moveTo($targetPath);
+                
+                // Store ONLY the URL/path in the database
+                $data['image'] = (string)$image_name; 
+
+            }
+
+            $product = $this->Products->patchEntity($product, $data);
+            debug($data);
+            // debug($product->getErrors());
+            
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
             }
             $this->Flash->error(__('The product could not be saved. Please, try again.'));
         }
