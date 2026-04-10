@@ -16,7 +16,7 @@ $this->Html->css('marketplace', ['block' => true]);
     </div>
 </div>
 
-<!-- Search & Filter bar -->
+<!-- Search bar -->
 <div class="marketplace-search">
     <?= $this->Form->create(null, ['type' => 'get', 'url' => ['action' => 'index']]) ?>
 
@@ -31,18 +31,18 @@ $this->Html->css('marketplace', ['block' => true]);
         <?= $this->Form->button('Search', ['class' => 'btn btn-lime']) ?>
 
         <?php if ($this->request->getQuery('keyword')): ?>
-    <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn-outline">Clear</a>
-<?php endif; ?>
+            <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn-outline">Clear</a>
+        <?php endif; ?>
 
     </div>
 
     <?= $this->Form->end() ?>
 </div>
 
-
-<?php if (!empty($this->request->getQuery('keyword'))): ?>
+<!-- Results heading — only shows when there is a keyword AND results exist -->
+<?php if (!empty($this->request->getQuery('keyword')) && !$products->isEmpty()): ?>
     <div class="search-results-label">
-        Here are our results for "<strong><?= h($this->request->getQuery('keyword')) ?></strong>"
+        Here are our results for <strong><?= h($this->request->getQuery('keyword')) ?></strong>
     </div>
 <?php endif; ?>
 
