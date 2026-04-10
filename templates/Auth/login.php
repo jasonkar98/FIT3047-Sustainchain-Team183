@@ -49,14 +49,12 @@ $this->assign('title', 'Login');
             'type' => 'email',
             'required' => true,
             'autofocus' => true,
-            'value' => $debug ? 'test@example.com' : '',
             'label' => 'Email',
             'placeholder' => 'name@company.com',
         ]);
         echo $this->Form->control('password', [
             'type' => 'password',
             'required' => true,
-            'value' => $debug ? 'password' : '',
             'label' => 'Password',
             'placeholder' => 'Enter your password',
         ]);

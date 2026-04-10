@@ -177,7 +177,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#mission">Our Mission</a></li>
-        <li><a href="#marketplace">Marketplace</a></li>
+        <li><?= $this->Html->link('Marketplace', ['controller' => 'Products', 'action' => 'index']) ?></li>
         <li><a href="#innovators">Discover Innovators</a></li>
         <li><?= $this->Html->link('Enquire', ['controller' => 'Enquiries', 'action' => 'add']) ?></li>
     </ul>
