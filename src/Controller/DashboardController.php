@@ -11,12 +11,16 @@ class DashboardController extends AppController
         // No unauthenticated actions — the entire dashboard requires login
     }
 
-    public function index(): void
+    public function index()
     {
-        // Get the currently logged-in user's data from the session
-        $currentUser = $this->Authentication->getIdentity();
+        $identity = $this->request->getAttribute('identity');
 
-        // Pass it to the view template so the HTML can display it
-        $this->set('currentUser', $currentUser);
+        $favourites = $this->fetchTable('favourites')
+            ->find()
+            ->where(['user_id' => $identity->id])
+            ->all()
+            ->toArray();
+
+        $this->set(compact('favourites'));
     }
 }
