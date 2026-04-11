@@ -341,7 +341,7 @@ $this->assign('title', 'Add a Product — SustainChain');
                     'placeholder' => 'e.g. Groceries',
                 ]) ?>
 
-                <?= $this->Form->control('image', [
+                <?= $this->Form->control('image_url', [
                     'label' => 'Image',
                     'id' => 'image-selection',
                     'type' => 'file',

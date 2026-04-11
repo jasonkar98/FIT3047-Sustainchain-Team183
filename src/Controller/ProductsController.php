@@ -56,18 +56,19 @@ class ProductsController extends AppController
 
             // Adding the Image
             
-            $image = $data['image'];
+            $image = $data['image_url'];
             $image_name = $image->getClientFilename();
 
             // Target directory - ensure this folder exists/has permissions
             $targetPath = WWW_ROOT . '/img/products/' . $image_name;
+
+            // Store the image name in the database
+            $data['image_url'] = $image_name; 
             
             if (!empty($image_name)) {
                 // Move file to webroot folder
                 $image->moveTo($targetPath);
-                
-                // Store ONLY the URL/path in the database
-                $data['image'] = (string)$image_name; 
+            
 
             }
 
