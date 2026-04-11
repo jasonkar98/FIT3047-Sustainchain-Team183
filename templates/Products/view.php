@@ -85,6 +85,23 @@ $this->assign('title', 'View a Product — SustainChain');
     animation: reveal .6s .2s ease both;
 }
 
+.attribute-label {
+    display: block;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 1.5vw; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.75rem;
+}
+
+.attribute-value {
+    display: block;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 2vw; font-weight: 350;
+    color: black;
+    margin-top: 0.75rem;
+}
+
 @keyframes reveal {
     from { opacity:0; transform:translateY(20px); }
     to   { opacity:1; transform:translateY(0); }
@@ -96,7 +113,8 @@ $this->assign('title', 'View a Product — SustainChain');
     padding: 4rem 2.5rem 6rem;
 }
 .form-main-inner {
-    max-width: 680px; margin: 0 auto;
+    width: 70vw;
+    margin: 0 auto;
 }
 
 /* ── Form card ── */
@@ -105,6 +123,7 @@ $this->assign('title', 'View a Product — SustainChain');
     border: 1px solid var(--s2);
     border-radius: var(--r24);
     padding: 3rem;
+    /* width: 80vw; */
     box-shadow: 0 8px 40px rgba(13,31,20,.07);
     animation: reveal .6s .3s ease both;
 }
@@ -299,13 +318,13 @@ $this->assign('title', 'View a Product — SustainChain');
     <div class="form-hero-inner">
         <div class="form-eyebrow t-label">
             <span class="form-eyebrow-dot"></span>
-            List a Product
+            <?= h($product->category) ?>
         </div>
         <h1 class="form-hero-title">
-            <?= h($product->name) ?> <em>by Product Owner</em>
+            <?= h($product->name) ?> <em>by <?= h($product->user->email) ?></em>
         </h1>
         <p class="form-hero-sub">
-            Want to have your product on our page? Submit this form and your product will be seen by others.
+            <?= h($product->description) ?>
         </p>
     </div>
 </div>
@@ -317,47 +336,35 @@ $this->assign('title', 'View a Product — SustainChain');
         <div class="form-card">
 
             <div class="products view content">
-            <h3><?= h($product->name) ?></h3>
             <table>
                 <tr>
-                    <th><?= __('Name') ?></th>
-                    <td><?= h($product->name) ?></td>
+                    <td>
+                    <?= $this->Html->image('products/' . $product->image_url, [
+                        'style' => 
+                        'width:25vw; 
+                        height: auto; 
+                        margin-top:10px;'
+                    ]) ?>
+                    </td>
+                    <td style="
+                    vertical-align: top;
+                    padding: 15px;
+                    ">
+                        <div class="attribute-label">
+                        Price: 
+                        </div>
+                        <div class="attribute-value">
+                        $<?= $this->Number->format($product->price) ?>
+                        </div>
+                        <br>
+                        <div class="attribute-label">
+                        Category: 
+                        </div>
+                        <div class="attribute-value">
+                        <?= h($product->category) ?>
+                        </div>
+                    </td>
                 </tr>
-                <tr>
-                    <th><?= __('Category') ?></th>
-                    <td><?= h($product->category) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Image Url') ?></th>
-                    <td><?= h($product->image_url) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($product->id) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Price') ?></th>
-                    <td><?= $this->Number->format($product->price) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Sold By') ?></th>
-                    <td><?= h($product->user->email) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Created') ?></th>
-                    <td><?= h($product->created) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Modified') ?></th>
-                    <td><?= h($product->modified) ?></td>
-                </tr>
-            </table>
-            <div class="text">
-                <strong><?= __('Description') ?></strong>
-                <blockquote>
-                    <?= $this->Text->autoParagraph(h($product->description)); ?>
-                </blockquote>
-            </div>
         </div>
 
     </div>
