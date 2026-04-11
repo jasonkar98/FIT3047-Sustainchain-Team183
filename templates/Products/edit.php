@@ -27,7 +27,7 @@
                     echo $this->Form->control('description');
                     echo $this->Form->control('price');
                     echo $this->Form->control('category');
-                    echo $this->Form->control('seller_id');
+                    echo $this->Form->control('user_id');
                     echo $this->Form->control('image_url');
                 ?>
             </fieldset>

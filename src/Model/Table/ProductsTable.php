@@ -44,6 +44,8 @@ class ProductsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->belongsTo('Users', ['foreign_key' => 'user_id', 'joinType' => 'INNER',]);
     }
 
     /**
@@ -77,9 +79,9 @@ class ProductsTable extends Table
             ->notEmptyString('category');
 
         $validator
-            ->integer('seller_id')
-            ->requirePresence('seller_id', 'create')
-            ->notEmptyString('seller_id');
+            ->integer('user_id')
+            ->requirePresence('user_id', 'create')
+            ->notEmptyString('user_id');
 
         $validator
             ->scalar('image_url')
@@ -87,5 +89,12 @@ class ProductsTable extends Table
             ->allowEmptyString('image_url');
 
         return $validator;
+    }
+
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
+        
+        return $rules;
     }
 }

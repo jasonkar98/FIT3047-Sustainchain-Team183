@@ -34,7 +34,7 @@ class ProductsController extends AppController
      */
     public function view($id = null)
     {
-        $product = $this->Products->get($id, contain: []);
+        $product = $this->Products->get($id, contain: ['Users']);
         $this->set(compact('product'));
     }
 
@@ -52,7 +52,7 @@ class ProductsController extends AppController
             // Getting the User ID
             $user = $this->Authentication->getIdentity();
             $userId = $user->getIdentifier();
-            $data['seller_id'] = $userId;
+            $data['user_id'] = $userId;
 
             // Adding the Image
             

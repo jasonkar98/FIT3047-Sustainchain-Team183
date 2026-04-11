@@ -33,7 +33,7 @@ CREATE TABLE `products` (
   `description` text NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `category` varchar(100) NOT NULL,
-  `seller_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `image_url` varchar(500) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL

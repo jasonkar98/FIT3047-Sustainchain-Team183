@@ -302,7 +302,7 @@ $this->assign('title', 'View a Product — SustainChain');
             List a Product
         </div>
         <h1 class="form-hero-title">
-            List your product <em>to the marketplace</em>
+            <?= h($product->name) ?> <em>by Product Owner</em>
         </h1>
         <p class="form-hero-sub">
             Want to have your product on our page? Submit this form and your product will be seen by others.
@@ -340,8 +340,8 @@ $this->assign('title', 'View a Product — SustainChain');
                     <td><?= $this->Number->format($product->price) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Seller Id') ?></th>
-                    <td><?= $this->Number->format($product->seller_id) ?></td>
+                    <th><?= __('Sold By') ?></th>
+                    <td><?= h($product->user->email) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Created') ?></th>

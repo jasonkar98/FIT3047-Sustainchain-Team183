@@ -13,7 +13,7 @@ use Cake\ORM\Entity;
  * @property string $description
  * @property string $price
  * @property string $category
- * @property int $seller_id
+ * @property int $user_id
  * @property string|null $image_url
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
@@ -34,7 +34,7 @@ class Product extends Entity
         'description' => true,
         'price' => true,
         'category' => true,
-        'seller_id' => true,
+        'user_id' => true,
         'image_url' => true,
         'created' => true,
         'modified' => true,
