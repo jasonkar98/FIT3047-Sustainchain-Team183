@@ -34,14 +34,14 @@
                     <td><?= h($product->created) ?></td>
                     <td><?= h($product->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $product->product_id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $product->product_id]) ?>
+                        <?= $this->Html->link(__('View'), ['action' => 'view', $product->id]) ?>
+                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $product->id]) ?>
                         <?= $this->Form->postLink(
                             __('Delete'),
-                            ['action' => 'delete', $product->product_id],
+                            ['action' => 'delete', $product->id],
                             [
                                 'method' => 'delete',
-                                'confirm' => __('Are you sure you want to delete # {0}?', $product->product_id),
+                                'confirm' => __('Are you sure you want to delete # {0}?', $product->id),
                             ]
                         ) ?>
                     </td>
