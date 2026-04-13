@@ -126,6 +126,7 @@ $this->assign('title', 'Add a Product — SustainChain');
 .form-card input[type="text"],
 .form-card input[type="email"],
 .form-card input[type="number"],
+.form-card select,
 .form-card textarea {
     width: 100%;
     background: var(--s0);
@@ -329,6 +330,7 @@ $this->assign('title', 'Add a Product — SustainChain');
                     'label' => 'Description',
                     'placeholder' => 'e.g. A dozen free range eggs, from Chickens that are raised on farmland where they can freely roam around the paddock.',
                     'type' => 'textarea',
+                    'maxlength' =>500,
                 ]) ?>
 
                 <?= $this->Form->control('price', [
@@ -338,7 +340,9 @@ $this->assign('title', 'Add a Product — SustainChain');
 
                 <?= $this->Form->control('category', [
                     'label' => 'Product Category',
-                    'placeholder' => 'e.g. Groceries',
+                    'type' => 'select',
+                    'options' => ['Food' => 'Food', 'Beauty' => 'Beauty', 'Apparel' => 'Apparel', 'Kitchenware' => 'Kitchenware', 'Bathroom' => 'Bathroom', 'Outdoors' => 'Outdoors', 'Sporting' => 'Sporting', 'Supplements' => 'Supplements'],
+                    'empty' => 'Select a Category',
                 ]) ?>
 
                 <?= $this->Form->control('image_url', [

@@ -321,7 +321,7 @@ $this->assign('title', 'View a Product — SustainChain');
             <?= h($product->category) ?>
         </div>
         <h1 class="form-hero-title">
-            <?= h($product->name) ?> <em>by <?= h($product->user->email) ?></em>
+            <?= h($product->name) ?> <em>by <?= h($product->user->first_name) ?> <?= h($product->user->last_name) ?></em>
         </h1>
         <p class="form-hero-sub">
             <?= h($product->description) ?>
