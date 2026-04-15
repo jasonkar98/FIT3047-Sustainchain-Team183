@@ -34,7 +34,7 @@ class ProductsController extends AppController
      */
     public function view($id = null)
     {
-        $product = $this->Products->get($id, contain: ['Users']);
+        $product = $this->Products->get($id, contain: ['Users', 'Filtertags']);
         $this->set(compact('product'));
     }
 
@@ -47,6 +47,7 @@ class ProductsController extends AppController
     {
         $product = $this->Products->newEmptyEntity();
         if ($this->request->is('post')) {
+
             $data = $this->request->getData();
 
             // Getting the User ID
@@ -68,12 +69,9 @@ class ProductsController extends AppController
             if (!empty($image_name)) {
                 // Move file to webroot folder
                 $image->moveTo($targetPath);
-            
-
             }
-
+            
             $product = $this->Products->patchEntity($product, $data);
-
             
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
@@ -82,7 +80,12 @@ class ProductsController extends AppController
             }
             $this->Flash->error(__('The product could not be saved. Please, try again.'));
         }
-        $this->set(compact('product'));
+        // $tags = $this->Products->Tags->find('list', [
+        //     'keyField' => 'id',
+        //     'valueField' => 'name'
+        // ]);
+        $filtertags = $this->Products->Filtertags->find('list', limit: 200)->all();
+        $this->set(compact('product', 'filtertags'));
     }
 
     /**

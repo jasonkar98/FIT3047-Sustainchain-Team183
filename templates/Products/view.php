@@ -357,11 +357,23 @@ $this->assign('title', 'View a Product — SustainChain');
                         $<?= $this->Number->format($product->price) ?>
                         </div>
                         <br>
+
                         <div class="attribute-label">
                         Category: 
                         </div>
                         <div class="attribute-value">
                         <?= h($product->category) ?>
+                        </div>
+                        <br>
+
+                        <div class="attribute-label">
+                        Tags: 
+                        </div>
+                        <div class="attribute-value">
+                        <?php foreach ($product->filtertags as $filtertag) : ?>
+                            <?= h($filtertag->name) ?>
+                            <br>
+                        <?php endforeach; ?>
                         </div>
                     </td>
                 </tr>

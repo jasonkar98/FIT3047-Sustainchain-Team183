@@ -46,6 +46,11 @@ class ProductsTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->belongsTo('Users', ['foreign_key' => 'user_id', 'joinType' => 'INNER',]);
+        
+        $this->belongsToMany('Filtertags', [
+            'foreignKey' => 'product_id',
+            'targetForeignKey' => 'filtertag_id',
+            'joinTable' => 'products_filtertags']);
     }
 
     /**

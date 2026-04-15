@@ -5,6 +5,7 @@
  * 
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Product $product
+ *  * @var \Cake\Collection\CollectionInterface|string[] $tags
  */
 
 use Cake\Core\Configure;
@@ -142,6 +143,8 @@ $this->assign('title', 'Add a Product — SustainChain');
 }
 .form-card input[type="text"]:focus,
 .form-card input[type="email"]:focus,
+.form-card input[type="number"]:focus,
+.form-card select:focus,
 .form-card textarea:focus {
     border-color: var(--g3);
     background: var(--white);
@@ -149,6 +152,8 @@ $this->assign('title', 'Add a Product — SustainChain');
 }
 .form-card input[type="text"]:hover,
 .form-card input[type="email"]:hover,
+.form-card input[type="number"]:hover,
+.form-card select:hover,
 .form-card textarea:hover {
     border-color: var(--g5);
 }
@@ -217,6 +222,13 @@ $this->assign('title', 'Add a Product — SustainChain');
     background: var(--g2);
     box-shadow: 0 8px 28px rgba(13,31,20,.3);
 }
+
+.btn-checkbox {
+    accent-color: rgba(200,232,64,.45);
+    width: 15px;
+    height: 15px;
+}
+
 
 /* ── Submit button ── */
 .submit-row {
@@ -344,6 +356,15 @@ $this->assign('title', 'Add a Product — SustainChain');
                     'options' => ['Food' => 'Food', 'Beauty' => 'Beauty', 'Apparel' => 'Apparel', 'Kitchenware' => 'Kitchenware', 'Bathroom' => 'Bathroom', 'Outdoors' => 'Outdoors', 'Sporting' => 'Sporting', 'Supplements' => 'Supplements'],
                     'empty' => 'Select a Category',
                 ]) ?>
+
+                <?= $this->Form->control('filtertags._ids', [
+                    'label' => 'Product Tags',
+                    'type' => 'select',
+                    'multiple' => 'checkbox',
+                    'class' => 'btn-checkbox',
+                    'options' => $filtertags
+                ]) ?>
+
 
                 <?= $this->Form->control('image_url', [
                     'label' => 'Image',
