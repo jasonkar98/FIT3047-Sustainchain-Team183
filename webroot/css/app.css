@@ -285,6 +285,14 @@ a {
     font-size: 0.95rem;
     border-radius: var(--r16);
 }
+.btn-dark {
+    color: var(--e1);
+    background: var(--g0);
+}
+.btn-dark:hover {
+    background: var(--g1);
+    transform: translateY(-1px);
+}
 
 /* about section */
 .pillars {

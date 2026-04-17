@@ -106,14 +106,14 @@
 .product-img-wrap {
     position: relative;
     overflow: hidden;
-    aspect-ratio: 4 / 3;   /* all images the same proportion */
-    background: var(--s1);  /* cream placeholder while image loads */
+    aspect-ratio: 4 / 3; /* all images the same proportion */
+    background: var(--s1); /* cream placeholder while image loads */
 }
 
 .product-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;      /* crops to fill — never squishes or stretches */
+    object-fit: cover; /* crops to fill — never squishes or stretches */
     display: block;
     transition: transform 0.4s ease;
 }
@@ -207,6 +207,62 @@
     }
 }
 
+@media (max-width: 640px) {
+    .marketplace-header {
+        padding: 5rem 1.5rem 3rem;
+    }
+    .marketplace-body {
+        padding: 2.5rem 1.25rem 4rem;
+    }
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Save button ─────────────────────────────────────────── */
+.product-save-btn {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+    color: #2e7d52;
+    transition:
+        background 0.2s,
+        color 0.2s,
+        transform 0.15s;
+}
+
+.product-save-btn:hover {
+    background: #ffffff;
+    transform: scale(1.1);
+}
+
+.product-save-btn.is-saved {
+    background: #2e7d52;
+    color: #ffffff;
+}
+
+.product-save-btn.is-saved .product-save-icon {
+    fill: currentColor;
+}
+
+.product-save-icon {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    transition: fill 0.2s;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
 @media (max-width: 640px) {
     .marketplace-header {
         padding: 5rem 1.5rem 3rem;

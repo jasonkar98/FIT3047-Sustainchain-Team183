@@ -70,6 +70,11 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/products/{id}', ['controller' => 'Products', 'action' => 'view'])
         ->setPatterns(['id' => '\d+'])
         ->setPass(['id']);
+
+        $builder->connect('/products/toggle-save/:id', 
+            ['controller' => 'Products', 'action' => 'toggleSave'],
+            ['pass' => ['id'], 'id' => '[0-9]+']
+        );
         /*
          * Connect catchall routes for all controllers.
          *

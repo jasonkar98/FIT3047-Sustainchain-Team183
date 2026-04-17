@@ -43,6 +43,28 @@ $this->Html->css('marketplace', ['block' => true]);
                             src="<?= h($imageSrc) ?>"
                             alt="<?= h($product->name) ?>"
                         >
+
+                        <!-- Save / bookmark icon — overlaid on the image -->
+                        <button
+                            class="product-save-btn"
+                            aria-label="Save <?= h($product->name) ?>"
+                            data-product-id="<?= h($product->id) ?>"
+                            data-save-url="<?= $this->Url->build(['controller' => 'Products', 'action' => 'toggleSave', $product->id]) ?>"
+                        >
+                            <svg
+                                class="product-save-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                        </button>
                     </div>
 
                     <!-- Info -->
@@ -68,3 +90,38 @@ $this->Html->css('marketplace', ['block' => true]);
     <?php endif; ?>
 
 </div>
+
+<?php $this->Html->scriptStart(['block' => true]); ?>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.product-save-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const productId = btn.dataset.productId;
+            let url = btn.dataset.saveUrl || '';
+
+            if (url.includes(':id')) {
+                url = url.replace(':id', productId);
+            }
+
+            if (!url) {
+                const appBase = window.location.pathname.split('/').filter(Boolean).slice(0, 1).join('/');
+                url = `${window.location.origin}${appBase ? '/' + appBase : ''}/products/toggle-save/${productId}`;
+            }
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-Token': <?= json_encode($this->request->getAttribute('csrfToken')) ?>,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    btn.classList.toggle('is-saved');
+                    const saved = btn.classList.contains('is-saved');
+                    btn.setAttribute('aria-pressed', saved);
+                }
+            });
+        });
+    });
+});
+<?php $this->Html->scriptEnd(); ?>

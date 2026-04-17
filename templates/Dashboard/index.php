@@ -5,9 +5,9 @@ $identity = $this->request->getAttribute('identity');
 $this->assign('title', 'Dashboard');
 
 $stats = [
-    ['label' => 'Saved Products', 'value' => count($favourites), 'sub' => 'Across 3 categories'],
-    ['label' => 'Total Orders',   'value' => '12',                'sub' => '2 pending delivery'],
-    ['label' => 'Member Since', 'value' => $identity ? $identity->created->i18nFormat('dd MMM YYYY') : '—', 'sub' => 'Joined recently'],
+    ['label' => 'Saved Products', 'value' => count($favourites)],
+    ['label' => 'Total Orders',   'value' => '12'],
+    ['label' => 'Member Since', 'value' => $identity ? $identity->created->i18nFormat('dd MMM YYYY') : '—'],
 ];
 
 $first_name = $identity ? h($identity->first_name) : 'there';
@@ -77,9 +77,6 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
         <div class="welcome-text">
             <h1>Welcome back, <em><?= $first_name ?></em></h1>
         </div>
-        <div class="welcome-actions">
-            <?= $this->Html->link('Browse Products →', ['controller' => 'Products', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
-        </div>
     </div>
 
     <!-- Stats -->
@@ -88,7 +85,6 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
         <div class="stat-card">
             <div class="stat-label"><?= h($s['label']) ?></div>
             <div class="stat-num"><?= h($s['value']) ?></div>
-            <div class="stat-sub"><?= h($s['sub']) ?></div>
         </div>
         <?php endforeach; ?>
     </div>
@@ -96,13 +92,13 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
     <!-- Saved Products -->
     <div>
         <div class="section-head">
-            <h2>Saved Products</h2>
+            <h2>Saved Listings</h2>
             <?= $this->Html->link('All Saved →', ['controller' => 'Favourites', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
         </div>
 
         <?php if (empty($favourites)): ?>
         <div class="favourites-empty">
-            <p><?= __('You have not saved any favourites. Start browsing products and add some favourites to see them here.') ?></p>
+            <p><?= __('You have not saved any products. Start browsing products and add some favourites to see them here.') ?></p>
         </div>
         <?php else: ?>
         <div class="products-grid">
@@ -129,11 +125,13 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
 
     <!-- Account Details + Activity -->
     <div class="bottom-row">
-
         <!-- Account Details -->
         <div class="card">
             <div class="section-head">
                 <h2>Account Details</h2>
+                <?php if ($identity): ?>
+                    <?= $this->Html->link('Edit Details', ['controller' => 'Users', 'action' => 'edit'], ['class' => 'btn btn-dark']) ?>
+                <?php endif; ?>
             </div>
             <?php if ($identity): ?>
             <div class="account-header">
@@ -143,15 +141,19 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
                 </div>
             </div>
             <div class="detail-row">
+                <span class="detail-label">First Name</span>
+                <span class="detail-val"><?= h($identity->first_name ?? '—') ?></span>
+            </div>
+                <div class="detail-row">
+                <span class="detail-label">Last Name</span>
+                <span class="detail-val"><?= h($identity->last_name ?? '—') ?></span>
+            </div>
+            <div class="detail-row">
                 <span class="detail-label">Email</span>
                 <span class="detail-val"><?= h($identity->email ?? '—') ?></span>
             </div>
-            <div class="detail-row">
-                <span class="detail-label">Username</span>
-                <span class="detail-val"><?= h($identity->username ?? '—') ?></span>
-            </div>
             <?php endif; ?>
-            <button class="edit-btn">Edit Account →</button>
+            
         </div>
 
         <!-- Recent Activity -->
