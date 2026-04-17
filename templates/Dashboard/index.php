@@ -1,6 +1,8 @@
 <?php
 /** @var \App\View\AppView $this */
 
+$this->Html->css('marketplace', ['block' => true]);
+
 $identity = $this->request->getAttribute('identity');
 $this->assign('title', 'Dashboard');
 
@@ -101,27 +103,54 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
             <p><?= __('You have not saved any products. Start browsing products and add some favourites to see them here.') ?></p>
         </div>
         <?php else: ?>
-        <div class="products-grid">
-            <?php foreach ($favourites as $p): ?>
-            <div class="prod-card">
-                <div class="prod-img <?= h($p['theme']) ?>"><?= $p['emoji'] ?></div>
-                <div class="prod-body">
-                    <div class="prod-name"><?= h($p['name']) ?></div>
-                    <div class="prod-type"><?= h($p['category']) ?></div>
-                    <div class="prod-footer">
-                        <div class="prod-price"><?= h($p['price']) ?></div>
-                        <button class="prod-unsave" title="Remove from saved">
-                            <svg viewBox="0 0 12 12" fill="none" stroke="#cc4444" stroke-width="1.5">
-                                <path d="M2 2 10 10M10 2 2 10"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div class="product-grid">
+            <?php foreach ($favourites as $favourite): ?>
+                <?php if (!empty($favourite->product)): ?>
+                    <?= $this->element('product_card', [
+                        'product' => $favourite->product,
+                        'showSaveButton' => true,
+                        'isSaved' => true,
+                    ]) ?>
+                <?php endif; ?>
             <?php endforeach; ?>
         </div>
         <?php endif; ?>
     </div>
+
+    <?php $this->Html->scriptStart(['block' => true]); ?>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.product-save-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const productId = btn.dataset.productId;
+                let url = btn.dataset.saveUrl || '';
+
+                if (url.includes(':id')) {
+                    url = url.replace(':id', productId);
+                }
+
+                if (!url) {
+                    const appBase = window.location.pathname.split('/').filter(Boolean).slice(0, 1).join('/');
+                    url = `${window.location.origin}${appBase ? '/' + appBase : ''}/products/toggle-save/${productId}`;
+                }
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-Token': <?= json_encode($this->request->getAttribute('csrfToken')) ?>,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        btn.classList.toggle('is-saved');
+                        const saved = btn.classList.contains('is-saved');
+                        btn.setAttribute('aria-pressed', saved);
+                    }
+                });
+            });
+        });
+    });
+    <?php $this->Html->scriptEnd(); ?>
 
     <!-- Account Details + Activity -->
     <div class="bottom-row">

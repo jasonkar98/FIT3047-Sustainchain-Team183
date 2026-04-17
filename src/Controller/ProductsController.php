@@ -17,7 +17,19 @@ class ProductsController extends AppController
         // paginate() loads products from the database, 12 per page
         $products = $this->paginate($this->Products, ['limit' => 12]);
 
-        $this->set(compact('products'));
+        $identity = $this->Authentication->getIdentity();
+        $savedProductIds = [];
+        if ($identity) {
+            $savedProductIds = $this->fetchTable('Favourites')
+                ->find('list', [
+                    'keyField' => 'product_id',
+                    'valueField' => 'product_id',
+                ])
+                ->where(['user_id' => $identity->getIdentifier()])
+                ->toArray();
+        }
+
+        $this->set(compact('products', 'savedProductIds'));
     }
 
     public function toggleSave($id = null)
