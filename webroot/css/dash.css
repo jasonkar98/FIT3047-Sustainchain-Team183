@@ -9,25 +9,25 @@
 }
 
 /* welcome */
-.welcome {
+/* .welcome {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
+    align-items: flex-end;
+    margin-bottom: 2rem;
 }
-.welcome-text h1 {
-    font-family: "Fraunces", serif;
-    font-size: clamp(5rem, 3vw, 2rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    color: var(--g0);
+.welcome h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    line-height: 1.1;
+    color: inherit;
 }
-.welcome-text h1 em {
+
+.welcome h1 em {
     font-style: italic;
-    font-weight: 300;
     color: var(--g3);
-}
+} */
+
 .welcome-text p {
     font-size: 0.875rem;
     color: var(--muted);
@@ -79,20 +79,6 @@
     margin-top: 0.35rem;
 }
 
-/* section header */
-.section-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-}
-.section-head h2 {
-    font-family: "Fraunces", serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--g0);
-    letter-spacing: -0.02em;
-}
 .see-all {
     font-size: 0.78rem;
     font-weight: 700;
@@ -190,6 +176,69 @@
     width: 12px;
     height: 12px;
 }
+
+/* Products grid
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 2.5rem;
+}
+.prod-card {
+    background: #fff;
+    border: 0.5px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.prod-img {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+.prod-img.green  { background: #e8f5e2; }
+.prod-img.blue   { background: #e3effc; }
+.prod-img.amber  { background: #fdf3df; }
+.prod-img.coral  { background: #faeae5; }
+.prod-img.purple { background: #eeedfe; }
+.prod-body {
+    padding: 12px;
+}
+.prod-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+.prod-type {
+    font-size: 11px;
+    color: #aaa;
+    margin-bottom: 10px;
+}
+.prod-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.prod-price {
+    font-size: 14px;
+    font-weight: 500;
+}
+.prod-unsave {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #fdeaea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+.prod-unsave:hover {
+    background: #f5c0c0;
+} */
 
 /* bottom 2-col */
 .bottom-row {
