@@ -14,7 +14,7 @@ class EnquiriesController extends AppController
     {
         parent::initialize();
         $this->loadComponent('Turnstile');
-        $this->Authentication->allowUnauthenticated(['index', 'view', 'add']);
+        $this->Authentication->allowUnauthenticated(['add']);
     }
 
     /**
@@ -24,10 +24,11 @@ class EnquiriesController extends AppController
      */
     public function index()
     {
-        $query = $this->Enquiries->find();
-        $enquiries = $this->paginate($query);
-
-        $this->set(compact('enquiries'));
+        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+//        $query = $this->Enquiries->find();
+//        $enquiries = $this->paginate($query);
+//
+//        $this->set(compact('enquiries'));
     }
 
     /**
@@ -39,8 +40,9 @@ class EnquiriesController extends AppController
      */
     public function view($id = null)
     {
-        $enquiry = $this->Enquiries->get($id, contain: []);
-        $this->set(compact('enquiry'));
+        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+//        $enquiry = $this->Enquiries->get($id, contain: []);
+//        $this->set(compact('enquiry'));
     }
 
     /**
@@ -54,6 +56,11 @@ class EnquiriesController extends AppController
         if ($this->request->is('post')) {
             $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
 
+            // Associate with logged-in user if available
+            $identity = $this->request->getAttribute('identity');
+            if ($identity) {
+                $enquiry->user_id = $identity->id;
+            }
 
             // Validate Turnstile response with CloudFlare
             $turnstileToken = $this->request->getData('cf-turnstile-response');
@@ -74,7 +81,9 @@ class EnquiriesController extends AppController
             if ($this->Enquiries->save($enquiry)) {
                 $this->Flash->success(__('The enquiry has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                // and redirect user to the location they're trying to access
+                return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+
             }
             $this->Flash->error(__('The enquiry could not be saved. Please, try again.'));
         }
@@ -90,17 +99,18 @@ class EnquiriesController extends AppController
      */
     public function edit($id = null)
     {
-        $enquiry = $this->Enquiries->get($id, contain: []);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
-            if ($this->Enquiries->save($enquiry)) {
-                $this->Flash->success(__('The enquiry has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The enquiry could not be saved. Please, try again.'));
-        }
-        $this->set(compact('enquiry'));
+        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+//        $enquiry = $this->Enquiries->get($id, contain: []);
+//        if ($this->request->is(['patch', 'post', 'put'])) {
+//            $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
+//            if ($this->Enquiries->save($enquiry)) {
+//                $this->Flash->success(__('The enquiry has been saved.'));
+//
+//                return $this->redirect(['action' => 'index']);
+//            }
+//            $this->Flash->error(__('The enquiry could not be saved. Please, try again.'));
+//        }
+//        $this->set(compact('enquiry'));
     }
 
     /**
@@ -112,14 +122,15 @@ class EnquiriesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $enquiry = $this->Enquiries->get($id);
-        if ($this->Enquiries->delete($enquiry)) {
-            $this->Flash->success(__('The enquiry has been deleted.'));
-        } else {
-            $this->Flash->error(__('The enquiry could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+//        $this->request->allowMethod(['post', 'delete']);
+//        $enquiry = $this->Enquiries->get($id);
+//        if ($this->Enquiries->delete($enquiry)) {
+//            $this->Flash->success(__('The enquiry has been deleted.'));
+//        } else {
+//            $this->Flash->error(__('The enquiry could not be deleted. Please, try again.'));
+//        }
+//
+//        return $this->redirect(['action' => 'index']);
     }
 }

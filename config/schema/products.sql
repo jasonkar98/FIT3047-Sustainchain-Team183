@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 -- phpMyAdmin SQL Dump
 -- version 5.2.3
 -- https://www.phpmyadmin.net/
@@ -60,3 +61,16 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+=======
+CREATE TABLE IF NOT EXISTS products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    seller_id INT NOT NULL,
+    image_url VARCHAR(500) DEFAULT NULL,
+    created DATETIME DEFAULT NULL,
+    modified DATETIME DEFAULT NULL
+);
+>>>>>>> origin/feat/userdashboard

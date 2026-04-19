@@ -6,18 +6,18 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Enquiry Entity
+ * Favourite Entity
  *
  * @property int $id
- * @property int|null $user_id
- * @property string $full_name
- * @property string $email
- * @property \Cake\I18n\DateTime $date
- * @property string $subject
- * @property string $body
- * @property bool $email_sent
+ * @property int $user_id
+ * @property int $product_id
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
+ *
+ * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Product $product
  */
-class Enquiry extends Entity
+class Favourite extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -30,11 +30,10 @@ class Enquiry extends Entity
      */
     protected array $_accessible = [
         'user_id' => true,
-        'full_name' => true,
-        'email' => true,
-        'date' => true,
-        'subject' => true,
-        'body' => true,
-        'email_sent' => true,
+        'product_id' => true,
+        'created' => true,
+        'modified' => true,
+        'user' => true,
+        'product' => true,
     ];
 }
