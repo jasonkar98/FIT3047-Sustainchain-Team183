@@ -22,6 +22,12 @@ class DashboardController extends AppController
             ->all()
             ->toArray();
 
+        $orders = $this->fetchTable('Orders')
+            ->find()
+            ->where(['user_id' => $identity->id])
+            ->all()
+            ->toArray();
+
         $enquiries = $this->fetchTable('Enquiries')
             ->find()
             ->where(['user_id' => $identity->id])
@@ -29,6 +35,12 @@ class DashboardController extends AppController
             ->all()
             ->toArray();
 
-        $this->set(compact('favourites', 'enquiries'));
+        // $listings = $this->fetchTable('Listings')
+        //     ->find()
+        //     ->where(['seller_id' => $identity->id])
+        //     ->all()
+        //     ->toArray();
+
+        $this->set(compact('favourites', 'orders', 'enquiries'));
     }
 }
