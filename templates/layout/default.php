@@ -32,7 +32,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
 <!-- global navigation bar -->
 <nav class="nav">
-    <a href="/team183-onboarding-project/landingPage" class="nav-logo">
+    <a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
         <div class="nav-logo-icon">🌿</div>
         <span class="nav-logo-name">Sustain<span>Chain</span></span>
     </a>
