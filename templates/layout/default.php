@@ -169,11 +169,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
 <body>
 <nav class="nav">
-<<<<<<< HEAD
     <a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
-=======
-    <a href="/" class="nav-logo">
->>>>>>> origin/feat/userdashboard
         <div class="nav-logo-icon">🌿</div>
         <span class="nav-logo-name">Sustain<span>Chain</span></span>
     </a>
