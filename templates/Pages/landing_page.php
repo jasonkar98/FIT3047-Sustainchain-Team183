@@ -44,7 +44,7 @@ $this->assign('title', 'SustainChain');
                     <div class="stat-desc">Business partnerships built on sustainable values</div>
                 </div>
                 <div class="stat-pill">
-                    <div class="stat-desc">Web & mobile - shop anywhere, anytime</div>
+                    <div class="stat-desc">Web & mobile: shop anywhere, anytime</div>
                 </div>
             </div>
         </div>
@@ -69,7 +69,7 @@ $this->assign('title', 'SustainChain');
         <div class="pillar pillar-dark">
             <p class="t-label pillar-tag">Eco Marketplace</p>
             <p class="pillar-title">Shop with purpose</p>
-            <p class="pillar-desc">Browse thousands of verified eco-friendly products — from organic food to sustainable fashion — curated so every purchase makes an impact. Full product transparency, ethical sourcing labels, and carbon-footprint scores.</p>
+            <p class="pillar-desc">Browse thousands of verified eco-friendly products; from organic food to sustainable fashion, curated so every purchase makes an impact. Full product transparency, ethical sourcing labels, and carbon-footprint scores.</p>
         </div>
 
         <div class="pillar pillar-forest">
@@ -115,6 +115,7 @@ $this->assign('title', 'SustainChain');
 
         <div class="inno-grid">
             <div class="inno-card">
+                <?= $this->Html->image('manufacturerLanding.png', ['alt' => 'Circular packaging', 'class' => 'inno-img']) ?>
                 <span class="inno-badge">Manufacturer</span>
                 <p class="inno-title">Circular packaging solutions</p>
                 <p class="inno-desc">Manufacturers pioneering 100% compostable and reusable packaging for the food and logistics industry.</p>
@@ -122,6 +123,7 @@ $this->assign('title', 'SustainChain');
             </div>
 
             <div class="inno-card">
+                <?= $this->Html->image('farmTech.png', ['alt' => 'Regenerative farming', 'class' => 'inno-img']) ?>
                 <span class="inno-badge">AgriTech</span>
                 <p class="inno-title">Regenerative farming tech</p>
                 <p class="inno-desc">Innovators bringing soil restoration, water-saving irrigation, and precision farming to smallholder farmers worldwide.</p>
@@ -129,6 +131,7 @@ $this->assign('title', 'SustainChain');
             </div>
 
             <div class="inno-card">
+                <?= $this->Html->image('cleanEnergy.png', ['alt' => 'Clean energy production', 'class' => 'inno-img']) ?>
                 <span class="inno-badge">Clean Energy</span>
                 <p class="inno-title">Renewable-powered production</p>
                 <p class="inno-desc">Manufacturers who have committed to 100% renewable energy across their production lines - verified on-chain.</p>
@@ -155,7 +158,7 @@ $this->assign('title', 'SustainChain');
                 <ul class="mode-list">
                     <li>Verified eco-labels on every product</li>
                     <li>Carbon footprint scores at checkout</li>
-                    <li>Direct from farmers — no middlemen</li>
+                    <li>Direct from farmers; no middlemen</li>
                     <li>Community reviews and impact stories</li>
                 </ul>
             </div>
@@ -186,7 +189,7 @@ $this->assign('title', 'SustainChain');
         <p class="section-body">
             SustainChain was founded on the belief that commerce can be a force
             for good. By connecting every participant in the supply chain - from the farmer growing the crop
-            to the consumer at the door — we make sustainability the default, not the exception.
+            to the consumer at the door, we make sustainability the default, not the exception.
         </p>
 
         <ul class="values">
