@@ -56,6 +56,11 @@ class EnquiriesController extends AppController
         if ($this->request->is('post')) {
             $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
 
+            // Associate with logged-in user if available
+            $identity = $this->request->getAttribute('identity');
+            if ($identity) {
+                $enquiry->user_id = $identity->id;
+            }
 
             // Validate Turnstile response with CloudFlare
             $turnstileToken = $this->request->getData('cf-turnstile-response');

@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `enquiries` (
   `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `full_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -45,7 +46,8 @@ CREATE TABLE `enquiries` (
 -- Indexes for table `enquiries`
 --
 ALTER TABLE `enquiries`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables

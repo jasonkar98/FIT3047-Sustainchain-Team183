@@ -70,16 +70,70 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
         font-weight: 400;
         margin: 0;
     }
+
+    /* Enquiries */
+    .enquiries-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .enquiry-item {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid #e0e0e0;
+    }
+    .enquiry-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+    }
+    .enquiry-header h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--color-text-primary, #1a1a1a);
+    }
+    .enquiry-date {
+        font-size: 0.9rem;
+        color: #666;
+    }
+    .enquiry-body {
+        color: #555;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+    .enquiry-status .status {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    .status.sent {
+        background: #d4edda;
+        color: #155724;
+    }
+    .status.pending {
+        background: #fff3cd;
+        color: #856404;
+    }
 </style>
 
-<div class="dash-page">
-
-    <!-- Welcome -->
-    <div class="welcome">
-        <div class="welcome-text">
-            <h1>Welcome back, <em><?= $first_name ?></em></h1>
-        </div>
+<div class="marketplace-header">
+    <div class="marketplace-header-inner">
+        <span class="t-label section-tag">Dashboard</span>
+        <h1 class="marketplace-title t-display">
+            Welcome back, <em><?= $first_name ?></em>
+        </h1>
+        <p class="marketplace-subtitle">
+            Everything you need to manage your sustainable shopping in one place.
+        </p>
     </div>
+</div>
+
+
+<div class="dash-page">
 
     <!-- Stats -->
     <div class="stats-row">
@@ -89,6 +143,62 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
             <div class="stat-num"><?= h($s['value']) ?></div>
         </div>
         <?php endforeach; ?>
+    </div>
+    
+    <div>
+        <div class="section-head">
+            <h2>My Inquiries</h2>
+        </div>
+
+        <?php if (empty($enquiries)): ?>
+        <div class="favourites-empty">
+            <p><?= __('You have not submitted any inquiries.') ?></p>
+        </div>
+        <?php else: ?>
+        <div class="enquiries-list">
+            <?php foreach ($enquiries as $enquiry): ?>
+            <div class="enquiry-item">
+                <div class="enquiry-header">
+                    <h3><?= h($enquiry->subject) ?></h3>
+                    <span class="enquiry-date"><?= $enquiry->date->i18nFormat('dd MMM YYYY') ?></span>
+                </div>
+                <p class="enquiry-body"><?= h(substr($enquiry->body, 0, 200)) ?><?php if (strlen($enquiry->body) > 200): ?>...<?php endif; ?></p>
+                <div class="enquiry-status">
+                    <?php if ($enquiry->email_sent): ?>
+                        <span class="status sent">Response Sent</span>
+                    <?php else: ?>
+                        <span class="status pending">Pending Response</span>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+    </div>
+
+    <!-- Ordered Products -->
+    <div>
+        <div class="section-head">
+            <h2>My Orders</h2>
+        </div>
+
+        <?php if (empty($orders)): ?>
+        <div class="favourites-empty">
+            <p><?= __('You have not placed any orders.') ?></p>
+        </div>
+        <?php else: ?>
+        <div class="product-grid">
+            <?php foreach ($orders as $order): ?>
+                <?php if (!empty($order->product)): ?>
+                    <?= $this->element('product_card', [
+                        'product' => $order->product,
+                        'showSaveButton' => true,
+                        'isSaved' => true,
+                    ]) ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
     </div>
 
     <!-- Saved Products -->
@@ -152,52 +262,28 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
     });
     <?php $this->Html->scriptEnd(); ?>
 
-    <!-- Account Details + Activity -->
-    <div class="bottom-row">
-        <!-- Account Details -->
-        <div class="card">
-            <div class="section-head">
-                <h2>Account Details</h2>
-                <?php if ($identity): ?>
-                    <?= $this->Html->link('Edit Details', ['controller' => 'Users', 'action' => 'edit'], ['class' => 'btn btn-dark']) ?>
-                <?php endif; ?>
-            </div>
-            <?php if ($identity): ?>
-            <div class="account-header">
-                <div class="account-avatar"><?= $avatar_initial ?></div>
-                <div>
-                    <div class="account-name"><?= h($identity->first_name) ?> <?= h($identity->last_name ?? '') ?></div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">First Name</span>
-                <span class="detail-val"><?= h($identity->first_name ?? '—') ?></span>
-            </div>
-                <div class="detail-row">
-                <span class="detail-label">Last Name</span>
-                <span class="detail-val"><?= h($identity->last_name ?? '—') ?></span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Email</span>
-                <span class="detail-val"><?= h($identity->email ?? '—') ?></span>
-            </div>
-            <?php endif; ?>
-            
+    <div>
+        <div class="section-head">
+            <h2>My Listings</h2>
+            <?= $this->Html->link('All Listings →', ['controller' => 'Listings', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
         </div>
 
-        <!-- Recent Activity -->
-        <div class="card">
-            <div class="section-head">
-                <h2>Recent Activity</h2>
-            </div>
-            <?php foreach ($activity as $a): ?>
-            <div class="act-row">
-                <div class="act-dot <?= h($a['theme']) ?>"><?= $a['icon'] ?></div>
-                <div class="act-text"><?= h($a['text']) ?></div>
-                <div class="act-time"><?= h($a['time']) ?></div>
-            </div>
+        <?php if (empty($favourites)): ?>
+        <div class="favourites-empty">
+            <p><?= __('You have not created any listings.') ?></p>
+        </div>
+        <?php else: ?>
+        <div class="product-grid">
+            <?php foreach ($favourites as $favourite): ?>
+                <?php if (!empty($favourite->product)): ?>
+                    <?= $this->element('product_card', [
+                        'product' => $favourite->product,
+                        'showSaveButton' => true,
+                        'isSaved' => true,
+                    ]) ?>
+                <?php endif; ?>
             <?php endforeach; ?>
         </div>
-
+        <?php endif; ?>
     </div>
 </div>

@@ -22,6 +22,13 @@ class DashboardController extends AppController
             ->all()
             ->toArray();
 
-        $this->set(compact('favourites'));
+        $enquiries = $this->fetchTable('Enquiries')
+            ->find()
+            ->where(['user_id' => $identity->id])
+            ->order(['date' => 'DESC'])
+            ->all()
+            ->toArray();
+
+        $this->set(compact('favourites', 'enquiries'));
     }
 }

@@ -175,11 +175,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </a>
 
     <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#mission">Our Mission</a></li>
         <li><?= $this->Html->link('Marketplace', ['controller' => 'Products', 'action' => 'index']) ?></li>
         <li><a href="#innovators">Discover Innovators</a></li>
-        <li><?= $this->Html->link('Enquire', ['controller' => 'Enquiries', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link('Contact Us', ['controller' => 'Enquiries', 'action' => 'add']) ?></li>
     </ul>
 
     <div class="nav-right">
@@ -217,14 +215,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     ) ?>
 
                     <?= $this->Html->link(
-                        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 13c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg> My Profile',
-                        ['controller' => 'Users', 'action' => 'view', $identity->id],
+                        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1L2 6.3l4.2-.7z"/></svg> Saved Products',
+                        ['controller' => 'Favourites', 'action' => 'index'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
 
                     <?= $this->Html->link(
-                        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1L2 6.3l4.2-.7z"/></svg> Saved Products',
-                        ['controller' => 'Favourites', 'action' => 'index'],
+                        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1L2 6.3l4.2-.7z"/></svg> My Listings',
+                        ['controller' => 'Listings', 'action' => 'index'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
 
