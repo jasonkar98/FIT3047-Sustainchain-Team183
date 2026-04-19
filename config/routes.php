@@ -59,8 +59,6 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/', ['controller' => 'Pages', 'action' => 'landingPage']);
 //        $builder->connect('/landingPage', ['controller' => 'Pages', 'action' => 'landingPage']);
 
-        $builder->connect('/', ['controller' => 'Pages', 'action' => 'landingPage']);
-        
         /*
          * ...and connect the rest of 'Pages' controller's URLs.
          */
@@ -68,8 +66,8 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/dashboard', ['controller' => 'Dashboard', 'action' => 'index']);
         $builder->connect('/products', ['controller' => 'Products', 'action' => 'index']);
         $builder->connect('/products/{id}', ['controller' => 'Products', 'action' => 'view'])
-        ->setPatterns(['id' => '\d+'])
-        ->setPass(['id']);
+            ->setPatterns(['id' => '\d+'])
+            ->setPass(['id']);
         /*
          * Connect catchall routes for all controllers.
          *
