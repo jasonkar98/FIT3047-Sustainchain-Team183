@@ -227,6 +227,8 @@ $this->assign('title', 'Add a Product — SustainChain');
     accent-color: rgba(200,232,64,.45);
     width: 15px;
     height: 15px;
+    vertical-align: middle;
+    margin-right: 10px;
 }
 
 

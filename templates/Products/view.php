@@ -57,14 +57,14 @@ $this->assign('title', 'View a Product — SustainChain');
     display: inline-flex; align-items: center; gap: .5rem;
     background: rgba(200,232,64,.12);
     border: 1px solid rgba(200,232,64,.22);
-    color: var(--e1);
+    color: var(--g1);
     padding: .3rem 1rem; border-radius: var(--r999);
     margin-bottom: 1.25rem;
     animation: reveal .5s ease both;
 }
 .form-eyebrow-dot {
     width: 6px; height: 6px; border-radius: 50%;
-    background: var(--e1);
+    background: var(--g0);
     animation: blink 2s ease infinite;
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
@@ -73,22 +73,39 @@ $this->assign('title', 'View a Product — SustainChain');
     font-family: 'Fraunces', serif;
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 700; line-height: 1.05; letter-spacing: -0.03em;
-    color: var(--white); margin-bottom: .75rem;
+    color: rgba(13,31,20); margin-bottom: .75rem;
     animation: reveal .6s .1s ease both;
 }
 .form-hero-title em {
     font-style: italic; font-weight: 300; color: var(--e1);
 }
+
+.form-hero-subtitle {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem; line-height: 1.7;
+    font-weight: 700; line-height: 1.05; letter-spacing: -0.03em;
+    font-style: italic;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    color: black; margin-bottom: .75rem;
+    animation: reveal .6s .1s ease both;
+}
+
+.form-hero-subtitle em {
+    font-style: italic; font-weight: 300; color: var(--g3);
+}
+
 .form-hero-sub {
-    font-size: 1rem; line-height: 1.7;
-    color: rgba(255,255,255,.45);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: black;
     animation: reveal .6s .2s ease both;
 }
 
 .attribute-label {
     display: block;
     font-family: 'Cabinet Grotesk', sans-serif;
-    font-size: 1.5vw; font-weight: 700;
+    font-size: 1.5vw; font-weight: 350;
     letter-spacing: .12em; text-transform: uppercase;
     color: var(--muted);
     margin-top: 0.75rem;
@@ -97,7 +114,8 @@ $this->assign('title', 'View a Product — SustainChain');
 .attribute-value {
     display: block;
     font-family: 'Cabinet Grotesk', sans-serif;
-    font-size: 2vw; font-weight: 350;
+    font-size: clamp(1rem, 3vw, 3rem); font-weight: 550;
+    padding-left: 1rem;
     color: black;
     margin-top: 0.75rem;
 }
@@ -115,6 +133,7 @@ $this->assign('title', 'View a Product — SustainChain');
 .form-main-inner {
     width: 70vw;
     margin: 0 auto;
+    margin-top: 3rem;
 }
 
 /* ── Form card ── */
@@ -123,9 +142,9 @@ $this->assign('title', 'View a Product — SustainChain');
     border: 1px solid var(--s2);
     border-radius: var(--r24);
     padding: 3rem;
-    /* width: 80vw; */
     box-shadow: 0 8px 40px rgba(13,31,20,.07);
     animation: reveal .6s .3s ease both;
+
 }
 
 /* ── Form fields ── */
@@ -310,25 +329,6 @@ $this->assign('title', 'View a Product — SustainChain');
 </style>
 
 
-<!-- ════ HERO ════ -->
-<div class="form-hero">
-    <div class="form-hero-bg"></div>
-    <div class="form-hero-circle"></div>
-
-    <div class="form-hero-inner">
-        <div class="form-eyebrow t-label">
-            <span class="form-eyebrow-dot"></span>
-            <?= h($product->category) ?>
-        </div>
-        <h1 class="form-hero-title">
-            <?= h($product->name) ?> <em>by <?= h($product->user->first_name) ?> <?= h($product->user->last_name) ?></em>
-        </h1>
-        <p class="form-hero-sub">
-            <?= h($product->description) ?>
-        </p>
-    </div>
-</div>
-
 <!-- ════ FORM ════ -->
 <div class="form-main">
     <div class="form-main-inner">
@@ -338,11 +338,11 @@ $this->assign('title', 'View a Product — SustainChain');
             <div class="products view content">
             <table>
                 <tr>
-                    <td>
+                    <td style="width: 50%">
                     <?= $this->Html->image('products/' . $product->image_url, [
                         'style' => 
-                        'width:25vw; 
-                        height: auto; 
+                        'width: 50vw;
+                        object-fit: cover; 
                         margin-top:10px;'
                     ]) ?>
                     </td>
@@ -350,31 +350,30 @@ $this->assign('title', 'View a Product — SustainChain');
                     vertical-align: top;
                     padding: 15px;
                     ">
-                        <div class="attribute-label">
-                        Price: 
+                        <div class="form-hero-title">
+                        <?= h($product->name) ?>
                         </div>
+
+                        <div class="form-hero-subtitle">
+                        <?= h($product->category) ?>
+                        <em>by <?= h($product->user->first_name) ?> <?= h($product->user->last_name) ?></em>
+                        </div>
+
                         <div class="attribute-value">
                         $<?= $this->Number->format($product->price) ?>
                         </div>
                         <br>
-
-                        <div class="attribute-label">
-                        Category: 
-                        </div>
-                        <div class="attribute-value">
-                        <?= h($product->category) ?>
+                        <div class="form-hero-sub">
+                        <?= h($product->description) ?>
                         </div>
                         <br>
 
-                        <div class="attribute-label">
-                        Tags: 
-                        </div>
-                        <div class="attribute-value">
                         <?php foreach ($product->filtertags as $filtertag) : ?>
-                            <?= h($filtertag->name) ?>
-                            <br>
+                            <div class="form-eyebrow t-label">
+                                <span class="form-eyebrow-dot"></span>
+                                <?= h($filtertag->name) ?>
+                            </div>
                         <?php endforeach; ?>
-                        </div>
                     </td>
                 </tr>
         </div>
