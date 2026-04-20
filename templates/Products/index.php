@@ -40,7 +40,7 @@ $this->Html->css('marketplace', ['block' => true]);
 </div>
 
 <!-- Results heading — only shows when there is a keyword AND results exist -->
-<?php if (!empty($this->request->getQuery('keyword')) && !$products->isEmpty()): ?>
+<?php if (!empty($this->request->getQuery('keyword')) && !$products->items()->isEmpty()): ?>
     <div class="search-results-label">
         Here are our results for <strong><?= h($this->request->getQuery('keyword')) ?></strong>
     </div>
@@ -126,7 +126,7 @@ $this->Html->css('marketplace', ['block' => true]);
                 </select>
             </div>
 
-            <?php if ($products->isEmpty()): ?>
+            <?php if ($products->items()->isEmpty()): ?>
                 <div class="marketplace-empty">
                     <?php if (!empty($search['category']) || !empty($search['price_min']) || !empty($search['price_max'])): ?>
                         <p>No results found for your filters.</p>
