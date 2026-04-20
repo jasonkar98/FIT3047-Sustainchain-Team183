@@ -40,7 +40,7 @@ $this->Html->css('marketplace', ['block' => true]);
 </div>
 
 <!-- Results heading — only shows when there is a keyword AND results exist -->
-<?php if (!empty($this->request->getQuery('keyword')) && !$products->isEmpty()): ?>
+<?php if (!empty($this->request->getQuery('keyword')) && !$products->items()->isEmpty()): ?>
     <div class="search-results-label">
         Here are our results for <strong><?= h($this->request->getQuery('keyword')) ?></strong>
     </div>
