@@ -126,7 +126,7 @@ $this->Html->css('marketplace', ['block' => true]);
                 </select>
             </div>
 
-            <?php if ($products->isEmpty()): ?>
+            <?php if ($products->items()->isEmpty()): ?>
                 <div class="marketplace-empty">
                     <?php if (!empty($search['category']) || !empty($search['price_min']) || !empty($search['price_max'])): ?>
                         <p>No results found for your filters.</p>
