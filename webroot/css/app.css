@@ -173,7 +173,7 @@ a {
 .hero-sub {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgb(255, 255, 255);
     max-width: 500px;
     margin-bottom: 2.5rem;
     animation: reveal 0.65s 0.2s ease both;
