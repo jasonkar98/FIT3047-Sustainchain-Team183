@@ -181,6 +181,20 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </ul>
 
     <div class="nav-right">
+        
+        <div class="nav-search" id="navSearch">
+        <button class="nav-search-icon" id="navSearchBtn" aria-label="Search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+        </button>
+        <form class="nav-search-form" action="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index'], ['fullBase' => true]) ?>" method="get">
+        <input type="text" name="keyword" class="nav-search-input" placeholder="Search products..." />
+        </form>
+    </div>
+
+
+
         <?php $identity = $this->request->getAttribute('identity'); ?>
         <?php if ($identity): ?>
 
@@ -264,6 +278,33 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
 <footer>
 </footer>
+
+<script>
+    const navSearch = document.getElementById('navSearch');
+    const navSearchBtn = document.getElementById('navSearchBtn');
+    const navSearchInput = navSearch.querySelector('.nav-search-input');
+
+    navSearchBtn.addEventListener('click', () => {
+        navSearch.classList.toggle('open');
+        if (navSearch.classList.contains('open')) {
+            navSearchInput.focus();
+        }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!navSearch.contains(e.target)) {
+            navSearch.classList.remove('open');
+        }
+    });
+
+    // Submit on Enter
+    navSearchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            navSearchInput.closest('form').submit();
+        }
+    });
+</script>
 
 <script>
     function toggleUserMenu() {
