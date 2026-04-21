@@ -29,7 +29,7 @@ $this->assign('title', 'SustainChain');
             </p>
 
             <div class="hero-actions">
-                <?= $this->Html->link('Shop now', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'btn btn-lime btn-lg']) ?>
+                <?= $this->Html->link('Shop now', ['controller' => 'Products', 'action' => 'index'], ['class' => 'btn btn-lime btn-lg']) ?>
             </div>
         </div>
 
