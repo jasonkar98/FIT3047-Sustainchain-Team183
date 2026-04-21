@@ -6,20 +6,14 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Product Entity
+ * Filtertag Entity
  *
  * @property int $id
  * @property string $name
- * @property string $description
- * @property string $price
- * @property string $category
- * @property int $user_id
- * @property string|null $image_url
- * @property \Cake\I18n\DateTime|null $created
- * @property \Cake\I18n\DateTime|null $modified
- * @property \App\Model\Entity\Filtertag[] $filtertags
+ *
+ * @property \App\Model\Entity\Product[] $products
  */
-class Product extends Entity
+class Filtertag extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -32,13 +26,6 @@ class Product extends Entity
      */
     protected array $_accessible = [
         'name' => true,
-        'description' => true,
-        'price' => true,
-        'category' => true,
-        'user_id' => true,
-        'image_url' => true,
-        'created' => true,
-        'modified' => true,
-        'filtertags' => true,
+        'products' => true,
     ];
 }

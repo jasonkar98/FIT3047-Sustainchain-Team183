@@ -169,16 +169,17 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
 <body>
 <nav class="nav">
-    <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
-        <div class="nav-logo-icon">🌿</div>
-        <span class="nav-logo-name">Sustain<span>Chain</span></span>
-    </a>
+    <div class="nav-left">
+        <a href="/" class="nav-logo">
+            <div class="nav-logo-icon">🌿</div>
+            <span class="nav-logo-name">Sustain<span>Chain</span></span>
+        </a>
 
-    <ul class="nav-links">
-        <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
-        <li><a href="#innovators">Discover Innovators</a></li>
-        <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
-    </ul>
+        <ul class="nav-links">
+            <li><?= $this->Html->link('Marketplace', ['controller' => 'Products', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link('Contact Us', ['controller' => 'Enquiries', 'action' => 'add']) ?></li>
+        </ul>
+    </div>
 
     <div class="nav-right">
         
@@ -237,20 +238,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     ) ?>
 
                     <?= $this->Html->link(
-                        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1L2 6.3l4.2-.7z"/></svg> Saved Products',
-                        ['prefix' => false, 'controller' => 'Favourites', 'action' => 'index'],
-                        ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
-                    ) ?>
-
-                    <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1L2 6.3l4.2-.7z"/></svg> My Listings',
-                        ['prefix' => false, 'controller' => 'Listings', 'action' => 'index'],
-                        ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
-                    ) ?>
-
-                    <?= $this->Html->link(
-                        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1v2m0 10v2M1 8h2m10 0h2"/></svg> Settings',
-                        ['prefix' => false, 'controller' => 'Users', 'action' => 'edit', $identity->id],
+                        ['controller' => 'Products', 'action' => 'myListings'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
 
@@ -276,7 +265,49 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('content') ?>
 </main>
 
-<footer>
+<!-- footer -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <div class="footer-logo-wrap">
+                <span class="footer-logo-name">Sustain<span>Chain</span></span>
+            </div>
+            <p class="footer-tagline">A vibrant marketplace for responsible consumption and a greener future.</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Platform</h4>
+            <ul>
+                <li><a href="#about">Features</a></li>
+                <li><a href="#marketplace">Marketplace</a></li>
+                <li><a href="#innovators">Discover Innovators</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Commerce</h4>
+            <ul>
+                <li><a href="/buyers">For Buyers</a></li>
+                <li><a href="/sellers">For Sellers</a></li>
+                <li><a href="/manufacturers">For Manufacturers</a></li>
+                <li><a href="/farmers">For Farmers</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="#mission">Our Mission</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/enquiries">Enquire</a></li>
+                <li><a href="/users/login">Log in</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p class="footer-copy">© <?= date('Y') ?> SustainChain. All rights reserved.</p>
+    </div>
 </footer>
 
 <script>

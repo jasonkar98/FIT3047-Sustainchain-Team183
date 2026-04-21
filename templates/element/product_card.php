@@ -14,11 +14,11 @@
             ? $product->image_url
             : 'https://placehold.co/400x300/d9ede4/2e7d52?text=No+Image';
         ?>
-        <img
-            class="product-img"
-            src="<?= h($imageSrc) ?>"
-            alt="<?= h($product->name) ?>"
-        >
+
+        <?= $this->Html->image('products/' . $product->image_url, [
+            'class' => 'product-view-img',
+            'alt'   => h($product->name),
+        ]) ?>
 
         <?php if (!empty($showSaveButton)): ?>
         <?php

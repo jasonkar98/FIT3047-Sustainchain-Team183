@@ -7,12 +7,6 @@ $this->Html->css('dash', ['block' => true]);
 $identity = $this->request->getAttribute('identity');
 $this->assign('title', 'Dashboard');
 
-$stats = [
-    ['label' => 'Saved Products', 'value' => count($favourites)],
-    ['label' => 'Total Orders',   'value' => count($orders)],
-    ['label' => 'Member Since', 'value' => $identity ? $identity->created->i18nFormat('dd MMM YYYY') : '—'],
-];
-
 $first_name = $identity ? h($identity->first_name) : 'there';
 $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1)) : '?';
 ?>
@@ -34,6 +28,9 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
         color: #888;
         font-size: 14px;
         margin-bottom: 2.5rem;
+    }
+    .favourites-empty p {
+        margin-bottom: 1.5rem;
     }
 
     .section-head {
@@ -242,77 +239,7 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
 
 <div class="dash-page">
 
-    <!-- Stats -->
-    <div class="stats-row">
-        <?php foreach ($stats as $s): ?>
-        <div class="stat-card">
-            <div class="stat-label"><?= h($s['label']) ?></div>
-            <div class="stat-num"><?= h($s['value']) ?></div>
-        </div>
-        <?php endforeach; ?>
-    </div>
-
-    <!-- My Inquiries -->
-    <div>
-        <div class="section-head">
-            <h2>My Inquiries</h2>
-        </div>
-
-        <?php if (empty($enquiries)): ?>
-        <div class="favourites-empty">
-            <p><?= __('You have not submitted any inquiries.') ?></p>
-        </div>
-        <?php else: ?>
-        <div class="enquiries-list">
-            <?php foreach ($enquiries as $enquiry): ?>
-            <div class="enquiry-item">
-                <div class="enquiry-header">
-                    <h3><?= h($enquiry->subject) ?></h3>
-                    <span class="enquiry-date"><?= $enquiry->date->i18nFormat('dd MMM YYYY') ?></span>
-                </div>
-                <p class="enquiry-body"><?= h(substr($enquiry->body, 0, 200)) ?><?php if (strlen($enquiry->body) > 200): ?>...<?php endif; ?></p>
-                <div class="enquiry-status">
-                    <?php if ($enquiry->email_sent): ?>
-                        <span class="status sent">Response Sent</span>
-                    <?php else: ?>
-                        <span class="status pending">Pending Response</span>
-                    <?php endif; ?>
-                </div>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <?php endif; ?>
-    </div>
-
-    <!-- My Orders -->
-    <div>
-        <div class="section-head">
-            <h2>My Orders</h2>
-        </div>
-
-        <?php if (empty($orders)): ?>
-        <div class="favourites-empty">
-            <p><?= __('You have not placed any orders.') ?></p>
-        </div>
-        <?php else: ?>
-        <div class="orders-list">
-            <?php foreach ($orders as $order): ?>
-            <div class="order-item">
-                <div class="order-header">
-                    <h3>Order #<?= h($order->order_number) ?></h3>
-                    <span class="order-date"><?= $order->created->i18nFormat('dd MMM YYYY') ?></span>
-                </div>
-                <div class="order-details">
-                    <span class="order-amount">$<?= h($order->total_amount) ?></span>
-                    <span class="order-status status-<?= h($order->status) ?>"><?= h(ucfirst($order->status)) ?></span>
-                </div>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <?php endif; ?>
-    </div>
-
-    <!-- Saved Listings (slider) -->
+    <!-- Saved Listings -->
     <div class="saved-listings-wrapper">
         <button class="slider-arrow prev" aria-label="Previous">❮</button>
         <button class="slider-arrow next" aria-label="Next">❯</button>
@@ -342,11 +269,40 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
         <?php endif; ?>
     </div>
 
+    <!-- My Orders -->
+    <div>
+        <div class="section-head">
+            <h2>My Orders</h2>
+        </div>
+
+        <?php if (empty($orders)): ?>
+        <div class="favourites-empty">
+            <p><?= __('You have not placed any orders.') ?></p>
+            <?= $this->Html->link('Browse Products', ['controller' => 'Products', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
+        </div>
+        <?php else: ?>
+        <div class="orders-list">
+            <?php foreach ($orders as $order): ?>
+            <div class="order-item">
+                <div class="order-header">
+                    <h3>Order #<?= h($order->order_number) ?></h3>
+                    <span class="order-date"><?= $order->created->i18nFormat('dd MMM YYYY') ?></span>
+                </div>
+                <div class="order-details">
+                    <span class="order-amount">$<?= h($order->total_amount) ?></span>
+                    <span class="order-status status-<?= h($order->status) ?>"><?= h(ucfirst($order->status)) ?></span>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+    </div>
+
     <!-- My Listings -->
     <div>
         <div class="section-head">
             <h2>My Listings</h2>
-            <?= $this->Html->link('All Listings →', ['controller' => 'Listings', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
+            <?= $this->Html->link('All Listings →', ['controller' => 'Products', 'action' => 'my_listings'], ['class' => 'btn btn-lime']) ?>
         </div>
 
         <?php if (empty($listings)): ?>
@@ -354,13 +310,50 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
             <p><?= __('You have not created any listings.') ?></p>
         </div>
         <?php else: ?>
-        <div class="products-grid">
-            <?php foreach ($listings as $listing): ?>
-                <?= $this->element('product_card', [
-                    'product' => $listing,
-                    'showSaveButton' => false,
-                    'isSaved' => false,
-                ]) ?>
+            <div class="slider-viewport">
+                <div class="products-grid slider-track">
+                    <?php foreach ($listings as $listing): ?>
+                        <?php if (!empty($listing)): ?>
+                            <?= $this->element('product_card', [
+                                'product' => $listing,
+                                'showSaveButton' => false,
+                                'isSaved' => false,
+                            ]) ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+
+        <!-- My Inquiries -->
+    <div>
+        <div class="section-head">
+            <h2>My Inquiries</h2>
+            <?= $this->Html->link('+ New Inquiry', ['controller' => 'Enquiries', 'action' => 'add'], ['class' => 'btn btn-lime']) ?>
+        </div>
+
+        <?php if (empty($enquiries)): ?>
+        <div class="favourites-empty">
+            <p><?= __('You have not submitted any inquiries.') ?></p>
+        </div>
+        <?php else: ?>
+        <div class="enquiries-list">
+            <?php foreach ($enquiries as $enquiry): ?>
+            <div class="enquiry-item">
+                <div class="enquiry-header">
+                    <h3><?= h($enquiry->subject) ?></h3>
+                    <span class="enquiry-date"><?= $enquiry->date->i18nFormat('dd MMM YYYY') ?></span>
+                </div>
+                <p class="enquiry-body"><?= h(substr($enquiry->body, 0, 200)) ?><?php if (strlen($enquiry->body) > 200): ?>...<?php endif; ?></p>
+                <div class="enquiry-status">
+                    <?php if ($enquiry->email_sent): ?>
+                        <span class="status sent">Response Sent</span>
+                    <?php else: ?>
+                        <span class="status pending">Pending Response</span>
+                    <?php endif; ?>
+                </div>
+            </div>
             <?php endforeach; ?>
         </div>
         <?php endif; ?>
@@ -395,6 +388,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     btn.classList.toggle('is-saved');
                     btn.setAttribute('aria-pressed', btn.classList.contains('is-saved'));
+
+                    // If unsaving a product in Saved Listings, remove it from the section
+                    const productCard = btn.closest('.product-card');
+                    const savedListingsWrapper = document.querySelector('.saved-listings-wrapper');
+                    
+                    if (productCard && savedListingsWrapper && savedListingsWrapper.contains(productCard)) {
+                        // Product is in Saved Listings and was just unsaved
+                        if (!btn.classList.contains('is-saved')) {
+                            // Remove the product card with animation
+                            productCard.style.opacity = '0';
+                            productCard.style.transition = 'opacity 0.3s ease';
+                            setTimeout(() => {
+                                productCard.remove();
+                                
+                                // Update stats count
+                                const statNum = document.querySelector('[data-stat="saved-products"]');
+                                if (statNum) {
+                                    const currentCount = parseInt(statNum.textContent) || 0;
+                                    statNum.textContent = Math.max(0, currentCount - 1);
+                                }
+
+                                // Check if no products remain
+                                const sliderTrack = document.querySelector('.slider-track');
+                                if (sliderTrack && sliderTrack.children.length === 0) {
+                                    // Show empty state
+                                    const emptyState = document.createElement('div');
+                                    emptyState.className = 'favourites-empty';
+                                    emptyState.innerHTML = '<p><?= __("No saved products yet.") ?></p>';
+                                    
+                                    const sliderViewport = document.querySelector('.slider-viewport');
+                                    if (sliderViewport) {
+                                        sliderViewport.replaceWith(emptyState);
+                                    }
+                                }
+                            }, 300);
+                        }
+                    }
                 }
             });
         });

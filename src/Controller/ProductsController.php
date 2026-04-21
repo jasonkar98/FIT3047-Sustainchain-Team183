@@ -78,6 +78,166 @@ class ProductsController extends AppController
 
         $this->set(compact('products', 'search', 'categories', 'savedProductIds'));
     }
+    
+        /**
+     * Add method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function add()
+    {
+        $product = $this->Products->newEmptyEntity();
+        if ($this->request->is('post')) {
+
+            $data = $this->request->getData();
+
+            // Getting the User ID
+            $user = $this->Authentication->getIdentity();
+            $userId = $user->getIdentifier();
+            $data['user_id'] = $userId;
+
+            // Adding the Image
+            
+            $image = $data['image_url'];
+            $image_name = $image->getClientFilename();
+
+            // Target directory - ensure this folder exists/has permissions
+            $targetPath = WWW_ROOT . '/img/products/' . $image_name;
+
+            // Store the image name in the database
+            $data['image_url'] = $image_name; 
+            
+            if (!empty($image_name)) {
+                // Move file to webroot folder
+                $image->moveTo($targetPath);
+            }
+            
+            $product = $this->Products->patchEntity($product, $data);
+            
+            if ($this->Products->save($product)) {
+                $this->Flash->success(__('The product has been saved.'));
+
+                return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+            }
+            $this->Flash->error(__('The product could not be saved. Please, try again.'));
+        }
+        
+        $filtertags = $this->Products->Filtertags->find('list', limit: 200)->all();
+        $this->set(compact('product', 'filtertags'));
+    }
+
+    /**
+     * Edit method
+     *
+     * @param string|null $id Product id.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function edit($id = null)
+    {
+        $product = $this->Products->get($id, contain: ['Filtertags']);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+
+            $data = $this->request->getData();
+
+            $current_image = $product['image_url'];
+
+            // Getting the User ID
+            $user = $this->Authentication->getIdentity();
+            $userId = $user->getIdentifier();
+            $data['user_id'] = $userId;
+
+            // Adding the Image
+            $image = $data['image_url'];
+            $image_name = $image->getClientFilename();
+
+            if (empty($image_name)) {
+                $data['image_url'] = $current_image;
+            } else {
+
+                // Target directory - ensure this folder exists/has permissions
+                $targetPath = WWW_ROOT . '/img/products/' . $image_name;
+
+                // Store the image name in the database
+                $data['image_url'] = $image_name; 
+                
+                if (!empty($image_name)) {
+                    // Move file to webroot folder
+                    $image->moveTo($targetPath);
+                }
+
+            }
+            
+            $product = $this->Products->patchEntity($product, $data);
+            
+            if ($this->Products->save($product)) {
+                $this->Flash->success(__('The product has been saved.'));
+
+                return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+            }
+            $this->Flash->error(__('The product could not be saved. Please, try again.'));
+        }
+
+        $filtertags = $this->Products->Filtertags->find('list', limit: 200)->all();
+        $this->set(compact('product', 'filtertags'));
+    }
+
+    /**
+     * Delete method
+     *
+     * @param string|null $id Product id.
+     * @return \Cake\Http\Response|null Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function delete($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $product = $this->Products->get($id);
+        if ($this->Products->delete($product)) {
+            $this->Flash->success(__('The product has been deleted.'));
+        } else {
+            $this->Flash->error(__('The product could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * View method
+     *
+     * @param string|null $id Product id.
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function view($id = null)
+    {
+        $product = $this->Products->get($id, contain: ['Users', 'Filtertags']);
+
+        $identity = $this->Authentication->getIdentity();
+        $isSaved = false;
+        if ($identity) {
+            $isSaved = $this->fetchTable('Favourites')
+                ->exists(['user_id' => $identity->getIdentifier(), 'product_id' => $id]);
+        }
+
+        $this->set(compact('product', 'isSaved'));
+    }
+
+
+    public function myListings(): void
+    {
+        $identity = $this->Authentication->getIdentity();
+
+        $query = $this->Products->find()
+            ->where(['Products.user_id' => $identity->getIdentifier()])
+            ->orderBy(['Products.created' => 'DESC']);
+
+        $listings = $this->paginate($query, ['limit' => 12]);
+
+        $first_name = $identity->first_name;
+
+        $this->set(compact('listings', 'first_name'));
+    }
 
     public function toggleSave($id = null)
     {
