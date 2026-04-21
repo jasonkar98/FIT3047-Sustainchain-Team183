@@ -310,15 +310,19 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
             <p><?= __('You have not created any listings.') ?></p>
         </div>
         <?php else: ?>
-        <div class="products-grid">
-            <?php foreach ($listings as $listing): ?>
-                <?= $this->element('product_card', [
-                    'product' => $listing,
-                    'showSaveButton' => false,
-                    'isSaved' => false,
-                ]) ?>
-            <?php endforeach; ?>
-        </div>
+            <div class="slider-viewport">
+                <div class="products-grid slider-track">
+                    <?php foreach ($listings as $listing): ?>
+                        <?php if (!empty($listing)): ?>
+                            <?= $this->element('product_card', [
+                                'product' => $listing,
+                                'showSaveButton' => false,
+                                'isSaved' => false,
+                            ]) ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
         <?php endif; ?>
     </div>
 
