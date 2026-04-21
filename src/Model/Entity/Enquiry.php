@@ -16,6 +16,8 @@ use Cake\ORM\Entity;
  * @property string $subject
  * @property string $body
  * @property bool $email_sent
+ * @property bool $is_read
+ * @property bool $is_resolved
  */
 class Enquiry extends Entity
 {
@@ -36,5 +38,7 @@ class Enquiry extends Entity
         'subject' => true,
         'body' => true,
         'email_sent' => true,
+        'is_read' => true,
+        'is_resolved' => true,
     ];
 }

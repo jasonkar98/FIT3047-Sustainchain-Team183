@@ -87,6 +87,14 @@ class EnquiriesTable extends Table
             ->boolean('email_sent')
             ->notEmptyString('email_sent');
 
+        $validator
+            ->boolean('is_read')
+            ->notEmptyString('is_read');
+
+        $validator
+            ->boolean('is_resolved')
+        ->notEmptyString('is_resolved');
+
         return $validator;
     }
 }

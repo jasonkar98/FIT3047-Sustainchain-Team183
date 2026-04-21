@@ -88,6 +88,20 @@ return function (RouteBuilder $routes): void {
          * It is NOT recommended to use fallback routes after your initial prototyping phase!
          * See https://book.cakephp.org/5/en/development/routing.html#fallbacks-method for more information
          */
+        $builder->prefix('Admin', function (RouteBuilder $builder): void {
+            $builder->connect('/', ['controller' => 'Dashboard', 'action' => 'index']);
+            $builder->connect('/enquiries', ['controller' => 'Enquiries', 'action' => 'index']);
+            $builder->connect('/enquiries/view/{id}', ['controller' => 'Enquiries', 'action' => 'view'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/enquiries/toggle-read/{id}', ['controller' => 'Enquiries', 'action' => 'toggleRead'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/enquiries/toggle-resolved/{id}', ['controller' => 'Enquiries', 'action' => 'toggleResolved'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->fallbacks();
+        });
         $builder->fallbacks();
     });
 

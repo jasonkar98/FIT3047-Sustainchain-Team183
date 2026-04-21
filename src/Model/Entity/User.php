@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property string $id
  * @property string $email
  * @property string $password
+ * @property string $role
  * @property string $first_name
  * @property string $last_name
  * @property string|null $avatar
@@ -36,19 +37,32 @@ class User extends Entity
      * (or remove it), and explicitly make individual fields accessible as needed.
      *
      * @var array<string, bool>
-     */
+     * @property string $role
+    */
     protected array $_accessible = [
         'email' => true,
         'password' => true,
+        'role' => false,
         'first_name' => true,
         'last_name' => true,
         'avatar' => true,
+        'role' => false,   
         'created' => false,
         'modified' => false,
         'nonce' => false, // Nonce and expiry dates are to be set in Controller directly, not through patching
         'nonce_expiry' => false,
         'blog_articles' => true,
     ];
+
+    /**
+     * Whether this user has the admin role.
+     * 
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
 
     /**
      * Fields that are excluded from JSON versions of the entity.
@@ -96,4 +110,6 @@ class User extends Entity
 
         return null;
     }
+
+
 }
