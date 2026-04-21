@@ -7,12 +7,6 @@ $this->Html->css('dash', ['block' => true]);
 $identity = $this->request->getAttribute('identity');
 $this->assign('title', 'Dashboard');
 
-$stats = [
-    ['label' => 'Saved Products', 'value' => count($favourites)],
-    ['label' => 'Total Orders',   'value' => count($orders)],
-    ['label' => 'Member Since', 'value' => $identity ? $identity->created->i18nFormat('dd MMM YYYY') : '—'],
-];
-
 $first_name = $identity ? h($identity->first_name) : 'there';
 $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1)) : '?';
 ?>
@@ -242,16 +236,6 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
 
 <div class="dash-page">
 
-    <!-- Stats -->
-    <div class="stats-row">
-        <?php foreach ($stats as $s): ?>
-        <div class="stat-card">
-            <div class="stat-label"><?= h($s['label']) ?></div>
-            <div class="stat-num"><?= h($s['value']) ?></div>
-        </div>
-        <?php endforeach; ?>
-    </div>
-
     <!-- My Inquiries -->
     <div>
         <div class="section-head">
@@ -395,6 +379,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     btn.classList.toggle('is-saved');
                     btn.setAttribute('aria-pressed', btn.classList.contains('is-saved'));
+
+                    // If unsaving a product in Saved Listings, remove it from the section
+                    const productCard = btn.closest('.product-card');
+                    const savedListingsWrapper = document.querySelector('.saved-listings-wrapper');
+                    
+                    if (productCard && savedListingsWrapper && savedListingsWrapper.contains(productCard)) {
+                        // Product is in Saved Listings and was just unsaved
+                        if (!btn.classList.contains('is-saved')) {
+                            // Remove the product card with animation
+                            productCard.style.opacity = '0';
+                            productCard.style.transition = 'opacity 0.3s ease';
+                            setTimeout(() => {
+                                productCard.remove();
+                                
+                                // Update stats count
+                                const statNum = document.querySelector('[data-stat="saved-products"]');
+                                if (statNum) {
+                                    const currentCount = parseInt(statNum.textContent) || 0;
+                                    statNum.textContent = Math.max(0, currentCount - 1);
+                                }
+
+                                // Check if no products remain
+                                const sliderTrack = document.querySelector('.slider-track');
+                                if (sliderTrack && sliderTrack.children.length === 0) {
+                                    // Show empty state
+                                    const emptyState = document.createElement('div');
+                                    emptyState.className = 'favourites-empty';
+                                    emptyState.innerHTML = '<p><?= __("No saved products yet.") ?></p>';
+                                    
+                                    const sliderViewport = document.querySelector('.slider-viewport');
+                                    if (sliderViewport) {
+                                        sliderViewport.replaceWith(emptyState);
+                                    }
+                                }
+                            }, 300);
+                        }
+                    }
                 }
             });
         });
