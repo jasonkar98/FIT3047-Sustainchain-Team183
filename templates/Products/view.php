@@ -10,6 +10,7 @@
 use Cake\Core\Configure;
 
 $this->assign('title', h($product->name) . ' — SustainChain');
+$this->Html->css('marketplace', ['block' => true]);
 ?>
 
 <style>
@@ -212,6 +213,36 @@ $this->assign('title', h($product->name) . ' — SustainChain');
     height: 18px;
 }
 
+/* ── Back button ── */
+.product-view-back {
+    margin-bottom: 2rem;
+}
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--white);
+    border: 1px solid var(--s2);
+    color: var(--g2);
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--r16);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.18s var(--ease-spring);
+    text-decoration: none;
+}
+.btn-back:hover {
+    background: var(--s1);
+    color: var(--g0);
+    transform: translateY(-1px);
+}
+.btn-back-icon {
+    width: 16px;
+    height: 16px;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
     .product-view-card {
@@ -229,8 +260,32 @@ $this->assign('title', h($product->name) . ' — SustainChain');
 }
 </style>
 
+<!-- Page header — dark green banner, same style as the landing page hero -->
+<div class="marketplace-header">
+    <div class="marketplace-header-inner">
+        <span class="t-label section-tag">SustainChain</span>
+        <h1 class="marketplace-title t-display">
+            The <em>sustainable</em> marketplace
+        </h1>
+        <p class="marketplace-subtitle">
+            Browse products from verified eco-friendly sellers, farmers, and manufacturers.
+        </p>
+    </div>
+</div>
+
 <div class="product-view-wrap">
     <div class="product-view-inner">
+        <!-- Back button -->
+        <div class="product-view-back">
+            <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn-back">
+                <svg class="btn-back-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5"/>
+                    <path d="M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Products
+            </a>
+        </div>
+
         <div class="product-view-card">
 
             <!-- Image -->
