@@ -143,6 +143,39 @@ $this->assign('title', 'Enquiry: ' . h($enquiry->subject));
         border-color: #276a46;
         color: #fff;
     }
+
+    .marketplace-header .marketplace-title {
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        max-width: 1100px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0 1.5rem;
+        line-height: 1.1;
+    }
+
+        /* Prev/Next navigation between enquiries */
+    .enquiry-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        max-width: 820px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .enquiry-nav .nav-link-label {
+        flex: 1;
+        text-align: center;
+        font-size: .85rem;
+        color: #666;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-width: 0;
+    }
 </style>
 
 <div class="marketplace-header">
@@ -200,5 +233,20 @@ $this->assign('title', 'Enquiry: ' . h($enquiry->subject));
                 ['class' => 'btn btn-dark']
             ) ?>
         </div>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem;">
+        <?php if ($prev): ?>
+            <?= $this->Html->link('← Previous', ['action' => 'view', $prev->id], ['class' => 'admin-back', 'escape' => false]) ?>
+        <?php else: ?>
+            <span class="admin-back" style="opacity: 0.4; cursor: default; pointer-events: none;">← Previous</span>
+        <?php endif; ?>
+
+        <span style="font-size: .85rem; color: #888;"><?= h($enquiry->subject) ?></span>
+
+        <?php if ($next): ?>
+            <?= $this->Html->link('Next →', ['action' => 'view', $next->id], ['class' => 'admin-back', 'escape' => false]) ?>
+        <?php else: ?>
+            <span class="admin-back" style="opacity: 0.4; cursor: default; pointer-events: none;">Next →</span>
+        <?php endif; ?>
     </div>
 </div>

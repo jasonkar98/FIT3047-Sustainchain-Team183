@@ -26,17 +26,21 @@ class EnquiriesController extends AppController
 
     public function view($id = null)
     {
-        $enquiriesTable = $this->fetchTable('Enquiries');
-        $enquiry = $enquiriesTable->get($id, ['contain' => ['Users']]);
+        $enquiry = $this->Enquiries->get($id, contain: ['Users']);
 
-        // Auto-mark as read when an admin opens it (Gmail-style)
-        if (!$enquiry->is_read) {
-            $enquiry->is_read = true;
-            $enquiriesTable->save($enquiry);
-        }
+        $prev = $this->Enquiries->find()
+            ->where(['id <' => $id])
+            ->orderBy(['id' => 'DESC'])
+            ->first();
 
-        $this->set(compact('enquiry'));
+        $next = $this->Enquiries->find()
+            ->where(['id >' => $id])
+            ->orderBy(['id' => 'ASC'])
+            ->first();
+
+        $this->set(compact('enquiry', 'prev', 'next'));
     }
+
 
     public function toggleRead($id = null)
     {
