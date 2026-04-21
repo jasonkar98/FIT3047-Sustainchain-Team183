@@ -7,6 +7,27 @@
 // - $saveLabel: label for the save button
 // - $saveAction: URL for the save action, if provided
 ?>
+<style>
+
+    /* ── Image side ── */
+.product-view-img-wrap {
+    position: relative;
+    background: var(--s1);
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.product-view-img {
+    width: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+}
+
+</style>
+
 <div class="product-card">
     <div class="product-img-wrap">
         <?php

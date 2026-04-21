@@ -220,25 +220,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <?php else: ?>
             <div class="product-grid">
                 <?php foreach ($products as $product): ?>
-                    <div class="product-card">
-                        <div class="product-img-wrap">
-                            <?php
-                                $imageSrc = !empty($product->image_url)
-                                    ? $product->image_url
-                                    : 'https://placehold.co/400x300/d9ede4/2e7d52?text=No+Image';
-                            ?>
-                            <img class="product-img" src="<?= h($imageSrc) ?>" alt="<?= h($product->name) ?>">
-                        </div>
-                        <div class="product-card-body">
-                            <span class="product-category"><?= h($product->category) ?></span>
-                            <h3 class="product-name"><?= h($product->name) ?></h3>
-                            <p class="product-price">$<?= h(number_format($product->price, 2)) ?></p>
-                            <p class="product-desc"><?= h(mb_strimwidth($product->description, 0, 90, '...')) ?></p>
-                        </div>
-                        <div class="product-card-footer">
-                            <a href="/products/<?= $product->id ?>" class="btn-product">View Product →</a>
-                        </div>
-                    </div>
+                    <?= $this->element('product_card', [
+                        'product' => $product,
+                        'showSaveButton' => false,
+                        'isSaved' => false,
+                    ]) ?>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
