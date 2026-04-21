@@ -72,7 +72,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <?php endif; ?>
     </div>
     </nav>
-    <main class="main">
+    <main class="main" style="padding-top: 80px;">
         <div class="container">
             <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
@@ -110,5 +110,3 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
 </body>
 </html>
-
-

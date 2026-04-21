@@ -24,11 +24,11 @@ class EnquiriesController extends AppController
      */
     public function index()
     {
-        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
-//        $query = $this->Enquiries->find();
-//        $enquiries = $this->paginate($query);
-//
-//        $this->set(compact('enquiries'));
+        
+    $query = $this->Enquiries->find();
+    $enquiries = $this->paginate($query);
+
+       $this->set(compact('enquiries'));
     }
 
     /**
@@ -40,9 +40,19 @@ class EnquiriesController extends AppController
      */
     public function view($id = null)
     {
-        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
-//        $enquiry = $this->Enquiries->get($id, contain: []);
-//        $this->set(compact('enquiry'));
+        
+         $enquiry = $this->Enquiries->get($id, contain: []);
+         $prev = $this->Enquiries->find()
+        ->where(['id <' => $id])
+        ->orderBy(['id' => 'DESC'])
+        ->first();
+
+        $next = $this->Enquiries->find()
+            ->where(['id >' => $id])
+            ->orderBy(['id' => 'ASC'])
+            ->first();
+
+        $this->set(compact('enquiry', 'prev', 'next'));
     }
 
     /**
@@ -74,7 +84,7 @@ class EnquiriesController extends AppController
             }
 
             if ($this->Enquiries->save($enquiry)) {
-                $this->Flash->success(__('The enquiry has been saved.'));
+                $this->Flash->success(__('Thank you for submitting your enquiry.'));
 
                 // and redirect user to the location they're trying to access
                 return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
@@ -94,18 +104,18 @@ class EnquiriesController extends AppController
      */
     public function edit($id = null)
     {
-        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
-//        $enquiry = $this->Enquiries->get($id, contain: []);
-//        if ($this->request->is(['patch', 'post', 'put'])) {
-//            $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
-//            if ($this->Enquiries->save($enquiry)) {
-//                $this->Flash->success(__('The enquiry has been saved.'));
-//
-//                return $this->redirect(['action' => 'index']);
-//            }
-//            $this->Flash->error(__('The enquiry could not be saved. Please, try again.'));
-//        }
-//        $this->set(compact('enquiry'));
+        
+        $enquiry = $this->Enquiries->get($id, contain: []);
+         if ($this->request->is(['patch', 'post', 'put'])) {
+            $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
+            if ($this->Enquiries->save($enquiry)) {
+                $this->Flash->success(__('The enquiry has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The enquiry could not be saved. Please, try again.'));
+        }
+        $this->set(compact('enquiry'));
     }
 
     /**
