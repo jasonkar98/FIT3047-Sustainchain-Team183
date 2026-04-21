@@ -169,16 +169,17 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
 <body>
 <nav class="nav">
-    <a href="/" class="nav-logo">
-        <div class="nav-logo-icon">🌿</div>
-        <span class="nav-logo-name">Sustain<span>Chain</span></span>
-    </a>
+    <div class="nav-left">
+        <a href="/" class="nav-logo">
+            <div class="nav-logo-icon">🌿</div>
+            <span class="nav-logo-name">Sustain<span>Chain</span></span>
+        </a>
 
-    <ul class="nav-links">
-        <li><?= $this->Html->link('Marketplace', ['controller' => 'Products', 'action' => 'index']) ?></li>
-        <!-- <li><a href="#innovators">Discover Innovators</a></li> -->
-        <li><?= $this->Html->link('Contact Us', ['controller' => 'Enquiries', 'action' => 'add']) ?></li>
-    </ul>
+        <ul class="nav-links">
+            <li><?= $this->Html->link('Marketplace', ['controller' => 'Products', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link('Contact Us', ['controller' => 'Enquiries', 'action' => 'add']) ?></li>
+        </ul>
+    </div>
 
     <div class="nav-right">
         <?php $identity = $this->request->getAttribute('identity'); ?>
