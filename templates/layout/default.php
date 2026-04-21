@@ -221,12 +221,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
 
-                    <?= $this->Html->link(
-                        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1v2m0 10v2M1 8h2m10 0h2"/></svg> Settings',
-                        ['controller' => 'Users', 'action' => 'edit', $identity->id],
-                        ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
-                    ) ?>
-
                     <div class="dropdown-divider"></div>
 
                     <?= $this->Html->link(
