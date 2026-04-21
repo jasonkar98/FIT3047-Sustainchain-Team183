@@ -165,7 +165,15 @@ class ProductsController extends AppController
     public function view($id = null)
     {
         $product = $this->Products->get($id, contain: ['Users', 'Filtertags']);
-        $this->set(compact('product'));
+
+        $identity = $this->Authentication->getIdentity();
+        $isSaved = false;
+        if ($identity) {
+            $isSaved = $this->fetchTable('Favourites')
+                ->exists(['user_id' => $identity->getIdentifier(), 'product_id' => $id]);
+        }
+
+        $this->set(compact('product', 'isSaved'));
     }
 
 
