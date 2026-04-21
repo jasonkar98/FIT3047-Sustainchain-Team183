@@ -72,9 +72,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <?php endif; ?>
     </div>
     </nav>
-    <main class="main" style="padding-top: 80px;">
+    <main class="main">
         <div class="container">
-            <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
         </div>
     </main>

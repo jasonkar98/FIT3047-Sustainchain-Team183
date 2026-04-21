@@ -6,7 +6,7 @@
 ?>
 
 <style>
-.enq-wrap { max-width: 760px; margin: 2rem auto; font-family: var(--font-sans, sans-serif); }
+.enq-wrap { max-width: 760px; margin: 2rem auto; font-family: var(--font-sans, sans-serif); padding-top: 80px; }
 .enq-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
 
 /* Header */
