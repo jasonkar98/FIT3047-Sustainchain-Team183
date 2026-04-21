@@ -29,6 +29,19 @@ class ProductsController extends AppController
                 ->toArray();
         }
 
+        // Keyword search
+        if (!empty($search['keyword'])) {
+            $keyword = '%' . trim($search['keyword']) . '%';
+            $query->where([
+                'OR' => [
+                    'Products.name LIKE'        => $keyword,
+                    'Products.description LIKE' => $keyword,
+                    'Products.category LIKE'    => $keyword,
+                ]
+            ]);
+        }
+
+
         // Category filter
         if (!empty($search['category'])) {
             $query->where(['Products.category IN' => (array)$search['category']]);

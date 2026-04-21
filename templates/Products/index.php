@@ -28,10 +28,24 @@ $this->Html->css('marketplace', ['block' => true]);
             'class'       => 'search-input',
         ]) ?>
 
-        <?= $this->Form->button('Search', ['class' => 'btn btn-lime']) ?>
+        <?= $this->Form->button('Search', ['class' => 'btn btn-lime', 'type' => 'submit']) ?>
 
         <?php if ($this->request->getQuery('keyword')): ?>
             <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn-outline">Clear</a>
+        <?php endif; ?>
+
+        <?php // Preserve any active filters/sort when re-searching ?>
+        <?php foreach ((array)($search['category'] ?? []) as $cat): ?>
+            <input type="hidden" name="category[]" value="<?= h($cat) ?>">
+        <?php endforeach; ?>
+        <?php if (!empty($search['price_min'])): ?>
+            <input type="hidden" name="price_min" value="<?= h($search['price_min']) ?>">
+        <?php endif; ?>
+        <?php if (!empty($search['price_max'])): ?>
+            <input type="hidden" name="price_max" value="<?= h($search['price_max']) ?>">
+        <?php endif; ?>
+        <?php if (!empty($search['sort'])): ?>
+            <input type="hidden" name="sort" value="<?= h($search['sort']) ?>">
         <?php endif; ?>
 
     </div>
@@ -88,68 +102,98 @@ document.addEventListener('DOMContentLoaded', () => {
         <input type="hidden" name="keyword" value="<?= h($this->request->getQuery('keyword')) ?>">
     <?php endif; ?>
 
-    <div class="marketplace-layout">
+<div class="marketplace-layout">
 
-        <!-- Sidebar -->
-        <aside class="filter-sidebar">
-            <h3 class="filter-heading">Filters</h3>
+    <!-- Sidebar: Filters form -->
+    <aside class="filter-sidebar">
+        <?= $this->Form->create(null, ['type' => 'get', 'url' => ['action' => 'index']]) ?>
 
-            <!-- Category -->
-            <div class="filter-group">
-                <label class="filter-label">Category</label>
-                <?php foreach ($categories as $cat): ?>
-                    <label class="filter-option">
-                        <input
-                            type="checkbox"
-                            name="category[]"
-                            value="<?= h($cat) ?>"
-                            <?= in_array($cat, (array)($search['category'] ?? [])) ? 'checked' : '' ?>
-                        >
-                        <?= h($cat) ?>
-                    </label>
-                <?php endforeach; ?>
-                <?php if (!empty($search['category'])): ?>
-                    <a href="<?= $this->Url->build(['action' => 'index'] + ['?' => ['keyword' => $search['keyword'] ?? '']]) ?>" class="filter-clear-link">Clear category</a>
+        <?php // Preserve keyword and sort across filter changes ?>
+        <?php if (!empty($search['keyword'])): ?>
+            <input type="hidden" name="keyword" value="<?= h($search['keyword']) ?>">
+        <?php endif; ?>
+        <?php if (!empty($search['sort'])): ?>
+            <input type="hidden" name="sort" value="<?= h($search['sort']) ?>">
+        <?php endif; ?>
+
+        <h3 class="filter-heading">Filters</h3>
+
+        <!-- Category -->
+        <div class="filter-group">
+            <label class="filter-label">Category</label>
+            <?php foreach ($categories as $cat): ?>
+                <label class="filter-option">
+                    <input
+                        type="checkbox"
+                        name="category[]"
+                        value="<?= h($cat) ?>"
+                        <?= in_array($cat, (array)($search['category'] ?? [])) ? 'checked' : '' ?>
+                    >
+                    <?= h($cat) ?>
+                </label>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- Price range -->
+        <div class="filter-group">
+            <label class="filter-label">Price range</label>
+            <div class="price-inputs">
+                <input
+                    type="number"
+                    name="price_min"
+                    placeholder="Min $"
+                    min="0"
+                    step="0.01"
+                    value="<?= h($search['price_min'] ?? '') ?>"
+                    class="price-input"
+                >
+                <span class="price-sep">–</span>
+                <input
+                    type="number"
+                    name="price_max"
+                    placeholder="Max $"
+                    min="0"
+                    step="0.01"
+                    value="<?= h($search['price_max'] ?? '') ?>"
+                    class="price-input"
+                >
+            </div>
+        </div>
+
+        <button type="submit" class="btn-apply">Apply</button>
+
+        <!-- Clear all filters -->
+        <?php if (!empty($search['category']) || !empty($search['price_min']) || !empty($search['price_max'])): ?>
+            <a href="<?= $this->Url->build(['action' => 'index'] + ['?' => array_filter([
+                'keyword' => $search['keyword'] ?? null,
+                'sort' => $search['sort'] ?? null,
+            ])]) ?>" class="btn-clear-all">Clear all filters</a>
+        <?php endif; ?>
+
+        <?= $this->Form->end() ?>
+    </aside>
+
+    <!-- Products column -->
+    <div class="products-col">
+
+        <!-- Sort form -->
+        <div class="sort-row">
+            <?= $this->Form->create(null, ['type' => 'get', 'url' => ['action' => 'index']]) ?>
+
+                <?php // Preserve keyword and filters across sort changes ?>
+                <?php if (!empty($search['keyword'])): ?>
+                    <input type="hidden" name="keyword" value="<?= h($search['keyword']) ?>">
                 <?php endif; ?>
-            </div>
+                <?php foreach ((array)($search['category'] ?? []) as $cat): ?>
+                    <input type="hidden" name="category[]" value="<?= h($cat) ?>">
+                <?php endforeach; ?>
+                <?php if (!empty($search['price_min'])): ?>
+                    <input type="hidden" name="price_min" value="<?= h($search['price_min']) ?>">
+                <?php endif; ?>
+                <?php if (!empty($search['price_max'])): ?>
+                    <input type="hidden" name="price_max" value="<?= h($search['price_max']) ?>">
+                <?php endif; ?>
 
-            <!-- Price range -->
-            <div class="filter-group">
-                <label class="filter-label">Price range</label>
-                <div class="price-inputs">
-                    <input
-                        type="number"
-                        name="price_min"
-                        placeholder="Min $"
-                        min="0"
-                        step="0.01"
-                        value="<?= h($search['price_min'] ?? '') ?>"
-                        class="price-input"
-                    >
-                    <span class="price-sep">–</span>
-                    <input
-                        type="number"
-                        name="price_max"
-                        placeholder="Max $"
-                        min="0"
-                        step="0.01"
-                        value="<?= h($search['price_max'] ?? '') ?>"
-                        class="price-input"
-                    >
-                </div>
-                <button type="submit" class="btn-apply">Apply</button>
-            </div>
-
-            <!-- Clear all filters -->
-            <?php if (!empty($search['category']) || !empty($search['price_min']) || !empty($search['price_max'])): ?>
-                <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn-clear-all">Clear all filters</a>
-            <?php endif; ?>
-        </aside>
-
-        <!-- Products -->
-        <div class="products-col">
-            <!-- sorting -->
-            <div class="sort-row">
                 <select name="sort" class="sort-select" onchange="this.closest('form').submit()">
                     <option value="newest"    <?= ($search['sort'] ?? 'newest') === 'newest'    ? 'selected' : '' ?>>Newest arrivals</option>
                     <option value="price_asc" <?= ($search['sort'] ?? '') === 'price_asc'  ? 'selected' : '' ?>>Price: Low to High</option>
@@ -157,49 +201,50 @@ document.addEventListener('DOMContentLoaded', () => {
                     <option value="name_asc"  <?= ($search['sort'] ?? '') === 'name_asc'   ? 'selected' : '' ?>>A–Z by name</option>
                     <option value="name_desc" <?= ($search['sort'] ?? '') === 'name_desc'  ? 'selected' : '' ?>>Z–A by name</option>
                 </select>
-            </div>
-
-            <?php if ($products->items()->isEmpty()): ?>
-                <div class="marketplace-empty">
-                    <?php if (!empty($search['category']) || !empty($search['price_min']) || !empty($search['price_max'])): ?>
-                        <p>No results found for your filters.</p>
-                        <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-lime">Clear filters</a>
-                    <?php elseif (!empty($this->request->getQuery('keyword'))): ?>
-                        <p>No results found for your search.</p>
-                        <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn btn-lime">Back to All Products</a>
-                    <?php else: ?>
-                        <p>No products available yet. Check back soon!</p>
-                        <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn btn-lime">Back to All Products</a>
-                    <?php endif; ?>
-                </div>
-            <?php else: ?>
-                <div class="product-grid">
-                    <?php foreach ($products as $product): ?>
-                        <div class="product-card">
-                            <div class="product-img-wrap">
-                                <?php
-                                    $imageSrc = !empty($product->image_url)
-                                        ? $product->image_url
-                                        : 'https://placehold.co/400x300/d9ede4/2e7d52?text=No+Image';
-                                ?>
-                                <img class="product-img" src="<?= h($imageSrc) ?>" alt="<?= h($product->name) ?>">
-                            </div>
-                            <div class="product-card-body">
-                                <span class="product-category"><?= h($product->category) ?></span>
-                                <h3 class="product-name"><?= h($product->name) ?></h3>
-                                <p class="product-price">$<?= h(number_format($product->price, 2)) ?></p>
-                                <p class="product-desc"><?= h(mb_strimwidth($product->description, 0, 90, '...')) ?></p>
-                            </div>
-                            <div class="product-card-footer">
-                                <a href="/products/<?= $product->id ?>" class="btn-product">View Product →</a>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+            <?= $this->Form->end() ?>
         </div>
 
+        <?php if ($products->items()->isEmpty()): ?>
+            <div class="marketplace-empty">
+                <?php if (!empty($search['category']) || !empty($search['price_min']) || !empty($search['price_max'])): ?>
+                    <p>No results found for your filters.</p>
+                    <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-lime">Clear filters</a>
+                <?php elseif (!empty($this->request->getQuery('keyword'))): ?>
+                    <p>No results found for your search.</p>
+                    <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn btn-lime">Back to All Products</a>
+                <?php else: ?>
+                    <p>No products available yet. Check back soon!</p>
+                    <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn btn-lime">Back to All Products</a>
+                <?php endif; ?>
+            </div>
+        <?php else: ?>
+            <div class="product-grid">
+                <?php foreach ($products as $product): ?>
+                    <div class="product-card">
+                        <div class="product-img-wrap">
+                            <?php
+                                $imageSrc = !empty($product->image_url)
+                                    ? $product->image_url
+                                    : 'https://placehold.co/400x300/d9ede4/2e7d52?text=No+Image';
+                            ?>
+                            <img class="product-img" src="<?= h($imageSrc) ?>" alt="<?= h($product->name) ?>">
+                        </div>
+                        <div class="product-card-body">
+                            <span class="product-category"><?= h($product->category) ?></span>
+                            <h3 class="product-name"><?= h($product->name) ?></h3>
+                            <p class="product-price">$<?= h(number_format($product->price, 2)) ?></p>
+                            <p class="product-desc"><?= h(mb_strimwidth($product->description, 0, 90, '...')) ?></p>
+                        </div>
+                        <div class="product-card-footer">
+                            <a href="/products/<?= $product->id ?>" class="btn-product">View Product →</a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
+
+</div>
 
     <?= $this->Form->end() ?>
 </div>
@@ -211,4 +256,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 </script>
-
