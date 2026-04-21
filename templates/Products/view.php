@@ -374,6 +374,9 @@ $this->assign('title', 'View a Product — SustainChain');
                                 <?= h($filtertag->name) ?>
                             </div>
                         <?php endforeach; ?>
+                        
+                        <br>
+                        <button>Add to Cart</button>
                     </td>
                 </tr>
         </div>
