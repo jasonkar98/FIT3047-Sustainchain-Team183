@@ -29,6 +29,9 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
         font-size: 14px;
         margin-bottom: 2.5rem;
     }
+    .favourites-empty p {
+        margin-bottom: 1.5rem;
+    }
 
     .section-head {
         display: flex;
@@ -236,67 +239,7 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
 
 <div class="dash-page">
 
-    <!-- My Inquiries -->
-    <div>
-        <div class="section-head">
-            <h2>My Inquiries</h2>
-        </div>
-
-        <?php if (empty($enquiries)): ?>
-        <div class="favourites-empty">
-            <p><?= __('You have not submitted any inquiries.') ?></p>
-        </div>
-        <?php else: ?>
-        <div class="enquiries-list">
-            <?php foreach ($enquiries as $enquiry): ?>
-            <div class="enquiry-item">
-                <div class="enquiry-header">
-                    <h3><?= h($enquiry->subject) ?></h3>
-                    <span class="enquiry-date"><?= $enquiry->date->i18nFormat('dd MMM YYYY') ?></span>
-                </div>
-                <p class="enquiry-body"><?= h(substr($enquiry->body, 0, 200)) ?><?php if (strlen($enquiry->body) > 200): ?>...<?php endif; ?></p>
-                <div class="enquiry-status">
-                    <?php if ($enquiry->email_sent): ?>
-                        <span class="status sent">Response Sent</span>
-                    <?php else: ?>
-                        <span class="status pending">Pending Response</span>
-                    <?php endif; ?>
-                </div>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <?php endif; ?>
-    </div>
-
-    <!-- My Orders -->
-    <div>
-        <div class="section-head">
-            <h2>My Orders</h2>
-        </div>
-
-        <?php if (empty($orders)): ?>
-        <div class="favourites-empty">
-            <p><?= __('You have not placed any orders.') ?></p>
-        </div>
-        <?php else: ?>
-        <div class="orders-list">
-            <?php foreach ($orders as $order): ?>
-            <div class="order-item">
-                <div class="order-header">
-                    <h3>Order #<?= h($order->order_number) ?></h3>
-                    <span class="order-date"><?= $order->created->i18nFormat('dd MMM YYYY') ?></span>
-                </div>
-                <div class="order-details">
-                    <span class="order-amount">$<?= h($order->total_amount) ?></span>
-                    <span class="order-status status-<?= h($order->status) ?>"><?= h(ucfirst($order->status)) ?></span>
-                </div>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <?php endif; ?>
-    </div>
-
-    <!-- Saved Listings (slider) -->
+    <!-- Saved Listings -->
     <div class="saved-listings-wrapper">
         <button class="slider-arrow prev" aria-label="Previous">❮</button>
         <button class="slider-arrow next" aria-label="Next">❯</button>
@@ -326,11 +269,40 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
         <?php endif; ?>
     </div>
 
+    <!-- My Orders -->
+    <div>
+        <div class="section-head">
+            <h2>My Orders</h2>
+        </div>
+
+        <?php if (empty($orders)): ?>
+        <div class="favourites-empty">
+            <p><?= __('You have not placed any orders.') ?></p>
+            <?= $this->Html->link('Browse Products', ['controller' => 'Products', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
+        </div>
+        <?php else: ?>
+        <div class="orders-list">
+            <?php foreach ($orders as $order): ?>
+            <div class="order-item">
+                <div class="order-header">
+                    <h3>Order #<?= h($order->order_number) ?></h3>
+                    <span class="order-date"><?= $order->created->i18nFormat('dd MMM YYYY') ?></span>
+                </div>
+                <div class="order-details">
+                    <span class="order-amount">$<?= h($order->total_amount) ?></span>
+                    <span class="order-status status-<?= h($order->status) ?>"><?= h(ucfirst($order->status)) ?></span>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+    </div>
+
     <!-- My Listings -->
     <div>
         <div class="section-head">
             <h2>My Listings</h2>
-            <?= $this->Html->link('All Listings →', ['controller' => 'Listings', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
+            <?= $this->Html->link('All Listings →', ['controller' => 'Products', 'action' => 'my_listings'], ['class' => 'btn btn-lime']) ?>
         </div>
 
         <?php if (empty($listings)): ?>
@@ -345,6 +317,39 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
                     'showSaveButton' => false,
                     'isSaved' => false,
                 ]) ?>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+    </div>
+
+        <!-- My Inquiries -->
+    <div>
+        <div class="section-head">
+            <h2>My Inquiries</h2>
+            <?= $this->Html->link('+ New Inquiry', ['controller' => 'Enquiries', 'action' => 'add'], ['class' => 'btn btn-lime']) ?>
+        </div>
+
+        <?php if (empty($enquiries)): ?>
+        <div class="favourites-empty">
+            <p><?= __('You have not submitted any inquiries.') ?></p>
+        </div>
+        <?php else: ?>
+        <div class="enquiries-list">
+            <?php foreach ($enquiries as $enquiry): ?>
+            <div class="enquiry-item">
+                <div class="enquiry-header">
+                    <h3><?= h($enquiry->subject) ?></h3>
+                    <span class="enquiry-date"><?= $enquiry->date->i18nFormat('dd MMM YYYY') ?></span>
+                </div>
+                <p class="enquiry-body"><?= h(substr($enquiry->body, 0, 200)) ?><?php if (strlen($enquiry->body) > 200): ?>...<?php endif; ?></p>
+                <div class="enquiry-status">
+                    <?php if ($enquiry->email_sent): ?>
+                        <span class="status sent">Response Sent</span>
+                    <?php else: ?>
+                        <span class="status pending">Pending Response</span>
+                    <?php endif; ?>
+                </div>
+            </div>
             <?php endforeach; ?>
         </div>
         <?php endif; ?>

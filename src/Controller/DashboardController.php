@@ -18,7 +18,7 @@ class DashboardController extends AppController
         $favourites = $this->fetchTable('Favourites')
             ->find()
             ->contain(['Products'])
-            ->where(['user_id' => $identity->id])
+            ->where(['Favourites.user_id' => $identity->getIdentifier()])
             ->all()
             ->toArray();
 

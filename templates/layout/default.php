@@ -216,7 +216,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1L2 6.3l4.2-.7z"/></svg> My Listings',
-                        ['controller' => 'Listings', 'action' => 'index'],
+                        ['controller' => 'Products', 'action' => 'myListings'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
 

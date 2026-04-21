@@ -32,6 +32,21 @@ class ProductsController extends AppController
         $this->set(compact('products', 'savedProductIds'));
     }
 
+    public function myListings(): void
+    {
+        $identity = $this->Authentication->getIdentity();
+
+        $query = $this->Products->find()
+            ->where(['Products.user_id' => $identity->getIdentifier()])
+            ->orderBy(['Products.created' => 'DESC']);
+
+        $listings = $this->paginate($query, ['limit' => 12]);
+
+        $first_name = $identity->first_name;
+
+        $this->set(compact('listings', 'first_name'));
+    }
+
     public function toggleSave($id = null)
     {
         $this->request->allowMethod(['post']);
