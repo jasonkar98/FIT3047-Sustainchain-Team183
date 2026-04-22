@@ -40,9 +40,20 @@ class EnquiriesController extends AppController
      */
     public function view($id = null)
     {
-        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
-//        $enquiry = $this->Enquiries->get($id, contain: []);
-//        $this->set(compact('enquiry'));
+        $identity = $this->Authentication->getIdentity();
+        if (!$identity) {
+            return $this->redirect(['controller' => 'Auth', 'action' => 'login']);
+        }
+
+        $enquiry = $this->Enquiries->get($id, contain: ['Users']);
+
+        // Check if the logged-in user owns this enquiry
+        if ($enquiry->user_id !== $identity->getIdentifier()) {
+            $this->Flash->error(__('You are not authorized to view this enquiry.'));
+            return $this->redirect(['controller' => 'Dashboard', 'action' => 'index']);
+        }
+
+        $this->set(compact('enquiry'));
     }
 
     /**

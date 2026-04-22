@@ -221,15 +221,16 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 <div class="nav-dropdown" id="user-menu" role="menu">
                     <div class="dropdown-header">
                         <div class="d-name"><?= h($identity->first_name) ?> <?= h($identity->last_name ?? '') ?></div>
-                        <?php if ($identity->get('role') === 'admin'): ?>
-                            <?= $this->Html->link(
-                                '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l6 3v5c0 3.5-2.5 6-6 7-3.5-1-6-3.5-6-7V4z"/></svg> Admin Area',
-                                ['prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
-                                ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
-                            ) ?>
-                            <div class="dropdown-divider"></div>
-                        <?php endif; ?>
                     </div>
+
+                    <?php if ($identity->get('role') === 'admin'): ?>
+                        <?= $this->Html->link(
+                            '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l6 3v5c0 3.5-2.5 6-6 7-3.5-1-6-3.5-6-7V4z"/></svg> Admin Dashboard',
+                            ['prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
+                            ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
+                        ) ?>
+                        <div class="dropdown-divider"></div>
+                    <?php endif; ?>
 
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 3V2m6 1V2M2 7h12"/></svg> Dashboard',

@@ -222,8 +222,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <?php foreach ($products as $product): ?>
                     <?= $this->element('product_card', [
                         'product' => $product,
-                        'showSaveButton' => false,
-                        'isSaved' => false,
+                        'showSaveButton' => !empty($this->request->getAttribute('identity')),
+                        'isSaved' => in_array($product->id, $savedProductIds),
                     ]) ?>
                 <?php endforeach; ?>
             </div>
