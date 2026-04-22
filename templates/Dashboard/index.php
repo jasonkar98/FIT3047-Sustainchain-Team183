@@ -269,7 +269,7 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
         <?php endif; ?>
     </div>
 
-    <!-- My Orders -->
+    <!--
     <div>
         <div class="section-head">
             <h2>My Orders</h2>
@@ -297,6 +297,7 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
         </div>
         <?php endif; ?>
     </div>
+    -->
 
     <!-- My Listings -->
     <div>
