@@ -378,24 +378,24 @@ $this->Html->css('marketplace', ['block' => true]);
 
 
                 <?= $this->Form->control('name', [
-                    'label' => 'Product Name',
+                    'label' => 'Product Name *',
                     'placeholder' => 'e.g. Farmland - Dozen Free Range Eggs',
                 ]) ?>
 
                 <?= $this->Form->control('description', [
-                    'label' => 'Description',
+                    'label' => 'Description *',
                     'placeholder' => 'e.g. A dozen free range eggs, from Chickens that are raised on farmland where they can freely roam around the paddock.',
                     'type' => 'textarea',
                     'maxlength' =>500,
                 ]) ?>
 
                 <?= $this->Form->control('price', [
-                    'label' => 'Price (AUD)',
+                    'label' => 'Price (AUD) *',
                     'placeholder' => 'e.g. 6.50',
                 ]) ?>
 
                 <?= $this->Form->control('category', [
-                    'label' => 'Product Category',
+                    'label' => 'Product Category *',
                     'type' => 'select',
                     'options' => ['Food' => 'Food', 'Beauty' => 'Beauty', 'Apparel' => 'Apparel', 'Kitchenware' => 'Kitchenware', 'Bathroom' => 'Bathroom', 'Outdoors' => 'Outdoors', 'Sporting' => 'Sporting', 'Supplements' => 'Supplements'],
                     'empty' => 'Select a Category',
