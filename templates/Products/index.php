@@ -179,8 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
         <!-- Sort form -->
         <div class="sort-row">
             <?= $this->Form->create(null, ['type' => 'get', 'url' => ['action' => 'index']]) ?>
-
-                <?php // Preserve keyword and filters across sort changes ?>
                 <?php if (!empty($search['keyword'])): ?>
                     <input type="hidden" name="keyword" value="<?= h($search['keyword']) ?>">
                 <?php endif; ?>
@@ -193,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <?php if (!empty($search['price_max'])): ?>
                     <input type="hidden" name="price_max" value="<?= h($search['price_max']) ?>">
                 <?php endif; ?>
-
                 <select name="sort" class="sort-select" onchange="this.closest('form').submit()">
                     <option value="newest"    <?= ($search['sort'] ?? 'newest') === 'newest'    ? 'selected' : '' ?>>Newest arrivals</option>
                     <option value="price_asc" <?= ($search['sort'] ?? '') === 'price_asc'  ? 'selected' : '' ?>>Price: Low to High</option>
@@ -214,7 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn btn-lime">Back to All Products</a>
                 <?php else: ?>
                     <p>No products available yet. Check back soon!</p>
-                    <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn btn-lime">Back to All Products</a>
                 <?php endif; ?>
             </div>
         <?php else: ?>
@@ -227,12 +223,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     ]) ?>
                 <?php endforeach; ?>
             </div>
+
+            <div class="marketplace-pagination">
+                <?= $this->Paginator->prev('← Prev') ?>
+                <?= $this->Paginator->numbers() ?>
+                <?= $this->Paginator->next('Next →') ?>
+            </div>
         <?php endif; ?>
+
     </div>
 
-</div>
-
-    <?= $this->Form->end() ?>
 </div>
 
 <script>

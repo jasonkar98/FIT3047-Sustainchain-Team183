@@ -164,6 +164,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             background: rgba(255, 80, 60, 0.1);
             color: #ff7060;
         }
+
     </style>
 </head>
 
