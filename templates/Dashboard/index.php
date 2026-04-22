@@ -342,13 +342,16 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
             <?php foreach ($enquiries as $enquiry): ?>
             <div class="enquiry-item">
                 <div class="enquiry-header">
-                    <h3><?= h($enquiry->subject) ?></h3>
+                    <h3><?= $this->Html->link(h($enquiry->subject), ['controller' => 'Enquiries', 'action' => 'view', $enquiry->id]) ?></h3>
                     <span class="enquiry-date"><?= $enquiry->date->i18nFormat('dd MMM YYYY') ?></span>
                 </div>
                 <p class="enquiry-body"><?= h(substr($enquiry->body, 0, 200)) ?><?php if (strlen($enquiry->body) > 200): ?>...<?php endif; ?></p>
                 <div class="enquiry-status">
                     <?php if ($enquiry->email_sent): ?>
                         <span class="status sent">Response Sent</span>
+                    <?php endif; ?>
+                    <?php if ($enquiry->is_resolved): ?>
+                            <span class="status sent">Resolved</span>
                     <?php else: ?>
                         <span class="status pending">Pending Response</span>
                     <?php endif; ?>
