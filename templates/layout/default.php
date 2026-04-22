@@ -189,7 +189,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
         </button>
-        <form class="nav-search-form" action="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index'], ['fullBase' => true]) ?>" method="get">
+        <form class="nav-search-form" action="<?= $this->Url->build(['prefix' => false,'controller' => 'Products', 'action' => 'index'], ['fullBase' => true]) ?>" method="get">
         <input type="text" name="keyword" class="nav-search-input" placeholder="Search products..." />
         </form>
     </div>
