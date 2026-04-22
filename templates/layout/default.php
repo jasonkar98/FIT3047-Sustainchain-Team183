@@ -605,7 +605,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <nav class="nav">
     <div class="nav-left">
         <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
-            <div class="nav-logo-icon">🌿</div>
+            <img src="<?= $this->Url->image('logo.png') ?>" class="nav-logo-img" alt="Logo">
             <span class="nav-logo-name">Sustain<span>Chain</span></span>
         </a>
 
