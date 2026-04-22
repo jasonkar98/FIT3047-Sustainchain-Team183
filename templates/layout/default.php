@@ -200,23 +200,26 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <?php if ($identity): ?>
 
             <!-- User dropdown -->
-            <div class="nav-user-wrap">
-                <button
-                    class="nav-user-btn"
-                    id="user-menu-btn"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                    aria-controls="user-menu"
-                    onclick="toggleUserMenu()"
-                >
-                    <div class="user-dot">
-                        <?= strtoupper(substr(h($identity->first_name), 0, 1)) ?>
-                    </div>
-                    <?= h($identity->first_name) ?>
-                    <svg class="chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M2 4l4 4 4-4"/>
-                    </svg>
-                </button>
+            <button
+                class="nav-user-btn"
+                id="user-menu-btn"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="user-menu"
+                onclick="toggleUserMenu()"
+            >
+                <div class="user-dot">
+                    <?php 
+                        // Fallback to 'U' if first_name is null to prevent substr error
+                        $fName = $identity->first_name ?? 'User';
+                        echo strtoupper(substr(h($fName), 0, 1)); 
+                    ?>
+                </div>
+                <?= h($identity->first_name ?? 'Account') ?>
+                <svg class="chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 4l4 4 4-4"/>
+                </svg>
+            </button>
 
                 <div class="nav-dropdown" id="user-menu" role="menu">
                     <div class="dropdown-header">

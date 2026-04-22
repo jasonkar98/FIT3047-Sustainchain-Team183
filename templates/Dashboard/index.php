@@ -7,8 +7,8 @@ $this->Html->css('dash', ['block' => true]);
 $identity = $this->request->getAttribute('identity');
 $this->assign('title', 'Dashboard');
 
-$first_name = $identity ? h($identity->first_name) : 'there';
-$avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1)) : '?';
+$first_name = ($identity && $identity->first_name) ? h($identity->first_name) : 'there';
+$avatar_initial = ($identity && $identity->first_name) ? strtoupper(substr(h($identity->first_name), 0, 1)) : '?';
 ?>
 
 <style>

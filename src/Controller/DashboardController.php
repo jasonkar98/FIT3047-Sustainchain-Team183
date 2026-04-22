@@ -29,11 +29,11 @@ class DashboardController extends AppController
             ->toArray();
 
         $enquiries = $this->fetchTable('Enquiries')
-            ->find()
-            ->where(['user_id' => $identity->id])
-            ->order(['date' => 'DESC'])
-            ->all()
-            ->toArray();
+        ->find()
+        ->where(['user_id' => $identity->id])
+        ->orderBy(['date' => 'DESC'])
+        ->all()
+        ->toArray();
 
         $listings = $this->fetchTable('Products')
             ->find()
