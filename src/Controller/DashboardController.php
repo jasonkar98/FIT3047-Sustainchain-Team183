@@ -42,6 +42,6 @@ class DashboardController extends AppController
             ->all()
             ->toArray();
 
-        $this->set(compact('favourites', 'orders', 'enquiries', 'listings'));
+        $this->set(compact('favourites', 'orders', 'enquiries', 'listings', 'identity'));
     }
 }

@@ -24,7 +24,7 @@ if (Configure::read('debug')) :
     return;
 endif;
 
-$this->assign('title', '500 — Server Error');
+$this->assign('title', '500 - Server Error');
 ?>
 
 <style>

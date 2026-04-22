@@ -16,7 +16,7 @@ if (Configure::read('debug')) :
     return;
 endif;
 
-$this->assign('title', '404 — Page Not Found');
+$this->assign('title', '404 - Page Not Found');
 ?>
 
 <style>
