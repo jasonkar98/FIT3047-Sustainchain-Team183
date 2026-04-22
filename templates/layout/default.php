@@ -165,6 +165,439 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             color: #ff7060;
         }
 
+        /* Foundation: no horizontal scroll anywhere */
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        img, svg, video { max-width: 100%; height: auto; }
+
+        /* Tablet and mobile < 1024px*/
+        @media (max-width: 1023px) {
+
+    .nav {
+        display: grid !important;
+        grid-template-columns: auto 1fr auto !important;
+        grid-template-areas:
+            "logo  spacer  search"
+            "links links   user"
+            !important;
+        gap: 0.35rem 0.5rem !important;
+        align-items: center;
+        padding: 0.6rem 0.75rem !important;
+        height: auto !important;
+        min-height: 68px;
+    }
+
+    /* Let children of nav-left / nav-right participate directly
+       in the nav grid (no layout boxes of their own) */
+            .nav-left,
+            .nav-right {
+                display: contents !important;
+            }
+
+            .nav-logo {
+                grid-area: logo;
+                justify-self: start;
+            }
+
+            .nav-links {
+                grid-area: links;
+                justify-self: start;
+                width: auto !important;
+                flex-wrap: wrap;
+                gap: 1rem !important;
+                padding-top: 0.25rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+            }
+            .nav-links li a {
+                padding: 0.25rem 0 !important;
+                font-size: 0.85rem !important;
+            }
+
+            .nav-search {
+                grid-area: search;
+                justify-self: end;
+                flex: 0 0 auto !important;
+            }
+            .nav-search-icon {
+                padding: 4px !important;
+            }
+
+            /* When search is expanded, it grows to fill the top row to the right of the logo */
+            .nav-search.open {
+                grid-column: 2 / 4 !important;
+                justify-self: stretch !important;
+                align-items: center;
+            }
+            .nav-search.open .nav-search-form {
+                max-width: 100% !important;
+                flex: 1 1 auto !important;
+                opacity: 1 !important;
+            }
+            .nav-search-input {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0;
+            }
+
+            .nav-user-wrap {
+                grid-area: user;
+                justify-self: end;
+            }
+            .nav-user-btn {
+                padding: 0.3rem 0.6rem !important;
+                font-size: 0.78rem !important;
+                max-width: 140px;
+            }
+            .nav-user-btn > span:not(.user-dot):not(.chevron) {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            /* Auth (logged-out) buttons also land in the user slot */
+            .nav-right > .btn {
+                grid-area: user;
+                justify-self: end;
+            }
+
+            /* Keep dropdown panel aligned to the user button on the right */
+            .nav-dropdown {
+                max-width: calc(100vw - 1rem) !important;
+                right: 0 !important;
+                left: auto !important;
+            }
+
+        /* ==== MOBILE ONLY  (< 640px) ==== */
+        @media (max-width: 639px) {
+
+            /* ---- Nav text smaller ---- */
+            .nav-logo-name   { font-size: 0.9rem !important; }
+            .nav-links li a  { font-size: 0.85rem !important; }
+
+            /* ---- Hero banners ---- */
+            .marketplace-header,
+            .form-hero {
+                padding: 2rem 1rem 1.5rem !important;
+            }
+            .marketplace-title,
+            .marketplace-header .marketplace-title,
+            .form-hero-title {
+                font-size: clamp(1.5rem, 7vw, 2.2rem) !important;
+                line-height: 1.15 !important;
+            }
+            .marketplace-subtitle { font-size: 0.85rem !important; }
+
+            /* ---- Products stack in 1 column (with higher specificity
+                to beat template-level !important rules) ---- */
+            body .product-grid,
+            body .products-grid,
+            body .slider-track {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                grid-auto-columns: 100% !important;
+                grid-auto-flow: row !important;
+                gap: 1rem !important;
+                overflow-x: visible !important;
+            }
+
+            /* Dashboard saved-listings wrapper — remove slider arrows + padding */
+            .saved-listings-wrapper {
+                padding: 0 !important;
+            }
+            .slider-arrow {
+                display: none !important;
+            }
+
+            /* ---- Dashboard stats stack ---- */
+            body .stats-row {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+            }
+
+            /* ---- Body padding tighter ---- */
+            .dash-page,
+            .products-col,
+            .filter-sidebar,
+            .form-main {
+                padding: 1rem !important;
+            }
+            .form-card { padding: 1.25rem !important; }
+
+            /* ---- Search + filter row stacks ---- */
+            .search-filter-row {
+                flex-direction: column !important;
+                gap: 0.5rem !important;
+            }
+            .search-filter-row input,
+            .search-filter-row button,
+            .search-filter-row a {
+                width: 100% !important;
+            }
+
+            /* ---- Admin enquiries TABLE → CARDS ---- */
+            .admin-table-wrap {
+                overflow: visible !important;
+                border: none !important;
+                background: transparent !important;
+                border-radius: 0 !important;
+            }
+            table.enquiries-table,
+            table.enquiries-table tbody,
+            table.enquiries-table tr,
+            table.enquiries-table td {
+                display: block !important;
+                width: 100% !important;
+            }
+            table.enquiries-table thead { display: none !important; }
+            table.enquiries-table tr {
+                background: #fff !important;
+                border: 1px solid #e0e0e0 !important;
+                border-radius: 12px !important;
+                padding: 1rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+            table.enquiries-table tr.is-unread { background: #fcfcf4 !important; }
+            table.enquiries-table td {
+                padding: 0.35rem 0 !important;
+                border: none !important;
+            }
+            table.enquiries-table td[data-label]::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 0.7rem;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: #888;
+                margin-bottom: 0.15rem;
+            }
+            /* Let long subjects wrap instead of overflowing */
+            table.enquiries-table td.subject-cell {
+                white-space: normal !important;
+                overflow-wrap: anywhere !important;
+                word-break: break-word !important;
+            }
+            table.enquiries-table .subject-link {
+                overflow-wrap: anywhere !important;
+                word-break: break-word !important;
+                display: inline-block;
+                max-width: 100%;
+            }
+            table.enquiries-table .row-actions {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 0.5rem !important;
+                margin-top: 0.5rem;
+            }
+
+            /* ---- Admin view: action bar stacks ---- */
+            .action-bar {
+                flex-direction: column !important;
+            }
+            .action-bar .btn,
+            .action-bar form button {
+                width: 100% !important;
+                justify-content: center;
+            }
+            .admin-back {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* ---- Prev / [current title] / Next nav on enquiry view ----
+            If the container has a flex layout with two .admin-back buttons
+            and a span in between, stack them. */
+            :is(div, nav):has(> .admin-back + span + .admin-back),
+            :is(div, nav):has(> .admin-back + span + span.admin-back) {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 0.5rem !important;
+            }
+            :is(div, nav):has(> .admin-back + span + .admin-back) > span {
+                text-align: center;
+                font-size: 0.8rem;
+                color: #666;
+                padding: 0.25rem 0;
+                order: -1;  /* show current-title label above the buttons */
+            }
+
+            /* ---- Enquiry list items ---- */
+            .enquiry-header {
+                flex-direction: column !important;
+                gap: 0.25rem !important;
+            }
+            .enquiry-item { padding: 1rem !important; }
+
+            /* ---- Auth cards full-width ---- */
+            .auth-card,
+            .form-card,
+            .auth-page {
+                width: 100% !important;
+                max-width: 100% !important;
+                overflow-x: hidden;
+            }
+
+            /* ---- Decorative hero circles: keep from causing scroll ---- */
+            .form-hero-circle {
+                display: none !important;
+            }
+
+            /*Global text-overflow guard */
+            .marketplace-title,
+            .marketplace-header .marketplace-title,
+            .form-hero-title,
+            h1, h2, h3, h4 {
+                overflow-wrap: anywhere;
+                word-break: break-word;
+            }
+            p, span, a, td, th, li, label {
+                overflow-wrap: anywhere;
+            }
+
+            /* Listing table*/
+            .my-listings-page table,
+            .my-listings-page table tbody,
+            .my-listings-page table tr,
+            .my-listings-page table td {
+                display: block !important;
+                width: 100% !important;
+            }
+            .my-listings-page table thead {
+                display: none !important;
+            }
+            .my-listings-page table tr {
+                background: #fff !important;
+                border: 1px solid #e0e0e0 !important;
+                border-radius: 12px !important;
+                padding: 1rem !important;
+                margin-bottom: 0.75rem !important;
+                position: relative;
+            }
+            /* HIDE everything except Product (first) and Actions (last) */
+            .my-listings-page table td {
+                padding: 0 !important;
+                border: none !important;
+            }
+            .my-listings-page table td:not(:first-child):not(:last-child) {
+                display: none !important;
+            }
+            .my-listings-page table td:first-child {
+                font-weight: 600;
+                font-size: 1rem;
+                padding-bottom: 0.75rem !important;
+            }
+            .my-listings-page table td:last-child {
+                text-align: left;
+            }
+            .my-listings-page table td:last-child a,
+            .my-listings-page table td:last-child button {
+                display: inline-block;
+                padding: 0.4rem 0.9rem;
+                background: #2e7d52;
+                color: #fff;
+                border-radius: 6px;
+                text-decoration: none;
+                font-size: 0.85rem;
+                font-weight: 600;
+            }
+
+            /* Dashboard saved listings*/
+            body .saved-listings-wrapper {
+                padding: 0 2.5rem !important;
+                position: relative;
+            }
+            body .saved-listings-wrapper .slider-viewport {
+                overflow: hidden !important;
+            }
+            body .slider-track,
+            body .products-grid.slider-track {
+                display: grid !important;
+                grid-template-columns: 100% !important;
+                grid-auto-columns: 100% !important;
+                grid-auto-flow: column !important;
+                gap: 0 !important;
+                overflow-x: auto !important;
+                scroll-snap-type: x mandatory !important;
+                scrollbar-width: none !important;
+            }
+            body .slider-track::-webkit-scrollbar {
+                display: none;
+            }
+            body .slider-track > * {
+                scroll-snap-align: start;
+                min-width: 0;
+                width: 100%;
+            }
+            /* Force arrows VISIBLE on mobile (override the display:none from previous round) */
+            body .slider-arrow {
+                display: flex !important;
+                position: absolute !important;
+                top: 50% !important;
+                transform: translateY(-50%) !important;
+                width: 36px !important;
+                height: 36px !important;
+                border-radius: 50% !important;
+                background: #2e7d52 !important;
+                color: #fff !important;
+                border: none !important;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                z-index: 5;
+                font-size: 0.9rem;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            }
+            body .slider-arrow.prev { left: 0 !important; right: auto !important; }
+            body .slider-arrow.next { right: 0 !important; left: auto !important; }
+            body .slider-arrow:hover {
+                background: #276a46 !important;
+            }
+        }
+
+        /* ---- Tighter nav clamping on tablet/mobile ---- */
+        .nav {
+            padding: 0.6rem 0.75rem !important;
+        }
+        .nav-left {
+            width: auto !important;
+            flex: 1 1 auto;
+            min-width: 0;
+            gap: 0.75rem !important;
+        }
+        .nav-right {
+            width: auto !important;
+            flex: 0 1 auto;
+            gap: 0.4rem !important;
+        }
+        .nav-links {
+            flex: 1 1 100%;
+            order: 99;
+            width: 100%;
+            justify-content: flex-start;
+            padding-top: 0.35rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .nav-links li a {
+            padding: 0.25rem 0 !important;
+        }
+        /* User dropdown button: smaller + truncated name */
+        .nav-user-btn {
+            padding: 0.3rem 0.6rem !important;
+            font-size: 0.78rem !important;
+            max-width: 140px;
+        }
+        .nav-user-btn > span:not(.user-dot):not(.chevron) {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        /* Search icon stays compact */
+        .nav-search-icon {
+            padding: 4px !important;
+        }
     </style>
 </head>
 

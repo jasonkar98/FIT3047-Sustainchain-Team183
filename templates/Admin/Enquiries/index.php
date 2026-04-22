@@ -253,28 +253,27 @@ $this->assign('title', 'Admin — Enquiries');
                 <tbody>
                 <?php foreach ($enquiriesList as $enquiry): ?>
                     <tr class="<?= $enquiry->is_read ? '' : 'is-unread' ?>">
-                        <td><?= $enquiry->date->i18nFormat('dd MMM YYYY') ?></td>
-                        <td><?= h($enquiry->full_name) ?></td>
-                        <td><?= h($enquiry->email) ?></td>
-                        <td class="subject-cell">
+                        <td data-label="Date"><?= $enquiry->date->i18nFormat('dd MMM YYYY') ?></td>
+                        <td data-label="From"><?= h($enquiry->full_name) ?></td>
+                        <td data-label="Email"><?= h($enquiry->email) ?></td>
+                        <td data-label="Subject" class="subject-cell">
                             <?= $this->Html->link(
                                 h(mb_strimwidth($enquiry->subject, 0, 60, '…')),
                                 ['action' => 'view', $enquiry->id],
                                 ['class' => 'subject-link']
                             ) ?>
                         </td>
-                        <td>
+                        <td data-label="Read">
                             <span class="status-pill <?= $enquiry->is_read ? 'closed' : 'warn' ?>">
                                 <?= $enquiry->is_read ? 'Read' : 'Unread' ?>
                             </span>
                         </td>
-                        <td>
+                        <td data-label="Resolved">
                             <span class="status-pill <?= $enquiry->is_resolved ? 'ok' : 'warn' ?>">
                                 <?= $enquiry->is_resolved ? 'Resolved' : 'Open' ?>
                             </span>
                         </td>
-                        
-                        <td>
+                        <td data-label="Actions">
                             <div class="row-actions">
                                 <?= $this->Form->postLink(
                                     $enquiry->is_read ? 'Mark unread' : 'Mark read',
