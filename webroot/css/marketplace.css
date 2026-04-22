@@ -1,0 +1,533 @@
+.marketplace-header {
+    background: var(--g0);
+    padding: 7rem 2.5rem 4rem;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+/* Subtle green glow — same radial-gradient technique as the hero section */
+.marketplace-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse 60% 80% at 50% 0%,
+        rgba(46, 125, 82, 0.25) 0%,
+        transparent 65%
+    );
+}
+
+.marketplace-header-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+/* Reuses .section-tag from app.css but forces lime colour for dark background */
+.marketplace-header .section-tag {
+    display: inline-block;
+    color: var(--e1);
+    margin-bottom: 0.75rem;
+}
+
+/* Same font/size pattern as .hero-title in app.css */
+.marketplace-title {
+    font-family: "Fraunces", serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 1rem;
+}
+
+/* Italic accent — same pattern as .hero-title em */
+.marketplace-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--e1);
+}
+
+.marketplace-subtitle {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Main content area ───────────────────────────────────── */
+.marketplace-body {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 4rem 2.5rem 6rem;
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.marketplace-empty {
+    text-align: center;
+    padding: 5rem 2rem;
+    color: var(--muted);
+}
+
+.marketplace-empty p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ── Product grid ────────────────────────────────────────── */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+/* ── Product card ────────────────────────────────────────── */
+/* Mirrors .inno-card from app.css but on a light background */
+.product-card {
+    background: var(--white);
+    border: 1px solid var(--s2);
+    border-radius: var(--r24);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    transition:
+        transform 0.25s var(--ease-spring),
+        box-shadow 0.25s;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(13, 31, 20, 0.1);
+}
+
+/* ── Product image ───────────────────────────────────────── */
+.product-img-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3; /* all images the same proportion */
+    background: var(--s1); /* cream placeholder while image loads */
+}
+
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* crops to fill — never squishes or stretches */
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+/* Subtle zoom on hover */
+.product-card:hover .product-img {
+    transform: scale(1.04);
+}
+
+/* ── Card body ───────────────────────────────────────────── */
+.product-card-body {
+    padding: 1.5rem 1.5rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.4rem;
+}
+
+/* Tiny uppercase label — same pattern as .t-label in app.css */
+.product-category {
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--g3);
+}
+
+.product-name {
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--g0);
+    line-height: 1.3;
+}
+
+/* Price uses Fraunces serif — same as .stat-num in app.css */
+.product-price {
+    font-family: "Fraunces", serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--g3);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-top: 0.25rem;
+}
+
+.product-desc {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: var(--muted);
+    flex: 1;
+    margin-top: 0.25rem;
+}
+
+/* ── Card CTA button ─────────────────────────────────────── */
+.product-card-footer {
+    padding: 0.75rem 1.5rem 1.5rem;
+}
+
+/* Dark pill button — matches the site's .btn style */
+.btn-product {
+    display: block;
+    text-align: center;
+    padding: 0.65rem 1.25rem;
+    background: var(--g0);
+    color: var(--white);
+    border-radius: var(--r999);
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    transition:
+        background 0.18s,
+        transform 0.18s var(--ease-spring),
+        box-shadow 0.18s;
+}
+
+.btn-product:hover {
+    background: var(--g2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(13, 31, 20, 0.2);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1024px) {
+}
+
+@media (max-width: 640px) {
+    .marketplace-header {
+        padding: 5rem 1.5rem 3rem;
+    }
+    .marketplace-body {
+        padding: 2.5rem 1.25rem 4rem;
+    }
+}
+
+/* ── Save button ─────────────────────────────────────────── */
+.product-save-btn {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+    color: #2e7d52;
+    transition:
+        background 0.2s,
+        color 0.2s,
+        transform 0.15s;
+}
+
+.product-save-btn:hover {
+    background: #ffffff;
+    transform: scale(1.1);
+}
+
+.product-save-btn.is-saved {
+    background: #2e7d52;
+    color: #ffffff;
+}
+
+.product-save-btn.is-saved .product-save-icon {
+    fill: currentColor;
+}
+
+.product-save-icon {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    transition: fill 0.2s;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .marketplace-header {
+        padding: 5rem 1.5rem 3rem;
+    }
+    .marketplace-body {
+        padding: 2.5rem 1.25rem 4rem;
+    }
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.marketplace-search form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.marketplace-search {
+    background: var(--s1);
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.search-filter-row {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--s2);
+    border-radius: var(--r999);
+    padding: 6px 6px 6px 1.5rem;
+    width: 100%;
+    max-width: 830px;
+    gap: 8px;
+}
+
+.marketplace-search .container {
+    max-width: 1200px;
+    width: 100%;
+}
+
+.search-input {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    flex: 1;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-size: 0.95rem;
+    color: var(--g0);
+    padding: 0;
+    width: 100%;
+}
+
+.search-input::placeholder {
+    color: var(--muted);
+}
+
+.search-filter-row .btn.btn-lime {
+    border-radius: var(--r999) !important;
+    padding: 0.65rem 1.5rem !important;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.btn-outline {
+    background: transparent;
+    border: none;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-size: 0.85rem;
+    color: var(--g3);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0 8px;
+    white-space: nowrap;
+}
+
+.search-results-label {
+    text-align: center;
+    padding: 2.5rem 2.5rem 0;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--g0);
+}
+
+.search-results-label strong {
+    font-weight: 700;
+}
+
+/* --- side bar for filter----*/
+
+/* ── Layout: sidebar + products ──────────────────────────── */
+.marketplace-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    padding-bottom: 4rem;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.filter-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--white);
+    border: 1px solid var(--s2);
+    border-radius: var(--r24);
+    padding: 1.5rem;
+    position: sticky;
+    top: 1.5rem;
+    margin-top: calc(38px + 1.25rem); /* ← ADDED */
+}
+
+.filter-heading {
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--g0);
+    margin-bottom: 1.25rem;
+}
+
+.filter-group {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.5px solid var(--s2);
+}
+
+.filter-group:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.filter-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--g0);
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.filter-option input[type="radio"] {
+    accent-color: var(--g3);
+    cursor: pointer;
+}
+
+.filter-clear-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--g3);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Price inputs */
+.price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+}
+
+.price-input {
+    width: 100%;
+    border: 1px solid var(--s2);
+    border-radius: var(--r24);
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    color: var(--g0);
+    background: var(--white);
+    outline: none;
+}
+
+.price-input:focus {
+    border-color: var(--g3);
+}
+
+.price-sep {
+    color: var(--muted);
+    flex-shrink: 0;
+}
+
+.btn-apply {
+    width: 100%;
+    background: var(--g0);
+    color: var(--white);
+    border: none;
+    border-radius: var(--r999);
+    padding: 0.6rem;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+
+.btn-apply:hover {
+    background: var(--g2);
+}
+
+.btn-clear-all {
+    display: block;
+    text-align: left;
+    font-size: 0.8rem;
+    color: var(--g3);
+    text-decoration: underline;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--s2);
+    cursor: pointer;
+}
+
+/* ── Products column ─────────────────────────────────────── */
+.products-col {
+    flex: 1;
+    min-width: 0;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .marketplace-layout {
+        flex-direction: column;
+    }
+    .filter-sidebar {
+        width: 100%;
+        position: static;
+    }
+}
+
+/* ── Sort row ────────────────────────────────────────────── */
+.sort-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.25rem;
+    align-items: center;
+}
+
+.sort-select {
+    appearance: none;
+    background: var(--white)
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23556652' d='M6 8L1 3h10z'/%3E%3C/svg%3E")
+        no-repeat right 12px center;
+    border: 1px solid var(--s2);
+    border-radius: var(--r999);
+    padding: 0.5rem 2.25rem 0.5rem 1rem;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--g0);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.18s;
+}
+
+.sort-select:hover,
+.sort-select:focus {
+    border-color: var(--g3);
+}

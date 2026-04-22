@@ -9,12 +9,15 @@ use Cake\ORM\Entity;
  * Enquiry Entity
  *
  * @property int $id
+ * @property int|null $user_id
  * @property string $full_name
  * @property string $email
  * @property \Cake\I18n\DateTime $date
  * @property string $subject
  * @property string $body
  * @property bool $email_sent
+ * @property bool $is_read
+ * @property bool $is_resolved
  */
 class Enquiry extends Entity
 {
@@ -28,11 +31,14 @@ class Enquiry extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
+        'user_id' => true,
         'full_name' => true,
         'email' => true,
         'date' => true,
         'subject' => true,
         'body' => true,
         'email_sent' => true,
+        'is_read' => true,
+        'is_resolved' => true,
     ];
 }

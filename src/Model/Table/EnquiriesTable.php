@@ -40,6 +40,10 @@ class EnquiriesTable extends Table
         $this->setTable('enquiries');
         $this->setDisplayField('full_name');
         $this->setPrimaryKey('id');
+
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     /**
@@ -50,6 +54,10 @@ class EnquiriesTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
+        $validator
+            ->integer('user_id')
+            ->allowEmptyString('user_id');
+
         $validator
             ->scalar('full_name')
             ->maxLength('full_name', 255)
@@ -78,6 +86,14 @@ class EnquiriesTable extends Table
         $validator
             ->boolean('email_sent')
             ->notEmptyString('email_sent');
+
+        $validator
+            ->boolean('is_read')
+            ->notEmptyString('is_read');
+
+        $validator
+            ->boolean('is_resolved')
+        ->notEmptyString('is_resolved');
 
         return $validator;
     }
