@@ -389,7 +389,7 @@ $this->Html->css('marketplace', ['block' => true]);
                 <?= $this->Form->control('price', [
                     'label' => 'Price (AUD)',
                     'placeholder' => 'e.g. 6.50',
-                    'min' => '0',
+                    'min' => '0.01',
                 ]) ?>
 
                 <?= $this->Form->control('category', [
