@@ -43,8 +43,8 @@ $this->assign('title', 'Register new user');
         <?= $this->Form->control('email', ['placeholder' => 'name@company.com']); ?>
 
         <div class="auth-grid">
-            <?= $this->Form->control('first_name', ['label' => 'First name', 'placeholder' => 'Ava']); ?>
-            <?= $this->Form->control('last_name', ['label' => 'Last name', 'placeholder' => 'Patel']); ?>
+            <?= $this->Form->control('first_name', ['label' => 'First name', 'placeholder' => 'Ava', 'pattern' => '[a-zA-Z]']); ?>
+            <?= $this->Form->control('last_name', ['label' => 'Last name', 'placeholder' => 'Patel', 'pattern' => '[a-zA-Z]']); ?>
         </div>
 
         <div class="auth-grid">
