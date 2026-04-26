@@ -398,7 +398,7 @@ $this->Html->css('marketplace', ['block' => true]);
                 <?= $this->Form->control('category', [
                     'label' => 'Product Category *',
                     'type' => 'select',
-                    'options' => ['Food' => 'Food', 'Beauty' => 'Beauty', 'Apparel' => 'Apparel', 'Kitchenware' => 'Kitchenware', 'Bathroom' => 'Bathroom', 'Outdoors' => 'Outdoors', 'Sporting' => 'Sporting', 'Supplements' => 'Supplements'],
+                    'options' => ['Food' => 'Food', 'Beauty' => 'Beauty', 'Apparel' => 'Apparel', 'Kitchenware' => 'Kitchenware', 'Bathroom' => 'Bathroom', 'Outdoors' => 'Outdoors', 'Sporting' => 'Sporting', 'Supplements' => 'Supplements', 'Other' => 'Other'],
                     'empty' => 'Select a Category',
                 ]) ?>
 

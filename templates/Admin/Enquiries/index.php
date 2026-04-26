@@ -254,8 +254,8 @@ $this->assign('title', 'Admin — Enquiries');
                 <?php foreach ($enquiriesList as $enquiry): ?>
                     <tr class="<?= $enquiry->is_read ? '' : 'is-unread' ?>">
                         <td data-label="Date"><?= $enquiry->date->i18nFormat('dd MMM YYYY') ?></td>
-                        <td data-label="From"><?= h($enquiry->full_name) ?></td>
-                        <td data-label="Email"><?= h($enquiry->email) ?></td>
+                        <td data-label="From"><?= h(mb_strimwidth($enquiry->full_name, 0, 10, '…')) ?></td>
+                        <td data-label="Email"><?= h(mb_strimwidth($enquiry->email, 0, 18, '…')) ?></td>
                         <td data-label="Subject" class="subject-cell">
                             <?= $this->Html->link(
                                 h(mb_strimwidth($enquiry->subject, 0, 60, '…')),
