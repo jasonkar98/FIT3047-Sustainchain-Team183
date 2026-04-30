@@ -1,0 +1,145 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Controller;
+
+/**
+ * Enquiries Controller
+ *
+ * @property \App\Model\Table\EnquiriesTable $enquiries
+ */
+class EnquiriesController extends AppController
+{
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('Turnstile');
+        $this->Authentication->allowUnauthenticated(['add']);
+    }
+
+    /**
+     * Index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function index()
+    {
+        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+//        $query = $this->Enquiries->find();
+//        $enquiries = $this->paginate($query);
+//
+//        $this->set(compact('enquiries'));
+    }
+
+    /**
+     * View method
+     *
+     * @param string|null $id Enquiry id.
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function view($id = null)
+    {
+        $identity = $this->Authentication->getIdentity();
+        if (!$identity) {
+            return $this->redirect(['controller' => 'Auth', 'action' => 'login']);
+        }
+
+        $enquiry = $this->Enquiries->get($id, contain: ['Users']);
+
+        // Check if the logged-in user owns this enquiry
+        if ($enquiry->user_id !== $identity->getIdentifier()) {
+            $this->Flash->error(__('You are not authorized to view this enquiry.'));
+            return $this->redirect(['controller' => 'Dashboard', 'action' => 'index']);
+        }
+
+        $this->set(compact('enquiry'));
+    }
+
+    /**
+     * Add method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function add()
+    {
+        $enquiry = $this->Enquiries->newEmptyEntity();
+        if ($this->request->is('post')) {
+            $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
+
+            // Associate with logged-in user if available
+            $identity = $this->request->getAttribute('identity');
+            if ($identity) {
+                $enquiry->user_id = $identity->id;
+            }
+
+            // Validate Turnstile response with CloudFlare
+            $turnstileToken = $this->request->getData('cf-turnstile-response');
+            if ($turnstileToken) {
+
+                $turnstileResponse = $this->Turnstile->validateTurnstile($turnstileToken, $this->request->clientIp());
+                // On failed validation, send user back to reset password page and try again
+                if (!$turnstileResponse || !$turnstileResponse['success']) {
+                    $this->log('Turnstile Response Error: ' . json_encode($turnstileResponse));
+                    $this->Flash->error('CAPTCHA challenge failed. Please try again.');
+
+                    $this->set(compact('enquiry')); // Need to return the $user entity so the form is autofilled
+
+                    return $this->render(); // Skip the rest of the controller and render the view
+                }
+            }
+
+            if ($this->Enquiries->save($enquiry)) {
+                $this->Flash->success(__('The enquiry has been saved.'));
+
+                return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+            }
+            $this->Flash->error(__('The enquiry could not be saved. Please, try again.'));
+        }
+        $this->set(compact('enquiry'));
+    }
+
+    /**
+     * Edit method
+     *
+     * @param string|null $id Enquiry id.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function edit($id = null)
+    {
+        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+//        $enquiry = $this->Enquiries->get($id, contain: []);
+//        if ($this->request->is(['patch', 'post', 'put'])) {
+//            $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
+//            if ($this->Enquiries->save($enquiry)) {
+//                $this->Flash->success(__('The enquiry has been saved.'));
+//
+//                return $this->redirect(['action' => 'index']);
+//            }
+//            $this->Flash->error(__('The enquiry could not be saved. Please, try again.'));
+//        }
+//        $this->set(compact('enquiry'));
+    }
+
+    /**
+     * Delete method
+     *
+     * @param string|null $id Enquiry id.
+     * @return \Cake\Http\Response|null Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function delete($id = null)
+    {
+        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+//        $this->request->allowMethod(['post', 'delete']);
+//        $enquiry = $this->Enquiries->get($id);
+//        if ($this->Enquiries->delete($enquiry)) {
+//            $this->Flash->success(__('The enquiry has been deleted.'));
+//        } else {
+//            $this->Flash->error(__('The enquiry could not be deleted. Please, try again.'));
+//        }
+//
+//        return $this->redirect(['action' => 'index']);
+    }
+}
