@@ -61,10 +61,33 @@ class UsersTable extends Table
 
         $validator
             ->scalar('password')
+            ->minLength('password', 8, 'Password must be at least 8 characters')
             ->maxLength('password', 255)
+            ->add('password', 'hasUppercase', [
+                'rule' => ['custom', '/[A-Z]/'],
+                'message' => 'Password must contain at least one uppercase letter',
+            ])
+            ->add('password', 'hasNumber', [
+                'rule' => ['custom', '/[0-9]/'],
+                'message' => 'Password must contain at least one number',
+            ])
+            ->add('password', 'hasSpecial', [
+                'rule' => ['custom', '/[\W_]/'],
+                'message' => 'Password must contain at least one special character',
+            ])
             ->requirePresence('password', 'create')
             ->notEmptyString('password');
-
+        
+        $validator
+            ->add('password_confirm', 'matchesPassword', [
+                'rule' => function ($value, $context) {
+                    return $value === $context['data']['password'];
+                },
+                'message' => 'Passwords do not match',
+            ])
+            ->requirePresence('password_confirm', 'create')
+            ->notEmptyString('password_confirm', 'Please confirm your password');
+            
         $validator
             ->scalar('nonce')
             ->maxLength('nonce', 255)

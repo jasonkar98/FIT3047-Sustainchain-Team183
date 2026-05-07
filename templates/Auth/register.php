@@ -43,8 +43,8 @@ $this->assign('title', 'Register new user');
         <?= $this->Form->control('email', ['placeholder' => 'name@company.com']); ?>
 
         <div class="auth-grid">
-            <?= $this->Form->control('first_name', ['label' => 'First name', 'placeholder' => 'Ava']); ?>
-            <?= $this->Form->control('last_name', ['label' => 'Last name', 'placeholder' => 'Patel']); ?>
+            <?= $this->Form->control('first_name', ['label' => 'First name', 'placeholder' => 'Ava', 'pattern' => '[a-zA-Z ]+']); ?>
+            <?= $this->Form->control('last_name', ['label' => 'Last name', 'placeholder' => 'Patel', 'pattern' => '[a-zA-Z ]+']); ?>
         </div>
 
         <div class="auth-grid">
@@ -61,6 +61,13 @@ $this->assign('title', 'Register new user');
             ]);
             ?>
         </div>
+        <ul class="auth-card-subtitle">
+            Your password must contain at least:
+            <li>8 characters</li>
+            <li>One uppercase letter</li>
+            <li>One number</li>
+            <li>One special character</li>
+        </ul>
 
         <!-- <?= $this->Form->control('avatar', ['type' => 'file', 'label' => 'Profile photo (optional)']); ?> -->
 

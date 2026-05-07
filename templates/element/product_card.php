@@ -30,16 +30,15 @@
 
 <div class="product-card">
     <div class="product-img-wrap">
-        <?php
-        $imageSrc = !empty($product->image_url)
-            ? $product->image_url
-            : 'https://placehold.co/400x300/d9ede4/2e7d52?text=No+Image';
-        ?>
-
-        <?= $this->Html->image('products/' . $product->image_url, [
-            'class' => 'product-view-img',
-            'alt'   => h($product->name),
-        ]) ?>
+        <?php if (!empty($product->image_url)): ?>
+            <?= $this->Html->image('products/' . $product->image_url, [
+                'class' => 'product-view-img',
+                'alt'   => h($product->name),
+            ]) ?>
+        <?php else: ?>
+            <img class="product-view-img" src="https://placehold.co/800x600/d9ede4/2e7d52?text=No+Image" alt="No image">
+        <?php endif; ?>
+        
 
         <?php if (!empty($showSaveButton)): ?>
         <?php
