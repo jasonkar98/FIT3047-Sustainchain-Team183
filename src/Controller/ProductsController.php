@@ -117,7 +117,7 @@ class ProductsController extends AppController
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
 
-                return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+                return $this->redirect(['controller' => 'Dashboard', 'action' => 'index']);
             }
             $this->Flash->error(__('The product could not be saved. Please, try again.'));
         }
@@ -173,7 +173,7 @@ class ProductsController extends AppController
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
 
-                return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+                return $this->redirect(['controller' => 'Dashboard', 'action' => 'index']);
             }
             $this->Flash->error(__('The product could not be saved. Please, try again.'));
         }
