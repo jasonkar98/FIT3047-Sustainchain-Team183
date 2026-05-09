@@ -707,7 +707,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <!-- Chat Toggle Button -->
 <button id="chat-toggle" style="position:fixed;bottom:24px;right:24px;z-index:1000;
     background:var(--g3);color:#fff;border:none;border-radius:50%;width:56px;height:56px;
-    font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2)">💬</button>
+    font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2)">💭</button>
 
 <!-- Chat Window -->
 <div id="chat-window" style="display:none;position:fixed;bottom:90px;right:24px;
@@ -731,7 +731,20 @@ const send   = document.getElementById('chat-send');
 const msgs   = document.getElementById('chat-messages');
 
 toggle.addEventListener('click', () => {
-    win.style.display = win.style.display === 'none' ? 'flex' : 'none';
+    const isHidden = win.style.display === 'none';
+    win.style.display = isHidden ? 'flex' : 'none';
+    
+    // Show default greeting messages on first open
+    if (isHidden && msgs.children.length === 0) {
+        const greetings = [
+            'Hello! 👋 Welcome to SustainChain Support.',
+            'How can I help you today? Feel free to ask about our products, orders, delivery, or policies.'
+        ];
+        
+        greetings.forEach((greeting, index) => {
+            setTimeout(() => addMessage(greeting, 'bot'), index * 600);
+        });
+    }
 });
 
 function addMessage(text, role) {
