@@ -28,6 +28,91 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->css(['app', 'nav']) ?>
     <?= $this->fetch('css') ?>
     <style>
+        /* ── Toast notifications ── */
+        .toast-stack {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.25rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            pointer-events: none;
+        }
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #fff;
+            border: 1px solid var(--s2, #d8e8d8);
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(13,31,20,.15);
+            padding: 0.85rem 1rem 0.85rem 1.1rem;
+            min-width: 260px;
+            max-width: 360px;
+            pointer-events: all;
+            animation: toast-in .3s cubic-bezier(.22,1,.36,1) both;
+        }
+        .toast.removing {
+            animation: toast-out .25s ease forwards;
+        }
+        @keyframes toast-in {
+            from { opacity: 0; transform: translateX(30px) scale(.96); }
+            to   { opacity: 1; transform: translateX(0)  scale(1); }
+        }
+        @keyframes toast-out {
+            to { opacity: 0; transform: translateX(30px) scale(.96); max-height: 0; padding: 0; margin: 0; }
+        }
+        .toast-success { border-left: 4px solid #4caf50; }
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            stroke: #4caf50;
+        }
+        .toast-msg {
+            flex: 1;
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--g0, #0d1f14);
+            line-height: 1.3;
+        }
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            line-height: 1;
+            color: var(--ink, #3a4a3e);
+            opacity: 0.45;
+            cursor: pointer;
+            padding: 0 0.1rem;
+            transition: opacity 0.15s;
+        }
+        .toast-close:hover { opacity: 1; }
+
+        .nav-cart-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+        .nav-cart-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--lime, #c8e840);
+            color: var(--g0, #0d1f14);
+            font-size: 0.68rem;
+            font-weight: 800;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            border-radius: 999px;
+            line-height: 1;
+            letter-spacing: 0;
+        }
+
         .nav-user-wrap {
             position: relative;
         }
@@ -178,6 +263,22 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <ul class="nav-links">
             <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
             <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+            <li>
+                <?php
+                $cartQtys = $this->request->getSession()->read('Cart.items') ?? [];
+                $cartCount = 0;
+                foreach ($cartQtys as $id => $qty) {
+                    if (is_int($id) && is_int($qty) && $qty > 0) $cartCount += $qty;
+                }
+                ?>
+                <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Cart', 'action' => 'index']) ?>" class="nav-cart-link">
+                    Cart
+                    <?php if ($cartCount > 0): ?>
+                        <span class="nav-cart-badge"><?= $cartCount ?></span>
+                    <?php endif; ?>
+                </a>
+            </li>
+
         </ul>
     </div>
 
@@ -264,8 +365,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </div>
 </nav>
 
-<main class="main">
+<div class="toast-stack" id="toastStack">
     <?= $this->Flash->render() ?>
+</div>
+
+<main class="main">
     <?= $this->fetch('content') ?>
 </main>
 
@@ -370,6 +474,22 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             document.getElementById('user-menu-btn')?.setAttribute('aria-expanded', 'false');
         }
     });
+</script>
+
+<script>
+(function () {
+    const DISMISS_MS = 4000;
+    document.querySelectorAll('.toast').forEach(function (toast) {
+        const t = setTimeout(function () { dismiss(toast); }, DISMISS_MS);
+        toast.querySelector('.toast-close')?.addEventListener('click', function () {
+            clearTimeout(t);
+        });
+    });
+    function dismiss(toast) {
+        toast.classList.add('removing');
+        toast.addEventListener('animationend', function () { toast.remove(); }, { once: true });
+    }
+})();
 </script>
 
 </body>
