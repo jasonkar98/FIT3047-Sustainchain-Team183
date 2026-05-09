@@ -611,7 +611,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
         <ul class="nav-links">
             <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+            <?php $identity = $this->request->getAttribute('identity'); ?>
+            <?php if ($identity->get('role') !== 'admin'): ?>
+                <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+            <?php endif; ?>
         </ul>
     </div>
 
