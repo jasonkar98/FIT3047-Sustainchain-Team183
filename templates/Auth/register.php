@@ -48,6 +48,15 @@ $this->assign('title', 'Register new user');
         </div>
 
         <div class="auth-grid">
+            <?= $this->Form->control('role', [
+                    'label' => 'Role',
+                    'type' => 'select',
+                    'options' => ['Buyer' => 'buyer', 'Seller' => 'seller', 'Manufacturer' => 'manufacturer', 'Farmer' => 'farmer'],
+                    'empty' => 'Select a Role',
+                ]) ?>
+        </div>
+
+        <div class="auth-grid">
             <?php
             echo $this->Form->control('password', [
                 'value' => '', // Ensure password is not sent back to the client
