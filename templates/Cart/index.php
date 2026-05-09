@@ -440,11 +440,11 @@ foreach ($products as $p) {
             </div>
             <p class="summary-note">Taxes and shipping calculated at checkout.</p>
 
-            <button class="btn-checkout" disabled>
+            <a href="<?= $this->Url->build(['controller' => 'Payments', 'action' => 'checkout']) ?>" class="btn-checkout" style="text-decoration:none;cursor:pointer;opacity:1;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
                 Checkout
-            </button>
-            <p class="checkout-note">Secure checkout coming soon.</p>
+            </a>
+            <p class="checkout-note">Secured by Stripe</p>
         </div>
 
     </div>
