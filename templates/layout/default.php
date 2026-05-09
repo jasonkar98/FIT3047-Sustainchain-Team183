@@ -25,6 +25,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $this->fetch('title') ?></title>
     <?= $this->fetch('meta') ?>
+    <?= $this->Html->meta('csrfToken', $this->request->getAttribute('csrfToken')) ?>
     <?= $this->Html->css(['app', 'nav']) ?>
     <?= $this->fetch('css') ?>
     <style>
@@ -702,6 +703,90 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Flash->render() ?>
     <?= $this->fetch('content') ?>
 </main>
+
+<!-- Chat Toggle Button -->
+<button id="chat-toggle" style="position:fixed;bottom:24px;right:24px;z-index:1000;
+    background:var(--g3);color:#fff;border:none;border-radius:50%;width:56px;height:56px;
+    font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2)">💬</button>
+
+<!-- Chat Window -->
+<div id="chat-window" style="display:none;position:fixed;bottom:90px;right:24px;
+    width:340px;height:480px;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.2);
+    z-index:1000;display:none;flex-direction:column;overflow:hidden;">
+  <div style="background:var(--g3);color:#fff;padding:16px;font-weight:bold;">SustainChain Support</div>
+  <div id="chat-messages" style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;"></div>
+  <div style="display:flex;padding:8px;border-top:1px solid var(--s2);gap:8px;">
+    <input id="chat-input" type="text" placeholder="Ask us anything..."
+      style="flex:1;padding:8px 12px;border:1px solid var(--s2);border-radius:20px;outline:none;" />
+    <button id="chat-send"
+      style="background:var(--e1);color:var(--ink);border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;">➤</button>
+  </div>
+</div>
+
+<script>
+const toggle = document.getElementById('chat-toggle');
+const win    = document.getElementById('chat-window');
+const input  = document.getElementById('chat-input');
+const send   = document.getElementById('chat-send');
+const msgs   = document.getElementById('chat-messages');
+
+toggle.addEventListener('click', () => {
+    win.style.display = win.style.display === 'none' ? 'flex' : 'none';
+});
+
+function addMessage(text, role) {
+    const el = document.createElement('div');
+    el.textContent = text;
+    el.style.cssText = `
+        max-width:80%;padding:8px 12px;border-radius:12px;font-size:14px;
+        align-self:${role === 'user' ? 'flex-end' : 'flex-start'};
+        background:${role === 'user' ? 'var(--g4)' : 'var(--g6)'};
+        color:${role === 'user' ? '#fff' : 'var(--ink)'};
+    `;
+    msgs.appendChild(el);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    addMessage(text, 'user');
+    addMessage('Typing…', 'bot');
+
+    try {
+        // Read CSRF token from cookie (how CakePHP sets it)
+        const csrfToken = document.querySelector('meta[name="csrfToken"]')?.content ?? '';
+
+        const res = await fetch('<?= $this->Url->build(['controller' => 'Chat', 'action' => 'ask']) ?>', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({ message: text }),
+        });
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.log('Status:', res.status);
+            console.log('Body:', errorText);
+            msgs.lastChild.textContent = `Error: HTTP ${res.status}`;
+            return;
+        }
+
+        const data = await res.json();
+        msgs.lastChild.textContent = data.response || data.error || 'Something went wrong.';
+
+    } catch (error) {
+        msgs.lastChild.textContent = 'Network error: ' + error.message;
+    }
+}
+
+send.addEventListener('click', sendMessage);
+input.addEventListener('keydown', e => e.key === 'Enter' && sendMessage());
+</script>
 
 <!-- footer -->
 <footer class="footer">
