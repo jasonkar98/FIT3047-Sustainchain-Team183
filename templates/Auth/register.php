@@ -6,6 +6,35 @@
 
 $this->layout = 'login';
 $this->assign('title', 'Register new user');
+
+$selectRolesData = [
+    'farmer' => [
+        'title' => 'Farmer',
+        'image' => 'farmer.jpg',
+        'desc' => 'People that grow their crops and raise their farmland life. They obtain raw products from their organic sources.'
+    ],
+    'manufacturer' => [
+        'title' => 'Manufacturer',
+        'image' => 'manufacturer.jpg',
+        'desc' => 'Businesses that run factories to produce packaged products with raw materials provided by Farmers'
+    ],
+    'seller' => [
+        'title' => 'Seller',
+        'image' => 'seller.jpg',
+        'desc' => 'A mix of Businesses that purchase products as stock from Manufacturers to sell to customers, and Sole Traders that sell their products to customers'
+    ],
+    'buyer' => [
+        'title' => 'Buyer',
+        'image' => 'buyer.jpg',
+        'desc' => 'People that purchase products from Sellers.'
+    ]
+];
+
+$selectRolesOptions = array_combine(
+    array_keys($selectRolesData), 
+    array_column($selectRolesData, 'title')
+);
+
 ?>
 
 <div class="auth-page register">
@@ -42,16 +71,40 @@ $this->assign('title', 'Register new user');
             <?= $this->Flash->render() ?>
             <?= $this->Form->create($user, ['class' => 'auth-form']) ?>
 
-            <div class="auth-grid">
-                <?= $this->Form->control('role', ['options' => $roles, 'empty' => 'Select a Role', 'required' => true, 'default' => '']) ?>
-            </div>
+            <div class="carousel-selector-wrapper text-center">
 
-            <?= $this->Form->hidden('role_selected', ['value' => 1]); ?>
-            <?= $this->Form->button('Select Role', ['class' => 'button auth-primary-btn']) ?>
+                <button type="button" class='button auth-primary-btn' id="prev-btn">← Previous</button>
+                <button type="button" class='button auth-primary-btn' id="next-btn">Next →</button>
 
-            <div class="auth-links">
-                <?= $this->Html->link('Login', ['controller' => 'Auth', 'action' => 'login']) ?>
-                <?= $this->Html->link('Back', ['controller' => 'Pages', 'action' => 'landingPage']) ?>
+                <div id="carousel-container">
+                    <?php $i = 0; foreach ($selectRolesData as $id => $info): ?>
+                        <div class="selection-card" 
+                            data-id="<?= $id ?>" 
+                            data-title="<?= h($info['title']) ?>"
+                            style="<?= $i === 0 ? '' : 'display: none;' ?>">
+                            <div class="card">
+                                <?= $this->Html->image($info['image']) ?>
+                                <h2><?= h($info['title']) ?></h2>
+                                <p><?= h($info['desc']) ?></p>
+                                <?= $this->Form->button('Select Role', ['class' => 'button auth-primary-btn']) ?>
+                            </div>
+                        </div>
+                    <?php $i++; endforeach; ?>
+                </div>
+
+                <?= $this->Form->control('role', ['type' => 'select',
+                'options' => $selectRolesOptions,
+                'id' => 'hidden-select',
+                'style' => 'display:none',
+                'label' => false,
+                'empty' => false]) ?>
+
+                <?= $this->Form->hidden('role_selected', ['value' => 1]); ?>
+
+                <div class="auth-links">
+                    <?= $this->Html->link('Login', ['controller' => 'Auth', 'action' => 'login']) ?>
+                    <?= $this->Html->link('Back', ['controller' => 'Pages', 'action' => 'landingPage']) ?>
+                </div>
             </div>
         </section>
 
@@ -110,3 +163,48 @@ $this->assign('title', 'Register new user');
 
     <?php endif; ?>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const cards = document.querySelectorAll('.selection-card');
+        const selectBox = document.getElementById('hidden-select');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        
+        let currentIndex = 0;
+        const totalCards = 4;
+
+        function updateDisplay(newIndex) {
+
+            cards[currentIndex].style.display = 'none';
+
+            currentIndex = newIndex;
+
+            cards.forEach(c => c.style.display = 'none');
+            const activeCard = cards[currentIndex];
+            cards[currentIndex].style.display = 'block';
+
+            const activeId = cards[currentIndex].getAttribute('data-id');
+            selectBox.value = activeId;
+            selectBox.dispatchEvent(new Event('change', { bubbles: true }));
+
+        }
+
+        nextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            let index = (currentIndex + 1) % totalCards;
+            updateDisplay(index);
+        });
+
+        prevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            let index = (currentIndex - 1 + totalCards) % totalCards;
+            updateDisplay(index);
+        });
+
+        if(totalCards > 0) {
+            selectBox.value = cards[0].getAttribute('data-id');
+        }
+    });
+</script>

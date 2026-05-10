@@ -74,8 +74,7 @@ class AuthController extends AppController
             }
         }
 
-        $roles = ['buyer' => 'Buyer', 'seller' => 'Seller', 'manufacturer' => 'Manufacturer', 'farmer' => 'Farmer'];
-        $this->set(compact('user', 'roles'));
+        $this->set(compact('user'));
     }
 
     /**
