@@ -37,6 +37,35 @@ $selectRolesOptions = array_combine(
 
 ?>
 
+<style>
+    /* ── Image side ── */
+.product-view-img-wrap {
+    position: relative;
+    background: var(--s1);
+    min-height: 300px;
+    min-width: 400px;
+    max-height: 300px;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.product-view-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+}
+
+tr, td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+</style>
+
 <div class="auth-page register">
     <section class="auth-hero">
         <div class="hero-eyebrow">
@@ -73,24 +102,42 @@ $selectRolesOptions = array_combine(
 
             <div class="carousel-selector-wrapper text-center">
 
-                <button type="button" class='button auth-primary-btn' id="prev-btn">← Previous</button>
-                <button type="button" class='button auth-primary-btn' id="next-btn">Next →</button>
+                <table>
+                    <tr>
 
-                <div id="carousel-container">
-                    <?php $i = 0; foreach ($selectRolesData as $id => $info): ?>
-                        <div class="selection-card" 
-                            data-id="<?= $id ?>" 
-                            data-title="<?= h($info['title']) ?>"
-                            style="<?= $i === 0 ? '' : 'display: none;' ?>">
-                            <div class="card">
-                                <?= $this->Html->image($info['image']) ?>
-                                <h2><?= h($info['title']) ?></h2>
-                                <p><?= h($info['desc']) ?></p>
-                                <?= $this->Form->button('Select Role', ['class' => 'button auth-primary-btn']) ?>
+                        <td>
+                            <button type="button" id="prev-btn" class="button auth-primary-btn">←</button>
+                        </td>
+
+                        <td>
+                            <div id="carousel-container">
+                                <?php $i = 0; foreach ($selectRolesData as $id => $info): ?>
+                                    <div class="selection-card" 
+                                        data-id="<?= $id ?>" 
+                                        data-title="<?= h($info['title']) ?>"
+                                        style="<?= $i === 0 ? '' : 'display: none;' ?>">
+                                        <h2><?= h($info['title']) ?></h2>
+                                        <br>
+                                        <div class="card">
+                                            <div class="product-view-img-wrap">
+                                                <?= $this->Html->image('user_roles/' . $info['image'], [
+                                                    'class' => 'product-view-img']) ?>
+                                            </div>
+                                            <br>
+                                            <p><?= h($info['desc']) ?></p>
+                                            <?= $this->Form->button('Select Role', ['class' => 'button auth-primary-btn']) ?>
+                                        </div>
+                                    </div>
+                                <?php $i++; endforeach; ?>
                             </div>
-                        </div>
-                    <?php $i++; endforeach; ?>
-                </div>
+                        </td>
+
+                        <td>
+                            <button type="button" id="next-btn" class="button auth-primary-btn">→</button>
+                        </td>
+                    </tr>
+
+                </table>
 
                 <?= $this->Form->control('role', ['type' => 'select',
                 'options' => $selectRolesOptions,
