@@ -616,6 +616,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 <?php if ($identity->get('role') !== 'admin'): ?>
                     <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
                 <?php endif; ?>
+            <?php else: ?>
+                <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
             <?php endif; ?>
         </ul>
     </div>
