@@ -45,17 +45,37 @@ class AuthController extends AppController
      */
     public function register()
     {
-        $user = $this->Users->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success('You have been registered. Please log in. ');
 
-                return $this->redirect(['action' => 'login']);
+        $user = $this->Users->newEmptyEntity();
+        // $session = $this->request->getSession();
+        $this->set('step', 1);
+
+        if ($this->request->is('post')) {
+
+            $data = $this->request->getData();
+
+
+             if (!empty($data['role_selected'])) {
+                $this->set('step', 2);
+
+                $this->set('role_selected', $data['role']);
+
+            } elseif (!empty($data['submit_details'])) {
+
+                $user = $this->Users->patchEntity($user, $data);
+
+                if ($this->Users->save($user)) {
+                    $this->Flash->success('You have been registered. Please log in. ');
+
+                    return $this->redirect(['action' => 'login']);
+                }
+                $this->Flash->error('The user could not be registered. Please, try again.');
+                $this->set('step', 2);
             }
-            $this->Flash->error('The user could not be registered. Please, try again.');
         }
-        $this->set(compact('user'));
+
+        $roles = ['buyer' => 'Buyer', 'seller' => 'Seller', 'manufacturer' => 'Manufacturer', 'farmer' => 'Farmer'];
+        $this->set(compact('user', 'roles'));
     }
 
     /**
