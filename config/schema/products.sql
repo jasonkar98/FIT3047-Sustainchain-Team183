@@ -34,6 +34,8 @@ CREATE TABLE `products` (
   `price` decimal(10,2) NOT NULL,
   `category` varchar(100) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `is_listed` tinyint(1) NOT NULL DEFAULT 1,
+  `unlist_reason` ENUM('admin','deactivation') DEFAULT NULL,
   `image_url` varchar(500) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
