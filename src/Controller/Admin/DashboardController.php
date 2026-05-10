@@ -21,6 +21,14 @@ class DashboardController extends AppController
             'unresolved' => $enquiriesTable->find()->where(['is_resolved' => false])->count(),
         ];
 
-        $this->set(compact('recentEnquiries', 'counts'));
+        // Newest non-admin users for the sidebar widget.
+        $newestUsers = $this->fetchTable('Users')->find()
+            ->where(['role !=' => 'admin'])
+            ->orderBy(['created' => 'DESC'])
+            ->limit(5)
+            ->all()
+            ->toArray();
+
+        $this->set(compact('recentEnquiries', 'counts', 'newestUsers'));
     }
 }

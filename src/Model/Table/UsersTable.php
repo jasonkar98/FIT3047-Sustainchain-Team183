@@ -44,6 +44,10 @@ class UsersTable extends Table
         $this->setPrimaryKey('id');
         $this->addBehavior('CanAuthenticate');
         $this->addBehavior('Timestamp');
+
+        $this->hasMany('Products', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     /**
