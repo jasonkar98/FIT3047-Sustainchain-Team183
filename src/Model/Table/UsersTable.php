@@ -105,6 +105,39 @@ class UsersTable extends Table
     }
 
     /**
+     * Validation rules used by the admin edit screen — only first_name and
+     * last_name are validated here. Role is not patched (not mass-assignable
+     * on the User entity) and is validated manually in the controller.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationAdminEdit(Validator $validator): Validator
+    {
+        $validator
+            ->scalar('first_name')
+            ->maxLength('first_name', 50)
+            ->requirePresence('first_name')
+            ->notEmptyString('first_name', 'First name is required')
+            ->add('first_name', 'lettersOnly', [
+                'rule' => ['custom', '/^[a-zA-Z ]+$/'],
+                'message' => 'First name may only contain letters and spaces',
+            ]);
+
+        $validator
+            ->scalar('last_name')
+            ->maxLength('last_name', 50)
+            ->requirePresence('last_name')
+            ->notEmptyString('last_name', 'Last name is required')
+            ->add('last_name', 'lettersOnly', [
+                'rule' => ['custom', '/^[a-zA-Z ]+$/'],
+                'message' => 'Last name may only contain letters and spaces',
+            ]);
+
+        return $validator;
+    }
+
+    /**
      * Returns a rules checker object that will be used for validating
      * application integrity.
      *

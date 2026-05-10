@@ -98,6 +98,13 @@ return function (RouteBuilder $routes): void {
             $builder->connect('/enquiries/toggle-resolved/{id}', ['controller' => 'Enquiries', 'action' => 'toggleResolved'])
                 ->setPatterns(['id' => '\d+'])
                 ->setPass(['id']);
+            $builder->connect('/users', ['controller' => 'Users', 'action' => 'index']);
+            $builder->connect('/users/edit/{id}', ['controller' => 'Users', 'action' => 'edit'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/send-reset-link/{id}', ['controller' => 'Users', 'action' => 'sendResetLink'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
             $builder->fallbacks();
         });
         $builder->fallbacks();

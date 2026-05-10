@@ -189,6 +189,27 @@ $newestUsers = $newestUsers ?? [];
         transition: background .15s;
     }
     .view-all-btn:hover { background: #25623f; }
+
+    /* ===== Make entire card clickable ===== */
+    /* Wrapping anchors around enquiry items and user-mini blocks */
+    a.card-link,
+    a.card-link:visited {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform .12s ease, box-shadow .12s ease;
+    }
+    a.card-link:hover .enquiry-item,
+    a.card-link:hover .user-mini {
+        border-color: #2e7d52;
+        box-shadow: 0 4px 14px rgba(46, 125, 82, .12);
+        transform: translateY(-1px);
+    }
+    a.card-link .enquiry-item,
+    a.card-link .user-mini {
+        transition: border-color .15s, box-shadow .15s, transform .15s;
+    }
 </style>
 
 <div class="marketplace-header">
@@ -238,7 +259,7 @@ $newestUsers = $newestUsers ?? [];
                                 </div>
                             </div>',
                             ['prefix' => 'Admin', 'controller' => 'Enquiries', 'action' => 'view', $enquiry->id],
-                            ['escape' => false]
+                            ['escape' => false, 'class' => 'card-link']
                         ) ?>
                     <?php endforeach; ?>
                 </div>
@@ -265,7 +286,7 @@ $newestUsers = $newestUsers ?? [];
                                 . '</span>'
                             . '</div>',
                             ['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'edit', $u->id],
-                            ['escape' => false, 'style' => 'text-decoration:none;']
+                            ['escape' => false, 'class' => 'card-link']
                         ) ?>
                     <?php endforeach; ?>
                 </div>

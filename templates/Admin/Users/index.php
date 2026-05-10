@@ -280,26 +280,69 @@ $sortLink = function (string $key, string $label) use ($role, $keyword, $sort, $
         color: #fff;
     }
 
-    /* ===== Mobile: collapse table to stacked cards ===== */
+    /* Whole-row click affordance */
+    table.users-table tr.clickable-row {
+        cursor: pointer;
+    }
+    table.users-table tr.clickable-row:hover td {
+        background: #f5f9f6;
+    }
+    /* When the row is hover-highlighted on an inactive user, keep the
+       inactive tint slightly visible underneath so it doesn't read as active. */
+    table.users-table tr.clickable-row.is-inactive:hover td {
+        background: #f5ede9;
+    }
+
+    /* ===== Mobile: each row becomes its own card ===== */
     @media (max-width: 720px) {
+        /* Drop the table-wrap chrome on mobile — each row owns its own card chrome. */
+        .admin-table-wrap {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            overflow: visible;
+        }
+
         table.users-table thead { display: none; }
         table.users-table,
-        table.users-table tbody,
-        table.users-table tr,
-        table.users-table td { display: block; width: 100%; }
+        table.users-table tbody { display: block; width: 100%; }
+
+        /* Each row → standalone card */
         table.users-table tr {
-            border-bottom: 1px solid #e0e0e0;
-            padding: .75rem 1rem;
+            display: block;
+            width: 100%;
+            margin-bottom: .85rem;
+            padding: 1rem 1.1rem;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .03);
         }
-        table.users-table tbody tr:last-child { border-bottom: none; }
-        table.users-table tbody td {
-            border: none;
-            padding: .25rem 0;
+        table.users-table tr:last-child { margin-bottom: 0; }
+        table.users-table tr.is-inactive { background: #fbf6f4; }
+        table.users-table tr.clickable-row:hover td,
+        table.users-table tr.clickable-row.is-inactive:hover td {
+            background: transparent; /* hover background lives on tr in mobile, not td */
+        }
+        table.users-table tr.clickable-row:hover {
+            border-color: #2e7d52;
+            box-shadow: 0 4px 14px rgba(46, 125, 82, .12);
+        }
+        table.users-table tr.clickable-row.is-inactive:hover {
+            border-color: #c98e7c;
+        }
+
+        /* Each cell → label/value flex row */
+        table.users-table td {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             gap: 1rem;
+            padding: .35rem 0;
+            border: none;
+            width: 100%;
         }
-        table.users-table tbody td::before {
+        table.users-table td::before {
             content: attr(data-label);
             font-size: .72rem;
             font-weight: 700;
@@ -307,6 +350,22 @@ $sortLink = function (string $key, string $label) use ($role, $keyword, $sort, $
             text-transform: uppercase;
             color: #555;
             flex-shrink: 0;
+        }
+
+        /* Name cell → promoted to card heading; no label, no flex split */
+        table.users-table td:first-child {
+            display: block;
+            padding: 0 0 .65rem;
+            margin-bottom: .65rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        table.users-table td:first-child::before {
+            content: none;
+        }
+        table.users-table td:first-child a.name-link {
+            font-size: 1.05rem;
+            font-weight: 700;
+            display: block;
         }
     }
 </style>
@@ -390,8 +449,15 @@ $sortLink = function (string $key, string $label) use ($role, $keyword, $sort, $
                 </thead>
                 <tbody>
                 <?php foreach ($userList as $user): ?>
-                    <?php $isActive = (int)($user->is_active ?? 1) === 1; ?>
-                    <tr class="<?= $isActive ? '' : 'is-inactive' ?>">
+                    <?php
+                        $isActive = (int)($user->is_active ?? 1) === 1;
+                        $rowHref = $this->Url->build(['action' => 'edit', $user->id]);
+                    ?>
+                    <tr class="clickable-row<?= $isActive ? '' : ' is-inactive' ?>"
+                        data-href="<?= h($rowHref) ?>"
+                        tabindex="0"
+                        role="link"
+                        aria-label="<?= h('Edit user: ' . $user->full_name) ?>">
                         <td data-label="Name">
                             <?= $this->Html->link(
                                 h($user->full_name),
@@ -429,3 +495,24 @@ $sortLink = function (string $key, string $label) use ($role, $keyword, $sort, $
         </div>
     <?php endif; ?>
 </div>
+
+<script>
+// Make table rows fully clickable. Clicks on links/buttons/forms inside the
+// row are excluded so future per-row action buttons (e.g. deactivate) keep working.
+(function () {
+    document.querySelectorAll('tr.clickable-row[data-href]').forEach(function (row) {
+        var go = function () { window.location = row.dataset.href; };
+        row.addEventListener('click', function (e) {
+            if (e.target.closest('a, button, form, input, label, select, textarea')) return;
+            go();
+        });
+        row.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                if (e.target.closest('a, button, form, input, label, select, textarea')) return;
+                e.preventDefault();
+                go();
+            }
+        });
+    });
+})();
+</script>
