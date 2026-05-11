@@ -77,6 +77,13 @@ class AuthController extends AppController
         $this->set(compact('user'));
     }
 
+    public function view($id = null)
+    {
+        
+        $user = $this->Authentication->getIdentity();
+        $this->set(compact('user'));
+    }
+
     /**
      * Forget Password method
      *
