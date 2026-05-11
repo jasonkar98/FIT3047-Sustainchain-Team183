@@ -61,7 +61,101 @@ $selectRolesOptions = array_combine(
 
 tr, td {
     text-align: center;
-    vertical-align: middle;
+    vertical-align: top;
+}
+
+
+.role-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: #cdc699;
+    color: var(--g0);
+    border: none;
+    border-radius: var(--r16);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 16px rgba(200, 232, 64, 0.25);
+    transition:
+        transform 0.18s var(--ease-spring),
+        background 0.18s,
+        box-shadow 0.18s;
+}
+
+.role-btn:hover {
+    background: var(--e0);
+    box-shadow: 0 8px 24px rgba(200, 232, 64, 0.35);
+    transform: translateY(-2px);
+}
+
+.role-btn:focus {
+    background: #72894a;
+    box-shadow: 0 8px 24px rgba(200, 232, 64, 0.35);
+    transform: translateY(-2px);
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3.5rem;
+    width: 3.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--g4);
+    color: var(--g0);
+    border: none;
+    border-radius: 50%;
+    text-transform: none;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 16px rgba(200, 232, 64, 0.25);
+    transition:
+        transform 0.18s var(--ease-spring),
+        background 0.18s,
+        box-shadow 0.18s;
+}
+
+.tooltip-btn:hover {
+    background: var(--e0);
+    box-shadow: 0 8px 24px rgba(200, 232, 64, 0.35);
+    transform: translateY(-2px);
+}
+
+.overlay-box {
+    visibility: hidden;
+    position: absolute;
+    z-index: 1;
+    font-family: inherit;
+    bottom: 105%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    background-color: var(--g0);
+    color: var(--g6:);
+    padding: 10px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .overlay-box {
+    visibility: visible;
+    opacity: 1;
 }
 
 </style>
@@ -100,59 +194,85 @@ tr, td {
             <?= $this->Flash->render() ?>
             <?= $this->Form->create($user, ['class' => 'auth-form']) ?>
 
-            <div class="carousel-selector-wrapper text-center">
-
-                <table>
-                    <tr>
-
-                        <td>
-                            <button type="button" id="prev-btn" class="button auth-primary-btn">←</button>
-                        </td>
-
-                        <td>
-                            <div id="carousel-container">
-                                <?php $i = 0; foreach ($selectRolesData as $id => $info): ?>
-                                    <div class="selection-card" 
-                                        data-id="<?= $id ?>" 
-                                        data-title="<?= h($info['title']) ?>"
-                                        style="<?= $i === 0 ? '' : 'display: none;' ?>">
-                                        <h2><?= h($info['title']) ?></h2>
-                                        <br>
-                                        <div class="card">
-                                            <div class="product-view-img-wrap">
-                                                <?= $this->Html->image('user_roles/' . $info['image'], [
-                                                    'class' => 'product-view-img']) ?>
-                                            </div>
-                                            <br>
-                                            <p><?= h($info['desc']) ?></p>
-                                            <?= $this->Form->button('Select Role', ['class' => 'button auth-primary-btn']) ?>
-                                        </div>
-                                    </div>
-                                <?php $i++; endforeach; ?>
-                            </div>
-                        </td>
-
-                        <td>
-                            <button type="button" id="next-btn" class="button auth-primary-btn">→</button>
-                        </td>
-                    </tr>
-
-                </table>
-
-                <?= $this->Form->control('role', ['type' => 'select',
+            <?= $this->Form->control('role', ['type' => 'select',
                 'options' => $selectRolesOptions,
                 'id' => 'hidden-select',
                 'style' => 'display:none',
+                'required' => true,
                 'label' => false,
                 'empty' => false]) ?>
 
-                <?= $this->Form->hidden('role_selected', ['value' => 1]); ?>
+            <table>
+                <tr>
+                    <td>
+                        <div class="role-button-container">
+                        <button type="button" id="role-btn" class="role-btn" value='farmer' title="<?= h($selectRolesData['farmer']['desc']) ?>"><?= h($selectRolesData['farmer']['title']) ?></button>
+                        </div>
+                    </td>
+                    <td style="width:3.5rem;">
+                        <div class="tooltip-container">
+                            <button type="button" class="tooltip-btn">i</button>
+                            <div class="overlay-box">
+                                <?= h($selectRolesData['farmer']['desc']) ?>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="role-button-container">
+                        <button type="button" id="role-btn" class="role-btn" value='manufacturer' title="<?= h($selectRolesData['manufacturer']['desc']) ?>"><?= h($selectRolesData['manufacturer']['title']) ?></button>
+                        </div>
+                    </td>
+                    <td style="width:3.5rem;">
+                        <div class="tooltip-container">
+                            <button type="button" class="tooltip-btn">i</button>
+                            <div class="overlay-box">
+                                <?= h($selectRolesData['manufacturer']['desc']) ?>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="role-button-container">
+                        <button type="button" id="role-btn" class="role-btn" value='seller' title="<?= h($selectRolesData['seller']['desc']) ?>"><?= h($selectRolesData['seller']['title']) ?></button>
+                        </div>
+                    </td>
+                    <td style="width:3.5rem;">
+                        <div class="tooltip-container">
+                            <button type="button" class="tooltip-btn">i</button>
+                            <div class="overlay-box">
+                                <?= h($selectRolesData['seller']['desc']) ?>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="role-button-container">
+                        <button type="button" id="role-btn" class="role-btn" value='buyer' title="<?= h($selectRolesData['buyer']['desc']) ?>"><?= h($selectRolesData['buyer']['title']) ?></button>
+                        </div>
+                    </td>
+                    <td style="width:3.5rem;">
+                        <div class="tooltip-container">
+                            <button type="button" class="tooltip-btn">i</button>
+                            <div class="overlay-box">
+                                <?= h($selectRolesData['buyer']['desc']) ?>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-                <div class="auth-links">
-                    <?= $this->Html->link('Login', ['controller' => 'Auth', 'action' => 'login']) ?>
-                    <?= $this->Html->link('Back', ['controller' => 'Pages', 'action' => 'landingPage']) ?>
-                </div>
+            <?= $this->Form->hidden('role_selected', ['value' => 1]); ?>
+            <?= $this->Form->button('Select Role', ['id' => 'select-role-btn','class' => 'button auth-primary-btn', 'disabled' => 'true']) ?>
+            
+            <div class="auth-links">
+                <?= $this->Html->link('Login', ['controller' => 'Auth', 'action' => 'login']) ?>
+                <?= $this->Html->link('Back', ['controller' => 'Pages', 'action' => 'landingPage']) ?>
             </div>
+        
         </section>
 
     <?php else: ?>
@@ -216,42 +336,21 @@ tr, td {
 
         const cards = document.querySelectorAll('.selection-card');
         const selectBox = document.getElementById('hidden-select');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
+        const roleBtns = document.querySelectorAll('#role-btn');
+        const selectRoleBtn = document.getElementById('select-role-btn');
         
         let currentIndex = 0;
         const totalCards = 4;
 
-        function updateDisplay(newIndex) {
-
-            cards[currentIndex].style.display = 'none';
-
-            currentIndex = newIndex;
-
-            cards.forEach(c => c.style.display = 'none');
-            const activeCard = cards[currentIndex];
-            cards[currentIndex].style.display = 'block';
-
-            const activeId = cards[currentIndex].getAttribute('data-id');
-            selectBox.value = activeId;
-            selectBox.dispatchEvent(new Event('change', { bubbles: true }));
-
-        }
-
-        nextBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            let index = (currentIndex + 1) % totalCards;
-            updateDisplay(index);
+        roleBtns.forEach(roleBtn => {
+            roleBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                let index = roleBtn.value;
+                selectBox.value = index
+                selectBox.dispatchEvent(new Event('change', { bubbles: true }));
+                selectRoleBtn.disabled = false;
+            });
         });
 
-        prevBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            let index = (currentIndex - 1 + totalCards) % totalCards;
-            updateDisplay(index);
-        });
-
-        if(totalCards > 0) {
-            selectBox.value = cards[0].getAttribute('data-id');
-        }
     });
 </script>

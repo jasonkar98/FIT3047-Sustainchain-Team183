@@ -414,7 +414,7 @@ tr, td {
 
         <!-- Back button -->
         <div class="product-view-back">
-            <a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'landingPage']) ?>" class="btn-back">
+            <a href="<?= $this->Url->build(['controller' => 'Auth', 'action' => 'view', $user->get('id')]) ?>" class="btn-back">
                 <svg class="btn-back-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M19 12H5"/>
                     <path d="M12 19l-7-7 7-7"/>
@@ -429,47 +429,6 @@ tr, td {
 
                 <?= $this->Form->control('first_name', ['label' => 'First name', 'placeholder' => 'Ava', 'pattern' => '[a-zA-Z ]+']); ?>
                 <?= $this->Form->control('last_name', ['label' => 'Last name', 'placeholder' => 'Patel', 'pattern' => '[a-zA-Z ]+']); ?>
-                <?= $this->Form->control('role', ['type' => 'hidden', 'id' => 'hidden-select']) ?>
-
-                <div class="carousel-selector-wrapper text-center">
-
-                    <table>
-                        <tr>
-
-                            <td>
-                                <button type="button" id="prev-btn" class="button auth-primary-btn">←</button>
-                            </td>
-
-                            <td>
-                                <div id="carousel-container">
-                                    <?php $i = 0; foreach ($selectRolesData as $id => $info): ?>
-                                        <div class="selection-card" 
-                                            data-id="<?= $id ?>" 
-                                            data-title="<?= h($info['title']) ?>"
-                                            style="<?= $i === 0 ? '' : 'display: none;' ?>">
-                                            <h2><?= h($info['title']) ?></h2>
-                                            <br>
-                                            <div class="card">
-                                                <div class="product-view-img-wrap">
-                                                    <?= $this->Html->image('user_roles/' . $info['image'], [
-                                                        'class' => 'product-view-img']) ?>
-                                                </div>
-                                                <br>
-                                                <p><?= h($info['desc']) ?></p>
-                                            </div>
-                                        </div>
-                                    <?php $i++; endforeach; ?>
-                                </div>
-                            </td>
-
-                            <td>
-                                <button type="button" id="next-btn" class="button auth-primary-btn">→</button>
-                            </td>
-                        </tr>
-
-                    </table>
-
-                </div>
 
                 <div class="form-divider"></div>
 
@@ -486,48 +445,3 @@ tr, td {
 
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-
-        const cards = document.querySelectorAll('.selection-card');
-        const selectBox = document.getElementById('hidden-select');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        
-        let currentIndex = 0;
-        const totalCards = 4;
-
-        function updateDisplay(newIndex) {
-
-            cards[currentIndex].style.display = 'none';
-
-            currentIndex = newIndex;
-
-            cards.forEach(c => c.style.display = 'none');
-            const activeCard = cards[currentIndex];
-            cards[currentIndex].style.display = 'block';
-
-            const activeId = cards[currentIndex].getAttribute('data-id');
-            selectBox.value = activeId;
-            selectBox.dispatchEvent(new Event('change', { bubbles: true }));
-
-        }
-
-        nextBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            let index = (currentIndex + 1) % totalCards;
-            updateDisplay(index);
-        });
-
-        prevBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            let index = (currentIndex - 1 + totalCards) % totalCards;
-            updateDisplay(index);
-        });
-
-        if(totalCards > 0) {
-            selectBox.value = cards[0].getAttribute('data-id');
-        }
-    });
-</script>
