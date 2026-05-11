@@ -188,8 +188,8 @@ tr, td {
 
         <section class="auth-card">
             <p class="card-eyebrow">Get started</p>
-            <h2>Create account</h2>
-            <p class="auth-card-subtitle">Set up your profile to get started.</p>
+            <h2>Select Your Role</h2>
+            <p class="auth-card-subtitle">Choose what kind of person or business do you consider yourself as.</p>
 
             <?= $this->Flash->render() ?>
             <?= $this->Form->create($user, ['class' => 'auth-form']) ?>
