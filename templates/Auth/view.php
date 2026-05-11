@@ -357,9 +357,15 @@ tr, td {
                     </a>
                     </td>
                     <td>
-                    <a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'landingPage']) ?>" class="btn-modify">
-                        Delete Account
-                    </a>
+                    <?= $this->Form->postLink(
+                        __('Delete This Account'),
+                        ['controller' => 'Auth', 'action' => 'delete', $user->id],
+                        [
+                            'method' => 'delete',
+                            'confirm' => __('Are you sure you want to delete your account, {0} {1}?', $user->first_name, $user->last_name),
+                            'class' => 'btn-modify'
+                        ]
+                    ) ?>
                     </td>
                 </tr>
             </table>

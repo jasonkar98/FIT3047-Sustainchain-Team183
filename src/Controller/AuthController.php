@@ -84,7 +84,7 @@ class AuthController extends AppController
         $this->set(compact('user'));
     }
 
-        public function edit($id = null)
+    public function edit($id = null)
     {
         $user = $this->Users->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -98,6 +98,22 @@ class AuthController extends AppController
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $this->set(compact('user'));
+    }
+
+    public function delete($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $user = $this->Users->get($id);
+        $user['is_active'] = 0;
+        // $user = $this->Users->patchEntity($user, $this->request->getData());
+        if ($this->Users->save($user)) {
+            $this->Flash->success(__('Your account has been disabled. You will soon be notified of its official deletion.'));
+            $this->logout();
+        } else {
+            $this->Flash->error(__('Your account could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
     }
 
     /**
