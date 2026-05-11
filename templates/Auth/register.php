@@ -112,7 +112,7 @@ tr, td {
     height: 3.5rem;
     width: 3.5rem;
     padding: 0.75rem 1.5rem;
-    background: var(--g4);
+    background: var(--g5);
     color: var(--g0);
     border: none;
     border-radius: 50%;
@@ -291,6 +291,10 @@ tr, td {
                 <?= $this->Form->control('first_name', ['label' => 'First name', 'placeholder' => 'Ava', 'pattern' => '[a-zA-Z ]+']); ?>
                 <?= $this->Form->control('last_name', ['label' => 'Last name', 'placeholder' => 'Patel', 'pattern' => '[a-zA-Z ]+']); ?>
             </div>
+
+            <?php if (h($this->request->getData('role')) == 'manufacturer'): ?>
+                <?= $this->Form->control('description', ['label' => 'Business Description', 'placeholder' => 'Describe your business...', 'type' => 'textarea']); ?>
+            <?php endif; ?>
 
             <?= $this->Form->control('role', ['type' => 'hidden', 'required' => true, 'default' => $role_selected]) ?>
 

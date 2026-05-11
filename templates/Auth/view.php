@@ -339,6 +339,10 @@ tr, td {
                 <?= h($user->email) ?>
             </div>
 
+            <?php if (h($user->role) == 'manufacturer'): ?>
+                <p class="product-view-desc"><?= h($user->description) ?></p>
+            <?php endif; ?>
+
         </div>
 
         <div class="product-view-divider"></div>

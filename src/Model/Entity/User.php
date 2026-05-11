@@ -46,11 +46,13 @@ class User extends Entity
         'last_name' => true,
         'avatar' => true,
         'role' => true,   
+        'description' => true,
         'created' => false,
         'modified' => false,
         'nonce' => false, // Nonce and expiry dates are to be set in Controller directly, not through patching
         'nonce_expiry' => false,
         'blog_articles' => true,
+        'is_active' => true
     ];
 
     /**

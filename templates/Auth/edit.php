@@ -430,10 +430,14 @@ tr, td {
                 <?= $this->Form->control('first_name', ['label' => 'First name', 'placeholder' => 'Ava', 'pattern' => '[a-zA-Z ]+']); ?>
                 <?= $this->Form->control('last_name', ['label' => 'Last name', 'placeholder' => 'Patel', 'pattern' => '[a-zA-Z ]+']); ?>
 
+                <?php if (h($user->role) == 'manufacturer'): ?>
+                    <?= $this->Form->control('description', ['label' => 'Business Description', 'placeholder' => 'Describe your business...', 'type' => 'textarea']); ?>
+                <?php endif; ?>
+
                 <div class="form-divider"></div>
 
                 <div class="submit-row">
-                    <?= $this->Form->button('List Product >', [
+                    <?= $this->Form->button('Confirm Changes', [
                         'class' => 'btn-submit',
                         'id'    => 'submit-btn',
                     ]) ?>
