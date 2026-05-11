@@ -249,6 +249,42 @@ $this->Html->css('marketplace', ['block' => true]);
     height: 16px;
 }
 
+/* ── Edit Delete button ── */
+.product-view-modify {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+tr, td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.btn-modify {
+    gap: 0.5rem;
+    background: var(--white);
+    border: 1px solid var(--s2);
+    color: var(--g2);
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--r16);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.18s var(--ease-spring);
+    text-decoration: none;
+}
+.btn-modify:hover {
+    background: var(--s1);
+    color: var(--g0);
+    transform: translateY(-1px);
+}
+.btn-modify-icon {
+    width: 16px;
+    height: 16px;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
     .product-view-card {
@@ -293,17 +329,37 @@ $this->Html->css('marketplace', ['block' => true]);
         </div>
 
         <div class="product-view-details">
-                <div>
-                    <span class="product-view-category"><?= h($user->role) ?></span>
-                </div>
-
-                <h1 class="product-view-name"><?= h($user->first_name) ?> <?= h($user->last_name) ?></h1>
-
-                <div class="product-view-seller">
-                    <?= h($user->email) ?>
-                </div>
-
-
+            <div>
+                <span class="product-view-category"><?= h($user->role) ?></span>
             </div>
+
+            <h1 class="product-view-name"><?= h($user->first_name) ?> <?= h($user->last_name) ?></h1>
+
+            <div class="product-view-seller">
+                <?= h($user->email) ?>
+            </div>
+
+        </div>
+
+        <div class="product-view-divider"></div>
+        <br>
+
+        <div class="product-view-modify">
+            <table>
+                <tr>
+                    <td>
+                    <a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'landingPage']) ?>" class="btn-modify">
+                        Edit
+                    </a>
+                    </td>
+                    <td>
+                    <a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'landingPage']) ?>" class="btn-modify">
+                        Delete Account
+                    </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
     </div>
 </div>
