@@ -307,10 +307,10 @@ tr, td {
     <div class="marketplace-header-inner">
         <span class="t-label section-tag">SustainChain</span>
         <h1 class="marketplace-title t-display">
-            The <em>User</em> Account
+            Your <em>User</em> Account
         </h1>
         <p class="marketplace-subtitle">
-            Browse products from verified eco-friendly sellers, farmers, and manufacturers.
+            View your user details, edit your user details, or request to terminate your account.
         </p>
     </div>
 </div>
@@ -348,7 +348,7 @@ tr, td {
             <table>
                 <tr>
                     <td>
-                    <a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'landingPage']) ?>" class="btn-modify">
+                    <a href="<?= $this->Url->build(['controller' => 'Auth', 'action' => 'edit', $user->id]) ?>" class="btn-modify">
                         Edit
                     </a>
                     </td>

@@ -84,6 +84,22 @@ class AuthController extends AppController
         $this->set(compact('user'));
     }
 
+        public function edit($id = null)
+    {
+        $user = $this->Users->get($id, contain: []);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            if ($this->Users->save($user)) {
+                $this->Authentication->setIdentity($user->toArray());
+                $this->Flash->success(__('The user has been saved.'));
+
+                return $this->redirect(['action' => 'view', $user->get('id')]);
+            }
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+        }
+        $this->set(compact('user'));
+    }
+
     /**
      * Forget Password method
      *
