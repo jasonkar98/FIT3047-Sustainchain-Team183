@@ -93,7 +93,10 @@ return [
         //'timestamp' => true,
         // 'cacheTime' => '+1 year'
     ],
-
+    'Stripe' => [
+        'publishableKey' => env('STRIPE_PUBLISHABLE_KEY'),
+        'secretKey'      => env('STRIPE_SECRET_KEY'),
+    ],
     /*
      * Configure the cache adapters.
      */
