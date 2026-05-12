@@ -24,7 +24,7 @@ class EnquiriesController extends AppController
      */
     public function index()
     {
-        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+        return $this->redirect(['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']);
 //        $query = $this->Enquiries->find();
 //        $enquiries = $this->paginate($query);
 //
@@ -92,7 +92,7 @@ class EnquiriesController extends AppController
             if ($this->Enquiries->save($enquiry)) {
                 $this->Flash->success(__('The enquiry has been saved.'));
 
-                return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+                return $this->redirect(['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']);
             }
             $this->Flash->error(__('The enquiry could not be saved. Please, try again.'));
         }
@@ -108,7 +108,7 @@ class EnquiriesController extends AppController
      */
     public function edit($id = null)
     {
-        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+        return $this->redirect(['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']);
 //        $enquiry = $this->Enquiries->get($id, contain: []);
 //        if ($this->request->is(['patch', 'post', 'put'])) {
 //            $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
@@ -131,7 +131,7 @@ class EnquiriesController extends AppController
      */
     public function delete($id = null)
     {
-        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+        return $this->redirect(['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']);
 //        $this->request->allowMethod(['post', 'delete']);
 //        $enquiry = $this->Enquiries->get($id);
 //        if ($this->Enquiries->delete($enquiry)) {

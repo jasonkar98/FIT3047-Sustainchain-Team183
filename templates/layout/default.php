@@ -604,14 +604,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
 <nav class="nav">
     <div class="nav-left">
-        <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
+        <a href="<?= $this->Url->build(['plugin' => false, 'prefix' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
             <div class="nav-logo-icon">🌿</div>
             <span class="nav-logo-name">Sustain<span>Chain</span></span>
         </a>
 
         <ul class="nav-links">
-            <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+            <li><?= $this->Html->link('Marketplace', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link('Contact Us', ['plugin' => false, 'prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
         </ul>
     </div>
 
@@ -663,7 +663,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <?php if ($identity->get('role') === 'admin'): ?>
                         <?= $this->Html->link(
                             '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l6 3v5c0 3.5-2.5 6-6 7-3.5-1-6-3.5-6-7V4z"/></svg> Admin Dashboard',
-                            ['prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
+                            ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
                             ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                         ) ?>
                         <div class="dropdown-divider"></div>
@@ -671,13 +671,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 3V2m6 1V2M2 7h12"/></svg> Dashboard',
-                        ['prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'],
+                        ['plugin' => false,'prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
 
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1L2 6.3l4.2-.7z"/></svg> My Listings',
-                        ['prefix' => false, 'controller' => 'Products', 'action' => 'myListings'],
+                        ['plugin' => false,'prefix' => false, 'controller' => 'Products', 'action' => 'myListings'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
 
@@ -685,7 +685,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3H3v10h3m3-7 3 3-3 3m3-3H6"/></svg> Log out',
-                        ['prefix' => false, 'controller' => 'Auth', 'action' => 'logout'],
+                        ['plugin' => false, 'prefix' => false, 'controller' => 'Auth', 'action' => 'logout'],
                         ['class' => 'dropdown-item danger', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
                 </div>
