@@ -74,11 +74,6 @@ return function (RouteBuilder $routes): void {
             ['_name' => 'products:togglesave', 'pass' => ['id'], 'id' => '[0-9]+']
         );
 
-        $builder->scope('/content-blocks', ['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks'], function (RouteBuilder $builder): void {
-            $builder->connect('/', ['action' => 'index']);
-            $builder->connect('/:action/*');
-        });
-
         /*
          * Connect catchall routes for all controllers.
          *
@@ -104,13 +99,15 @@ return function (RouteBuilder $routes): void {
             $builder->connect('/enquiries/toggle-resolved/{id}', ['controller' => 'Enquiries', 'action' => 'toggleResolved'])
                 ->setPatterns(['id' => '\d+'])
                 ->setPass(['id']);
-            $builder->connect('/content-blocks', ['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']);
-            $builder->connect('/content-blocks/:action/*', ['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks']);
             $builder->fallbacks();
         });
         $builder->fallbacks();
     });
 
+    $routes->plugin('ContentBlocks', ['path' => '/admin/content-blocks'], function (RouteBuilder $builder): void {
+        $builder->connect('/', ['controller' => 'ContentBlocks', 'action' => 'index', 'prefix' => 'Admin']);
+        $builder->connect('/{action}/*', ['controller' => 'ContentBlocks', 'prefix' => 'Admin']);
+    });
     /*
      * If you need a different set of middleware or none at all,
      * open new scope and define routes there.

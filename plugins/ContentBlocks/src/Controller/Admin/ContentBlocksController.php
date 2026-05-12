@@ -1,14 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace ContentBlocks\Controller;
+namespace ContentBlocks\Controller\Admin;
 
-use App\Controller\AppController;
+use ContentBlocks\Controller\AppController;
 use Authorization\AuthorizationService;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Log\Log;
 use Psr\Http\Message\UploadedFileInterface;
+
 
 /**
  * ContentBlocks Controller

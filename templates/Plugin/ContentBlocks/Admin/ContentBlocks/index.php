@@ -6,6 +6,7 @@
 
 $this->assign('title', 'Content Blocks');
 
+$this->Html->css('marketplace', ['block' => true]);
 $this->Html->css('contentblocks', ['block' => true]);
 
 $slugify = function($text) {
@@ -22,17 +23,24 @@ $sectionIcons = [
 ?>
 <div class="contentBlocks index content">
 
-    <div class="cb-header">
-        <h3><?= __('Content Blocks') ?></h3>
+    <div class="marketplace-header">
+        <div class="marketplace-header-inner">
+            <span class="t-label section-tag">Admin</span>
+            <h1 class="marketplace-title">Content<em>Blocks</em></h1>
+            <p class="marketplace-subtitle">
+            Make changes to the site's content and copy, without needing to edit code or redeploy. <br>
+            Click on a block to edit its content, or restore a previous version if available.
+        </p>
+        </div>
     </div>
 
-    <div class="cb-nav">
+    <nav class="cb-nav" aria-label="Jump to section">
         <?php foreach (array_keys($contentBlocksGrouped) as $parent): ?>
             <a class="cb-nav-pill" href="#<?= $slugify($parent) ?>">
                 <?= h($parent) ?>
             </a>
         <?php endforeach; ?>
-    </div>
+    </nav>
 
     <?php foreach ($contentBlocksGrouped as $parent => $contentBlocks): ?>
 

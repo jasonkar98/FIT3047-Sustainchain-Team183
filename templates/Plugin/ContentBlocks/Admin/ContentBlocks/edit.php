@@ -131,7 +131,7 @@ $this->Html->css('contentblocks', ['block' => true]);
             <div class="cb-form-actions">
                 <?= $this->Form->button(__('Save changes'), ['class' => 'btn-product']) ?>
                 <?= $this->Html->link(
-                    '<i class="ti ti-arrow-left" aria-hidden="true"></i> ' . __('Back to all blocks'),
+                    '<i class="ti ti-arrow-left" aria-hidden="true"></i> ' . __('Back'),
                     ['action' => 'index'],
                     ['class' => 'cb-back-link', 'escape' => false]
                 ) ?>

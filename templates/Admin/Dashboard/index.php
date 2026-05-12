@@ -122,7 +122,7 @@ $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1))
     <div>
         <div class="section-head">
             <h2>Incoming Enquiries</h2>
-            <?= $this->Html->link('Content Blocks', ['prefix' => false, 'plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
+            <?= $this->Html->link('Content Blocks', ['prefix' => 'Admin', 'plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
             <?= $this->Html->link('View all →', ['prefix' => 'Admin', 'controller' => 'Enquiries', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
         </div>
 

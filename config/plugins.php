@@ -12,5 +12,5 @@ return [
         'onlyCli' => true,
     ],
     'Authentication' => [],
-    'ContentBlocks' => [],
+    'ContentBlocks' => ['path' => ROOT . DS . 'plugins' . DS . 'ContentBlocks' . DS],
 ];
