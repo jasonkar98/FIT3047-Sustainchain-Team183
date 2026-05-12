@@ -27,6 +27,10 @@ $sectionIcons = [
         <div class="marketplace-header-inner">
             <span class="t-label section-tag">Admin</span>
             <h1 class="marketplace-title">Content<em>Blocks</em></h1>
+            <p class="marketplace-subtitle">
+            Make changes to the site's content and copy, without needing to edit code or redeploy. <br>
+            Click on a block to edit its content, or restore a previous version if available.
+        </p>
         </div>
     </div>
 
