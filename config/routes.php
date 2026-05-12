@@ -55,13 +55,8 @@ return function (RouteBuilder $routes): void {
          * its action called 'display', and we pass a param to select the view file
          * to use (in this case, templates/Pages/home.php)...
          */
-//        $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
-        $builder->connect('/', ['controller' => 'Pages', 'action' => 'landingPage']);
-//        $builder->connect('/landingPage', ['controller' => 'Pages', 'action' => 'landingPage']);
 
-        /*
-         * ...and connect the rest of 'Pages' controller's URLs.
-         */
+        $builder->connect('/', ['controller' => 'Pages', 'action' => 'landingPage']);
         $builder->connect('/pages/*', 'Pages::display');
         $builder->connect('/dashboard', ['controller' => 'Dashboard', 'action' => 'index']);
         $builder->connect('/products', ['controller' => 'Products', 'action' => 'index']);
@@ -73,6 +68,9 @@ return function (RouteBuilder $routes): void {
             ['controller' => 'Products', 'action' => 'toggleSave'],
             ['_name' => 'products:togglesave', 'pass' => ['id'], 'id' => '[0-9]+']
         );
+
+        $builder->post('/chat/ask', ['controller' => 'Chat', 'action' => 'ask']);
+        
         /*
          * Connect catchall routes for all controllers.
          *
@@ -100,6 +98,7 @@ return function (RouteBuilder $routes): void {
                 ->setPass(['id']);
             $builder->fallbacks();
         });
+        
         $builder->fallbacks();
     });
 
