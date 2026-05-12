@@ -25,7 +25,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $this->fetch('title') ?></title>
     <?= $this->fetch('meta') ?>
-    <?= $this->Html->css(['app', 'nav']) ?>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300;1,9..144,700&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <?= $this->Html->css(['fonts', 'app', 'nav']) ?>
     <?= $this->fetch('css') ?>
     <style>
         .nav-user-wrap {
@@ -36,9 +39,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             display: inline-flex;
             align-items: center;
             gap: 0.45rem;
-            background: rgba(200, 232, 64, 0.1);
-            border: 1px solid rgba(200, 232, 64, 0.22);
-            color: var(--e1);
+            background: rgba(10, 64, 12, 0.08);
+            border: 1px solid rgba(10, 64, 12, 0.2);
+            color: #0A400C;
             font-size: 0.82rem;
             font-weight: 700;
             padding: 0.4rem 0.9rem;
@@ -50,8 +53,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         }
 
         .nav-user-btn:hover {
-            background: rgba(200, 232, 64, 0.18);
-            border-color: rgba(200, 232, 64, 0.4);
+            background: rgba(10, 64, 12, 0.14);
+            border-color: rgba(10, 64, 12, 0.35);
         }
 
         .nav-user-btn .chevron {
@@ -65,13 +68,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             width: 22px;
             height: 22px;
             border-radius: 50%;
-            background: var(--g3);
+            background: #0A400C;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.62rem;
             font-weight: 700;
-            color: var(--white);
+            color: #FEFAE0;
             flex-shrink: 0;
         }
 
@@ -81,8 +84,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             top: calc(100% + 0.6rem);
             right: 0;
             min-width: 200px;
-            background: var(--g0);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #0A400C;
+            border: 1px solid rgba(254, 250, 224, 0.12);
             border-radius: var(--r16);
             padding: 0.5rem;
             z-index: 200;
@@ -90,7 +93,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             pointer-events: none;
             transform: translateY(-6px);
             transition: opacity 0.18s ease, transform 0.18s ease;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 12px 40px rgba(10, 64, 12, 0.3);
         }
 
         .nav-dropdown.open {
@@ -209,7 +212,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 flex-wrap: wrap;
                 gap: 1rem !important;
                 padding-top: 0.25rem;
-                border-top: 1px solid rgba(255, 255, 255, 0.08);
+                border-top: 1px solid rgba(10, 64, 12, 0.1);
             }
             .nav-links li a {
                 padding: 0.25rem 0 !important;
@@ -496,7 +499,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             .my-listings-page table td:last-child button {
                 display: inline-block;
                 padding: 0.4rem 0.9rem;
-                background: #2e7d52;
+                background: #52796F;
                 color: #fff;
                 border-radius: 6px;
                 text-decoration: none;
@@ -540,7 +543,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 width: 36px !important;
                 height: 36px !important;
                 border-radius: 50% !important;
-                background: #2e7d52 !important;
+                background: #52796F !important;
                 color: #fff !important;
                 border: none !important;
                 align-items: center;
@@ -553,7 +556,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             body .slider-arrow.prev { left: 0 !important; right: auto !important; }
             body .slider-arrow.next { right: 0 !important; left: auto !important; }
             body .slider-arrow:hover {
-                background: #276a46 !important;
+                background: #354F52 !important;
             }
         }
 
@@ -578,7 +581,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             width: 100%;
             justify-content: flex-start;
             padding-top: 0.35rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(10, 64, 12, 0.1);
         }
         .nav-links li a {
             padding: 0.25rem 0 !important;
@@ -603,15 +606,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
 <body>
 <nav class="nav">
-    <div class="nav-left">
-        <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
-            <div class="nav-logo-icon">🌿</div>
-            <span class="nav-logo-name">Sustain<span>Chain</span></span>
-        </a>
+    <a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
+        <img src="<?= $this->Url->image('logo.png') ?>" class="nav-logo-img" alt="Logo">
+        <span class="nav-logo-name">Sustain<span>Chain</span></span>
+    </a>
 
+        <?php
+            $currentController = $this->request->getParam('controller');
+            $currentPrefix     = $this->request->getParam('prefix');
+        ?>
         <ul class="nav-links">
-            <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+            <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index'], ['class' => (!$currentPrefix && $currentController === 'Products') ? 'active' : '']) ?></li>
+            <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add'], ['class' => (!$currentPrefix && $currentController === 'Enquiries') ? 'active' : '']) ?></li>
         </ul>
     </div>
 

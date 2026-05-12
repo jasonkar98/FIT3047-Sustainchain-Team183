@@ -9,6 +9,12 @@ $this->assign('title', 'SustainChain');
 
 <!-- hero -->
 <section class="hero">
+    <!-- slideshow backgrounds -->
+    <div class="hero-slides">
+        <div class="hero-slide active" style="background-image:url('<?= $this->Url->image('HERO.png') ?>')"></div>
+        <div class="hero-slide" style="background-image:url('<?= $this->Url->image('cowsHomepage.png') ?>')"></div>
+        <div class="hero-slide" style="background-image:url('<?= $this->Url->image('cleanEnergy.png') ?>')"></div>
+    </div>
     <div class="hero-bg"></div>
     <div class="hero-inner">
         <div class="hero-left">
@@ -48,6 +54,13 @@ $this->assign('title', 'SustainChain');
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- slide dots -->
+    <div class="hero-dots">
+        <button class="hero-dot active" data-index="0" aria-label="Slide 1"></button>
+        <button class="hero-dot" data-index="1" aria-label="Slide 2"></button>
+        <button class="hero-dot" data-index="2" aria-label="Slide 3"></button>
     </div>
 </section>
 
@@ -99,6 +112,34 @@ $this->assign('title', 'SustainChain');
 </section>
 
 
+<!-- marketplace -->
+<section class="modes" id="marketplace" style="background-image:url('<?= $this->Url->image('marketplaceHomepage.png') ?>')">
+    <div class="modes-overlay"></div>
+    <div class="modes-text">
+        <h2 class="modes-heading">Shop Sustainable.<br>Live Better.</h2>
+        <p class="modes-sub">Discover eco-friendly products from brands that care for the planet.</p>
+        <div class="modes-actions">
+            <?= $this->Html->link('Shop Now', ['controller' => 'Products', 'action' => 'index'], ['class' => 'btn btn-lime btn-lg']) ?>
+            <a href="#about" class="btn btn-modes-outline btn-lg">Learn More</a>
+        </div>
+        <div class="modes-features">
+            <div class="modes-feature">
+                <span class="modes-feature-icon">🌿</span>
+                <span>Eco-Friendly<br>Products</span>
+            </div>
+            <div class="modes-feature">
+                <span class="modes-feature-icon">📦</span>
+                <span>Ethical<br>Sourcing</span>
+            </div>
+            <div class="modes-feature">
+                <span class="modes-feature-icon">🌍</span>
+                <span>Better for<br>Our Planet</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 <!-- discover innovators -->
 <section class="innovators" id="innovators">
     <div class="innovators-bg"></div>
@@ -142,43 +183,6 @@ $this->assign('title', 'SustainChain');
 </section>
 
 
-<!-- marketplace -->
-<section class="modes" id="marketplace">
-    <div class="modes-inner">
-        <p class="t-label section-tag">Marketplace</p>
-        <h2 class="section-title t-display">
-            Built for every kind of<br><em>sustainable commerce</em>
-        </h2>
-
-        <div class="modes-grid">
-            <div class="mode-card b2c">
-                <span class="mode-chip">B2C · Consumer</span>
-                <h3 class="mode-title">Shop consciously</h3>
-                <p class="mode-desc">Discover and purchase eco-friendly products directly from verified sellers, farmers, and makers. Every product comes with full sustainability transparency.</p>
-                <ul class="mode-list">
-                    <li>Verified eco-labels on every product</li>
-                    <li>Carbon footprint scores at checkout</li>
-                    <li>Direct from farmers; no middlemen</li>
-                    <li>Community reviews and impact stories</li>
-                </ul>
-            </div>
-
-            <div class="mode-card b2b">
-                <span class="mode-chip">B2B · Business</span>
-                <h3 class="mode-title">Scale sustainably</h3>
-                <p class="mode-desc">Build lasting business-to-business relationships with partners who share your commitment to responsible commerce and environmental stewardship.</p>
-                <ul class="mode-list">
-                    <li>Bulk purchasing with verified suppliers</li>
-                    <li>Supply chain transparency dashboard</li>
-                    <li>Connect with certified manufacturers</li>
-                    <li>ESG reporting & compliance tools</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-
 <!-- misson/features -->
 <section class="mission" id="mission">
     <div class="mission-text">
@@ -215,6 +219,36 @@ $this->assign('title', 'SustainChain');
     </div>
 </section>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots   = document.querySelectorAll('.hero-dot');
+    if (!slides.length) return;
+    let current = 0;
+    let timer;
+
+    function goTo(n) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (n + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+    }
+
+    function startTimer() { timer = setInterval(function () { goTo(current + 1); }, 5000); }
+    function resetTimer()  { clearInterval(timer); startTimer(); }
+
+    dots.forEach(function (dot) {
+        dot.addEventListener('click', function () {
+            goTo(parseInt(dot.dataset.index));
+            resetTimer();
+        });
+    });
+
+    startTimer();
+});
+</script>
 
 <!-- login/register -->
 <section class="final-cta">

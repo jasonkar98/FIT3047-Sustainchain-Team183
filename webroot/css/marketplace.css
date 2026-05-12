@@ -326,16 +326,22 @@
     white-space: nowrap;
 }
 
-.search-filter-row .btn-outline {
-    background: transparent;
-    border: none;
-    font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
-    font-size: 0.85rem;
-    color: var(--g3);
-    text-decoration: underline;
-    cursor: pointer;
-    padding: 0 8px;
+.search-filter-row .btn.btn-outline {
+    border-radius: var(--r999) !important;
+    border: 1.5px solid var(--s2) !important;
+    padding: 0.65rem 1.25rem !important;
+    font-family: "Cabinet Grotesk", "Satoshi", sans-serif !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    color: var(--g0) !important;
+    background: transparent !important;
+    text-decoration: none !important;
     white-space: nowrap;
+    flex-shrink: 0;
+}
+.search-filter-row .btn.btn-outline:hover {
+    border-color: var(--g0) !important;
+    background: var(--g6) !important;
 }
 
 .search-results-label {
@@ -559,15 +565,22 @@
     background: var(--s1);
 }
 
+.marketplace-pagination .active a,
 .marketplace-pagination .active span {
     background: var(--g0);
     color: var(--white);
     border-color: var(--g0);
+    font-weight: 700;
 }
 
+.marketplace-pagination .disabled a,
 .marketplace-pagination .disabled span {
-    color: var(--muted);
+    color: var(--s2);
+    background: var(--s1);
+    border-color: var(--s2);
+    opacity: 0.5;
     pointer-events: none;
+    cursor: not-allowed;
 }
 
 .marketplace-pagination ul {
