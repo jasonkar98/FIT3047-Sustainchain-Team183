@@ -206,6 +206,15 @@ class AuthController extends AppController
         if ($result && $result->isValid()) {
             if ($this->request->is('post')) {
                 $identity = $this->Authentication->getIdentity();
+
+                // Block deactivated accounts. The credentials were valid but the
+                // admin has suspended the account — log them straight back out.
+                if ($identity && (int)$identity->get('is_active') === 0) {
+                    $this->Authentication->logout();
+                    $this->Flash->error('This account has been deactivated. Please contact support.');
+                    return $this->redirect(['action' => 'login']);
+                }
+
                 $isAdmin = $identity && ($identity->get('role') === 'admin');
 
                 $fallbackLocation = $isAdmin

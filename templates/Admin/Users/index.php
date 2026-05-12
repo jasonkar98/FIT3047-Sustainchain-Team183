@@ -7,6 +7,7 @@
 /** @var string $direction */
 /** @var array<string, int> $roleCounts */
 /** @var array<int, string> $managedRoles */
+/** @var iterable<\App\Model\Entity\User> $adminUsers */
 
 $this->Html->css('marketplace', ['block' => true]);
 $this->Html->css('dash', ['block' => true]);
@@ -293,6 +294,83 @@ $sortLink = function (string $key, string $label) use ($role, $keyword, $sort, $
         background: #f5ede9;
     }
 
+    /* ===== Two-column grid: main table + admin sidebar ===== */
+    .users-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 280px;
+        gap: 1.5rem;
+        align-items: start;
+    }
+    @media (max-width: 1024px) {
+        .users-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Admin sidebar */
+    .admin-sidebar {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 1.25rem;
+        position: sticky;
+        top: 1rem;
+    }
+    .admin-sidebar h3 {
+        font-family: "DM Serif Display", serif;
+        font-size: 1.15rem;
+        font-weight: 400;
+        margin: 0 0 .25rem;
+    }
+    .admin-sidebar .subtle {
+        font-size: .78rem;
+        color: #666;
+        margin: 0 0 1rem;
+    }
+    .admin-mini-list {
+        display: flex;
+        flex-direction: column;
+        gap: .55rem;
+    }
+    .admin-mini {
+        display: flex;
+        flex-direction: column;
+        gap: .15rem;
+        padding: .55rem .75rem;
+        border-radius: 8px;
+        border: 1px solid #f0f0f0;
+        background: #fcfcfa;
+    }
+    .admin-mini .name {
+        font-weight: 600;
+        font-size: .9rem;
+        color: #1a1a1a;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+    .admin-mini .email {
+        font-size: .75rem;
+        color: #666;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+    .admin-mini .meta {
+        font-size: .7rem;
+        color: #888;
+        margin-top: .15rem;
+    }
+    .admin-mini .you-pill {
+        display: inline-block;
+        background: #2e7d52;
+        color: #fff;
+        font-size: .62rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        padding: .1rem .45rem;
+        border-radius: 999px;
+        margin-left: .35rem;
+        vertical-align: middle;
+    }
+
     /* ===== Mobile: each row becomes its own card ===== */
     @media (max-width: 720px) {
         /* Drop the table-wrap chrome on mobile — each row owns its own card chrome. */
@@ -428,14 +506,20 @@ $sortLink = function (string $key, string $label) use ($role, $keyword, $sort, $
         <?php endif; ?>
     </div>
 
-    <?php $userList = is_array($users) ? $users : iterator_to_array($users); ?>
+    <?php
+        $userList    = is_array($users) ? $users : iterator_to_array($users);
+        $adminList   = $adminUsers ?? [];
+        $currentId   = $this->request->getAttribute('identity')?->getIdentifier();
+    ?>
 
-    <?php if (empty($userList)): ?>
-        <div class="empty-state">
-            <p>No <?= h(strtolower($roleLabels[$role])) ?> match this search.</p>
-        </div>
-    <?php else: ?>
-        <div class="admin-table-wrap">
+    <div class="users-grid">
+        <div>
+        <?php if (empty($userList)): ?>
+            <div class="empty-state">
+                <p>No <?= h(strtolower($roleLabels[$role])) ?> match this search.</p>
+            </div>
+        <?php else: ?>
+            <div class="admin-table-wrap">
             <table class="users-table">
                 <thead>
                     <tr>
@@ -486,14 +570,43 @@ $sortLink = function (string $key, string $label) use ($role, $keyword, $sort, $
             </table>
         </div>
 
-        <div class="paginator-wrap">
-            <ul class="pagination">
-                <?= $this->Paginator->prev('‹ ' . __('prev')) ?>
-                <?= $this->Paginator->numbers() ?>
-                <?= $this->Paginator->next(__('next') . ' ›') ?>
-            </ul>
-        </div>
-    <?php endif; ?>
+            <div class="paginator-wrap">
+                <ul class="pagination">
+                    <?= $this->Paginator->prev('‹ ' . __('prev')) ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next(__('next') . ' ›') ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+        </div><!-- /main column -->
+
+        <!-- Admin accounts sidebar -->
+        <aside class="admin-sidebar">
+            <h3>Admin accounts</h3>
+            <p class="subtle">All accounts with admin privileges. Not editable from here.</p>
+
+            <?php if (empty($adminList)): ?>
+                <p class="users-empty" style="font-size:.85rem; color:#888;">No admin accounts.</p>
+            <?php else: ?>
+                <div class="admin-mini-list">
+                    <?php foreach ($adminList as $a): ?>
+                        <div class="admin-mini">
+                            <span class="name">
+                                <?= h($a->full_name) ?>
+                                <?php if ($currentId !== null && (int)$a->id === (int)$currentId): ?>
+                                    <span class="you-pill">You</span>
+                                <?php endif; ?>
+                            </span>
+                            <span class="email"><?= h($a->email) ?></span>
+                            <span class="meta">
+                                <?= $a->created ? 'Since ' . $a->created->i18nFormat('dd MMM YYYY') : '' ?>
+                            </span>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </aside>
+    </div><!-- /users-grid -->
 </div>
 
 <script>

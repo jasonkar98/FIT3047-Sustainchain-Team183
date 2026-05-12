@@ -161,6 +161,45 @@ $isActive = (int)($user->is_active ?? 1) === 1;
         display: inline-block;
         margin: 0;
     }
+
+    /* Deactivation card variants */
+    .form-card.danger-card {
+        border-color: #f0c6c6;
+        background: #fcf6f5;
+    }
+    .form-card .btn-danger {
+        background: #b00020;
+        color: #fff;
+        border: 1px solid #b00020;
+        padding: .6rem 1.2rem;
+        border-radius: 999px;
+        font-size: .9rem;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .form-card .btn-danger:hover { background: #8c0019; border-color: #8c0019; }
+
+    .form-card .btn-success {
+        background: #2e7d52;
+        color: #fff;
+        border: 1px solid #2e7d52;
+        padding: .6rem 1.2rem;
+        border-radius: 999px;
+        font-size: .9rem;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .form-card .btn-success:hover { background: #25623f; border-color: #25623f; }
 </style>
 
 <div class="marketplace-header">
@@ -272,6 +311,60 @@ $isActive = (int)($user->is_active ?? 1) === 1;
             [
                 'class' => 'btn btn-secondary',
                 'confirm' => 'Send a password reset link to ' . $user->email . '?',
+            ]
+        ) ?>
+    </div>
+
+    <!-- Account status -->
+    <div class="form-card<?= $isActive ? ' danger-card' : '' ?>" id="account-status">
+        <h2><?= $isActive ? 'Deactivate account' : 'Reactivate account' ?></h2>
+        <?php if ($isActive): ?>
+            <p class="subtle">
+                The user will be blocked from logging in. All of their currently-listed products
+                will be removed from the public marketplace. When you reactivate the account,
+                those products will be restored to exactly the state they were in before deactivation.
+            </p>
+            <?= $this->Form->postLink(
+                'Deactivate user',
+                ['action' => 'toggleActive', $user->id],
+                [
+                    'class' => 'btn-danger',
+                    'confirm' => 'Deactivate ' . $user->full_name . "?\n\nThey will be blocked from logging in and all of their listed products will be removed from the marketplace.",
+                ]
+            ) ?>
+        <?php else: ?>
+            <p class="subtle">
+                The user will regain access to log in, and any products that were unlisted
+                by the deactivation will be returned to the marketplace.
+                Products you manually unlisted as an admin will remain unlisted.
+            </p>
+            <?= $this->Form->postLink(
+                'Reactivate user',
+                ['action' => 'toggleActive', $user->id],
+                [
+                    'class' => 'btn-success',
+                    'confirm' => 'Reactivate ' . $user->full_name . '?',
+                ]
+            ) ?>
+        <?php endif; ?>
+    </div>
+
+    <!-- Permanent deletion -->
+    <div class="form-card danger-card">
+        <h2>Delete account</h2>
+        <p class="subtle">
+            <strong>This permanently removes the user and everything they own.</strong>
+            Their products are deleted, any favourites referencing those products are cleaned up,
+            and their orders are removed. Their past enquiries are kept on file for the admin
+            audit trail but are detached from the account. <strong>This cannot be undone.</strong>
+        </p>
+
+        <?= $this->Form->postLink(
+            'Delete user permanently',
+            ['action' => 'delete', $user->id],
+            [
+                'class' => 'btn-danger',
+                'confirm' => "PERMANENTLY delete " . $user->full_name . "?\n\nThis removes the user, all of their products, and any saved-product references to them. This cannot be undone.",
             ]
         ) ?>
     </div>

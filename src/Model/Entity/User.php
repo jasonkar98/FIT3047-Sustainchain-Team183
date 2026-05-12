@@ -13,6 +13,7 @@ use Cake\ORM\Entity;
  * @property string $email
  * @property string $password
  * @property string $role
+ * @property bool $is_active
  * @property string $first_name
  * @property string $last_name
  * @property string|null $avatar

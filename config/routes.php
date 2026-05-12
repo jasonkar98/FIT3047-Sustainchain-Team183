@@ -69,10 +69,14 @@ return function (RouteBuilder $routes): void {
         ->setPatterns(['id' => '\d+'])
         ->setPass(['id']);
 
-        $builder->connect('/products/toggle-save/:id', 
+        $builder->connect('/products/toggle-save/:id',
             ['controller' => 'Products', 'action' => 'toggleSave'],
             ['_name' => 'products:togglesave', 'pass' => ['id'], 'id' => '[0-9]+']
         );
+        $builder->connect('/products/admin-toggle-listing/{id}',
+            ['controller' => 'Products', 'action' => 'adminToggleListing'])
+            ->setPatterns(['id' => '\d+'])
+            ->setPass(['id']);
         /*
          * Connect catchall routes for all controllers.
          *
@@ -103,6 +107,12 @@ return function (RouteBuilder $routes): void {
                 ->setPatterns(['id' => '\d+'])
                 ->setPass(['id']);
             $builder->connect('/users/send-reset-link/{id}', ['controller' => 'Users', 'action' => 'sendResetLink'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/toggle-active/{id}', ['controller' => 'Users', 'action' => 'toggleActive'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/delete/{id}', ['controller' => 'Users', 'action' => 'delete'])
                 ->setPatterns(['id' => '\d+'])
                 ->setPass(['id']);
             $builder->fallbacks();

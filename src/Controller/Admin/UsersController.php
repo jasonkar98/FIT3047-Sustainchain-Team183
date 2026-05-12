@@ -96,7 +96,15 @@ class UsersController extends AppController
 
         $users = $this->paginate($query, ['limit' => 20]);
 
-        $this->set(compact('users', 'role', 'keyword', 'sort', 'direction', 'roleCounts'));
+        // Sidebar list of admin accounts. Not editable from this UI, just
+        // visible so the admin can see who else holds admin privileges.
+        $adminUsers = $usersTable->find()
+            ->where(['role' => 'admin'])
+            ->orderBy(['Users.created' => 'DESC'])
+            ->all()
+            ->toArray();
+
+        $this->set(compact('users', 'role', 'keyword', 'sort', 'direction', 'roleCounts', 'adminUsers'));
         $this->set('managedRoles', self::MANAGED_ROLES);
     }
 
@@ -203,5 +211,160 @@ class UsersController extends AppController
         }
 
         return $this->redirect($this->referer(['action' => 'edit', $id]));
+    }
+
+    /**
+     * Toggle a user's is_active flag.
+     *
+     * Deactivate:
+     *   - sets users.is_active = 0
+     *   - cascade-unlists every product currently listed by this user:
+     *     UPDATE products SET is_listed=0, unlist_reason='deactivation'
+     *     WHERE user_id = ? AND is_listed = 1
+     *   - already-unlisted products (admin-unlisted, etc.) are not touched
+     *
+     * Reactivate:
+     *   - sets users.is_active = 1
+     *   - restores ONLY the products unlisted by the deactivation cascade:
+     *     UPDATE products SET is_listed=1, unlist_reason=NULL
+     *     WHERE user_id = ? AND unlist_reason = 'deactivation'
+     *   - products unlisted for any other reason (admin) stay unlisted
+     */
+    public function toggleActive(?string $id = null)
+    {
+        $this->request->allowMethod(['post']);
+
+        $usersTable = $this->fetchTable('Users');
+        $user = $usersTable->get($id);
+
+        if ($user->role === 'admin') {
+            throw new NotFoundException('User not found.');
+        }
+
+        $productsTable = $this->fetchTable('Products');
+        $wasActive = (int)$user->is_active === 1;
+
+        $user->is_active = $wasActive ? 0 : 1;
+
+        if (!$usersTable->save($user)) {
+            $this->Flash->error('Could not update the user. Please try again.');
+            return $this->redirect($this->referer(['action' => 'edit', $id]));
+        }
+
+        if ($wasActive) {
+            // Deactivate → cascade-unlist currently listed products.
+            $affected = $productsTable->updateAll(
+                ['is_listed' => 0, 'unlist_reason' => 'deactivation'],
+                ['user_id' => $user->id, 'is_listed' => 1],
+            );
+
+            $msg = $user->full_name . ' has been deactivated.';
+            if ($affected > 0) {
+                $msg .= ' (' . $affected . ' ' . ($affected === 1 ? 'product' : 'products') . ' unlisted.)';
+            }
+            $this->Flash->success($msg);
+        } else {
+            // Reactivate → restore ONLY products unlisted by the cascade.
+            $affected = $productsTable->updateAll(
+                ['is_listed' => 1, 'unlist_reason' => null],
+                ['user_id' => $user->id, 'unlist_reason' => 'deactivation'],
+            );
+
+            $msg = $user->full_name . ' has been reactivated.';
+            if ($affected > 0) {
+                $msg .= ' (' . $affected . ' ' . ($affected === 1 ? 'product' : 'products') . ' relisted.)';
+            }
+            $this->Flash->success($msg);
+        }
+
+        return $this->redirect($this->referer(['action' => 'edit', $id]));
+    }
+
+    /**
+     * Hard-delete a user. Wipes their data in a single transaction:
+     *   - their products (and the favourites those products had)
+     *   - their saved favourites
+     *   - their orders (FK cascade)
+     *   - their enquiries are detached, NOT deleted (user_id -> NULL) so the
+     *     admin still has an audit trail of past communications. Email + name
+     *     are preserved on the enquiry row itself.
+     *
+     * Blocks deleting:
+     *   - admin accounts (via this UI)
+     *   - the currently logged-in admin (no self-delete from here)
+     */
+    public function delete(?string $id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $usersTable = $this->fetchTable('Users');
+        $user = $usersTable->get($id);
+
+        if ($user->role === 'admin') {
+            throw new NotFoundException('User not found.');
+        }
+
+        $identity = $this->Authentication->getIdentity();
+        if ($identity && (int)$identity->getIdentifier() === (int)$user->id) {
+            $this->Flash->error('You cannot delete your own account.');
+            return $this->redirect(['action' => 'edit', $id]);
+        }
+
+        $productsTable    = $this->fetchTable('Products');
+        $favouritesTable  = $this->fetchTable('Favourites');
+        $enquiriesTable   = $this->fetchTable('Enquiries');
+
+        $userName = $user->full_name;
+        $userId   = (int)$user->id;
+
+        // How many products will be wiped — used for the success flash.
+        $productCount = $productsTable->find()
+            ->where(['user_id' => $userId])
+            ->count();
+
+        $connection = $usersTable->getConnection();
+
+        try {
+            $deleted = $connection->transactional(function () use (
+                $usersTable, $productsTable, $favouritesTable, $enquiriesTable,
+                $user, $userId
+            ) {
+                // Pull product IDs first so we can clean their inbound saves
+                // explicitly. (Favourites has ON DELETE CASCADE on both FKs
+                // but explicit deletes are robust regardless of FK state.)
+                $productIds = $productsTable->find()
+                    ->where(['user_id' => $userId])
+                    ->all()
+                    ->extract('id')
+                    ->toList();
+
+                if (!empty($productIds)) {
+                    $favouritesTable->deleteAll(['product_id IN' => $productIds]);
+                }
+
+                $productsTable->deleteAll(['user_id' => $userId]);
+                $favouritesTable->deleteAll(['user_id' => $userId]);
+
+                // Preserve enquiry history — detach instead of delete.
+                $enquiriesTable->updateAll(['user_id' => null], ['user_id' => $userId]);
+
+                return (bool)$usersTable->delete($user);
+            });
+        } catch (\Throwable $e) {
+            $this->Flash->error('Could not delete the user. Please try again.');
+            return $this->redirect(['action' => 'edit', $id]);
+        }
+
+        if ($deleted) {
+            $msg = $userName . ' has been permanently deleted.';
+            if ($productCount > 0) {
+                $msg .= ' (' . $productCount . ' ' . ($productCount === 1 ? 'product' : 'products') . ' removed.)';
+            }
+            $this->Flash->success($msg);
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $this->Flash->error('Could not delete the user. Please try again.');
+        return $this->redirect(['action' => 'edit', $id]);
     }
 }
