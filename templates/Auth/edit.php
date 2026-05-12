@@ -431,7 +431,8 @@ tr, td {
                 <?= $this->Form->control('last_name', ['label' => 'Last name', 'placeholder' => 'Patel', 'pattern' => '[a-zA-Z ]+']); ?>
 
                 <?php if (h($user->role) == 'manufacturer'): ?>
-                    <?= $this->Form->control('description', ['label' => 'Business Description', 'placeholder' => 'Describe your business...', 'type' => 'textarea']); ?>
+                    <?= $this->Form->control('goals', ['label' => 'Business Goals', 'placeholder' => 'Describe your business goals...', 'type' => 'textarea']); ?>
+                    <?= $this->Form->control('business_values', ['label' => 'Business Values', 'placeholder' => 'Describe your business values...', 'type' => 'textarea']); ?>
                 <?php endif; ?>
 
                 <div class="form-divider"></div>

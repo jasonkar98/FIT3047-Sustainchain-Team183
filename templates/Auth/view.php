@@ -335,12 +335,19 @@ tr, td {
 
             <h1 class="product-view-name"><?= h($user->first_name) ?> <?= h($user->last_name) ?></h1>
 
-            <div class="product-view-seller">
+            <div class="product-view-desc">
                 <?= h($user->email) ?>
             </div>
 
             <?php if (h($user->role) == 'manufacturer'): ?>
-                <p class="product-view-desc"><?= h($user->description) ?></p>
+                <div class="product-view-seller">
+                Business Goals
+                </div>
+                <p class="product-view-desc"><?= h($user->goals) ?></p>
+                <div class="product-view-seller">
+                Business Values
+                </div>
+                <p class="product-view-desc"><?= h($user->business_values) ?></p>
             <?php endif; ?>
 
         </div>

@@ -293,7 +293,8 @@ tr, td {
             </div>
 
             <?php if (h($this->request->getData('role')) == 'manufacturer'): ?>
-                <?= $this->Form->control('description', ['label' => 'Business Description', 'placeholder' => 'Describe your business...', 'type' => 'textarea']); ?>
+                <?= $this->Form->control('goals', ['label' => 'Business Goals', 'placeholder' => 'Describe your business goals...', 'type' => 'textarea']); ?>
+                <?= $this->Form->control('business_values', ['label' => 'Business Values', 'placeholder' => 'Describe your business values...', 'type' => 'textarea']); ?>
             <?php endif; ?>
 
             <?= $this->Form->control('role', ['type' => 'hidden', 'required' => true, 'default' => $role_selected]) ?>
