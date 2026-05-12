@@ -73,6 +73,12 @@ return function (RouteBuilder $routes): void {
             ['controller' => 'Products', 'action' => 'toggleSave'],
             ['_name' => 'products:togglesave', 'pass' => ['id'], 'id' => '[0-9]+']
         );
+
+        $builder->scope('/content-blocks', ['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks'], function (RouteBuilder $builder): void {
+            $builder->connect('/', ['action' => 'index']);
+            $builder->connect('/:action/*');
+        });
+
         /*
          * Connect catchall routes for all controllers.
          *
@@ -98,6 +104,8 @@ return function (RouteBuilder $routes): void {
             $builder->connect('/enquiries/toggle-resolved/{id}', ['controller' => 'Enquiries', 'action' => 'toggleResolved'])
                 ->setPatterns(['id' => '\d+'])
                 ->setPass(['id']);
+            $builder->connect('/content-blocks', ['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']);
+            $builder->connect('/content-blocks/:action/*', ['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks']);
             $builder->fallbacks();
         });
         $builder->fallbacks();
