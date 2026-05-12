@@ -7,46 +7,56 @@
 $this->layout = 'login';
 $this->assign('title', 'Reset Password');
 ?>
-<div class="container login">
-    <div class="row">
-        <div class="column column-50 column-offset-25">
 
-            <div class="users form content">
-
-                <?= $this->Form->create($user) ?>
-
-                <fieldset>
-
-                    <legend>Reset Your Password</legend>
-
-                    <?= $this->Flash->render() ?>
-
-                    <?php
-                    echo $this->Form->control('password', [
-                        'type' => 'password',
-                        'label' => 'New Password',
-                        'required' => true,
-                        'autofocus' => true,
-                        'value' => ''
-                    ]);
-                    echo $this->Form->control('password_confirm', [
-                        'type' => 'password',
-                        'label' => 'Repeat New Password',
-                        'required' => true,
-                        'value' => ''
-                    ]);
-                    ?>
-
-                </fieldset>
-
-                <?= $this->Form->button('Reset Password') ?>
-                <?= $this->Form->end() ?>
-
-                <hr class="hr-between-buttons">
-
-                <?= $this->Html->link('Back to login', ['controller' => 'Auth', 'action' => 'login'], ['class' => 'button button-outline']) ?>
-
+<div class="auth-page">
+    <section class="auth-hero">
+        <div class="hero-eyebrow">
+            <span class="eyebrow-dot"></span>
+            Sustainable supply chain
+        </div>
+        <h1>Sustain<em>Chain</em></h1>
+        <p class="auth-subtitle">Sustainable future, connected supply chains.</p>
+        <div class="auth-stats">
+            <div class="stat-pill">
+                <div class="stat-num">4.2k</div>
+                <div class="stat-desc">Active suppliers tracked</div>
+            </div>
+            <div class="stat-pill">
+                <div class="stat-num">98%</div>
+                <div class="stat-desc">Audit compliance rate</div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <section class="auth-card">
+        <p class="card-eyebrow">Account security</p>
+        <h2>Reset password</h2>
+        <p class="auth-card-subtitle">Enter and confirm your new password below.</p>
+
+        <?= $this->Flash->render() ?>
+        <?= $this->Form->create($user, ['class' => 'auth-form']) ?>
+        <?php
+        echo $this->Form->control('password', [
+            'type' => 'password',
+            'label' => 'New Password',
+            'required' => true,
+            'autofocus' => true,
+            'placeholder' => 'Enter new password',
+            'value' => '',
+        ]);
+        echo $this->Form->control('password_confirm', [
+            'type' => 'password',
+            'label' => 'Confirm New Password',
+            'required' => true,
+            'placeholder' => 'Repeat new password',
+            'value' => '',
+        ]);
+        ?>
+        <?= $this->Form->button('Reset Password', ['class' => 'button auth-primary-btn']) ?>
+        <?= $this->Form->end() ?>
+
+        <div class="auth-links">
+            <?= $this->Html->link('Back to login', ['controller' => 'Auth', 'action' => 'login']) ?>
+        </div>
+    </section>
 </div>
