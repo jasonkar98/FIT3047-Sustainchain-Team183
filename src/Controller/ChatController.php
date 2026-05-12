@@ -30,9 +30,6 @@ class ChatController extends AppController
         }
 
         $apiKey = Configure::read('Gemini.apiKey');
-        // if (empty($apiKey)) {
-        //     $apiKey = env('API_KEY');
-        // }
 
         if (empty($apiKey)) {
             return $this->response->withStringBody(json_encode([
