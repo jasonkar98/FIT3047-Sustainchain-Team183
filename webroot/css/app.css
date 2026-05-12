@@ -150,20 +150,18 @@ a {
     inset: 0;
     z-index: 1;
     background:
-        radial-gradient(
-            ellipse 70% 60% at 80% 20%,
-            rgba(10, 64, 12, 0.22) 0%,
-            transparent 65%
+        linear-gradient(
+            to right,
+            rgba(5, 20, 6, 0.1) 0%,
+            rgba(5, 20, 6, 0.4) 50%,
+            rgba(5, 20, 6, 0.25) 100%
         ),
-        radial-gradient(
-            ellipse 50% 70% at 10% 90%,
-            rgba(129, 144, 103, 0.08) 0%,
-            transparent 55%
-        ),
-        radial-gradient(
-            ellipse 40% 40% at 50% 50%,
-            rgba(10, 64, 12, 0.6) 0%,
-            transparent 80%
+        linear-gradient(
+            to bottom,
+            rgba(5, 20, 6, 0.3) 0%,
+            transparent 40%,
+            transparent 70%,
+            rgba(5, 20, 6, 0.4) 100%
         );
 }
 
@@ -191,6 +189,8 @@ a {
     border-radius: var(--r999);
     margin-bottom: 1.75rem;
     animation: reveal 0.6s ease both;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 .eyebrow-dot {
     width: 6px;
@@ -211,21 +211,23 @@ a {
 
 .hero-title {
     font-size: clamp(3rem, 6vw, 5.5rem);
-    color: var(--white);
+    color: var(--g6);
     margin-bottom: 1.75rem;
     animation: reveal 0.65s 0.1s ease both;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 4px 24px rgba(0, 0, 0, 0.5);
 }
 .hero-title em {
-    color: var(--e1);
+    color: var(--g3);
 }
 
 .hero-sub {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: rgb(255, 255, 255);
+    color: rgba(255, 255, 255, 0.92);
     max-width: 500px;
     margin-bottom: 2.5rem;
     animation: reveal 0.65s 0.2s ease both;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7), 0 3px 16px rgba(0, 0, 0, 0.5);
 }
 
 .hero-actions {
@@ -246,7 +248,7 @@ a {
 }
 
 .stat-pill {
-    background: rgba(10, 64, 12, 0.75);
+    background: rgb(84, 107, 65,0.75);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--r16);
     padding: 1.25rem 1.5rem;
@@ -318,13 +320,13 @@ a {
     color: var(--white);
 }
 .btn-lime {
-    background: var(--g0);
-    color: var(--e0);
-    box-shadow: 0 4px 20px rgba(10, 64, 12, 0.3);
+    background: var(--g3);
+    color: var(--white);
+    box-shadow: 0 4px 20px rgba(129, 144, 103, 0.35);
 }
 .btn-lime:hover {
-    background: var(--g1);
-    box-shadow: 0 8px 28px rgba(10, 64, 12, 0.4);
+    background: var(--g0);
+    box-shadow: 0 8px 28px rgba(129, 144, 103, 0.45);
 }
 .btn-lg {
     padding: 0.8rem 2rem;
@@ -356,7 +358,7 @@ a {
 }
 .section-title {
     font-size: clamp(2rem, 4vw, 3.25rem);
-    color: var(--g0);
+    color: var(--g1);
     max-width: 560px;
 }
 .section-title em {
@@ -780,6 +782,17 @@ a {
     color: var(--g0);
     box-shadow: 0 4px 16px rgba(254, 250, 224, 0.3);
 }
+.btn-create:hover {
+    background: rgb(99, 112, 75) !important;
+    color: var(--white) !important;
+    box-shadow: 0 8px 24px rgba(99, 112, 75, 0.45) !important;
+}
+.btn-signin-cta:hover {
+    background: rgb(99, 112, 75) !important;
+    color: var(--white) !important;
+    border-color: rgb(99, 112, 75) !important;
+    box-shadow: 0 8px 24px rgba(99, 112, 75, 0.45) !important;
+}
 .cta-actions {
     display: flex;
     align-items: center;
@@ -790,7 +803,7 @@ a {
 
 /* footer */
 .footer {
-    background: var(--ink);
+    background: rgba(99, 112, 75, 0.97);
     padding: 3.5rem 2.5rem;
 }
 .footer-inner {
