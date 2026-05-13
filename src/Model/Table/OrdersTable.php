@@ -66,6 +66,12 @@ class OrdersTable extends Table
             ->notEmptyString('user_id');
 
         $validator
+            ->scalar('order_number')
+            ->maxLength('order_number', 20)
+            ->requirePresence('order_number', 'create')
+            ->notEmptyString('order_number');
+
+        $validator
             ->decimal('total_amount')
             ->requirePresence('total_amount', 'create')
             ->notEmptyString('total_amount');

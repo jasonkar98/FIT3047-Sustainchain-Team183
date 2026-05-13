@@ -392,6 +392,15 @@ $this->Html->css('marketplace', ['block' => true]);
                     'min' => '0.01',
                 ]) ?>
 
+                <?= $this->Form->control('discount', [
+                    'label' => 'Discount (%)',
+                    'placeholder' => 'e.g. 10 (leave blank for no discount)',
+                    'type' => 'number',
+                    'min' => '0',
+                    'max' => '100',
+                    'step' => '1',
+                ]) ?>
+
                 <?= $this->Form->control('category', [
                     'label' => 'Product Category *',
                     'type' => 'select',

@@ -51,6 +51,11 @@ if ($viewerOwnsProduct) {
     position: absolute;
     inset: 0;
 }
+.product-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
 
 /* Delisted badge + dimmed image for unlisted product cards */
 .product-card.is-unlisted .product-img-wrap { position: relative; }
@@ -86,6 +91,8 @@ if ($viewerOwnsProduct) {
 
 </style>
 
+<a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'view', $product->id]) ?>" class="product-card">
+
 <div class="product-card<?= $isUnlisted ? ' is-unlisted' : '' ?>">
     <div class="product-img-wrap">
         <?php if ($isUnlisted): ?>
@@ -102,30 +109,21 @@ if ($viewerOwnsProduct) {
         <?php else: ?>
             <img class="product-view-img" src="https://placehold.co/800x600/d9ede4/2e7d52?text=No+Image" alt="No image">
         <?php endif; ?>
-
+        
 
         <?php if (!empty($showSaveButton)): ?>
-        <?php
-            $isSaved = !empty($isSaved) || (!empty($product->is_saved) && $product->is_saved);
-        ?>
+        <?php $isSaved = !empty($isSaved) || (!empty($product->is_saved) && $product->is_saved); ?>
         <button
             class="product-save-btn<?= $isSaved ? ' is-saved' : '' ?>"
             aria-pressed="<?= $isSaved ? 'true' : 'false' ?>"
             aria-label="<?= h($saveLabel ?? 'Save ' . $product->name) ?>"
             data-product-id="<?= h($product->id) ?>"
             data-save-url="<?= h($saveAction ?? $this->Url->build(['controller' => 'Products', 'action' => 'toggleSave', $product->id])) ?>"
+            onclick="event.preventDefault()"
         >
-            <svg
-                class="product-save-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-            >
+            <svg class="product-save-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
             </svg>
         </button>
@@ -135,11 +133,15 @@ if ($viewerOwnsProduct) {
     <div class="product-card-body">
         <span class="product-category"><?= h($product->category) ?></span>
         <h3 class="product-name"><?= h($product->name) ?></h3>
-        <p class="product-price">$<?= h(number_format($product->price, 2)) ?></p>
+        <p class="product-price">
+            <?php if (!empty($product->discount) && $product->discount > 0): ?>
+                <span class="product-price-original">$<?= h(number_format($product->price, 2)) ?></span>
+                $<?= h(number_format($product->price * (1 - $product->discount / 100), 2)) ?>
+                <span class="product-discount-badge">-<?= h($product->discount) ?>%</span>
+            <?php else: ?>
+                $<?= h(number_format($product->price, 2)) ?>
+            <?php endif; ?>
+        </p>
         <p class="product-desc"><?= h(mb_strimwidth($product->description, 0, 90, '...')) ?></p>
     </div>
-
-    <div class="product-card-footer">
-        <?= $this->Html->link('View Product →', ['controller' => 'Products', 'action' => 'view', $product->id], ['class' => 'btn-product']) ?>
-    </div>
-</div>
+</a>

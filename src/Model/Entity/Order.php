@@ -29,11 +29,13 @@ class Order extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'user_id' => true,
-        'total_amount' => true,
-        'status' => true,
-        'created' => true,
-        'modified' => true,
-        'user' => true,
+        'user_id'       => true,
+        'order_number'  => true,
+        'total_amount'  => true,
+        'status'        => true,
+        'shipping_address' => true,
+        'created'       => true,
+        'modified'      => true,
+        'user'          => true,
     ];
 }
