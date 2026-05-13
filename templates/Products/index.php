@@ -6,7 +6,7 @@ $this->Html->css('marketplace', ['block' => true]);
 <!-- Page header — dark green banner, same style as the landing page hero -->
 <div class="marketplace-header">
     <div class="marketplace-header-inner">
-        <span class="t-label section-tag">SustainChain</span>
+        <span class="t-label section-tag">Welcome, to</span>
         <h1 class="marketplace-title t-display">
             The <em>sustainable</em> marketplace
         </h1>

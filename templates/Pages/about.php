@@ -5,7 +5,10 @@ $this->assign('title', 'About SustainChain');
 <style>
 /* ── About page ── */
 .about-hero {
-    background: var(--g0);
+    background-color: var(--g0);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
     color: var(--white);
     padding: 5rem 1.5rem 4rem;
     text-align: center;
@@ -16,7 +19,7 @@ $this->assign('title', 'About SustainChain');
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 70% 60% at 50% -10%, rgba(177,171,134,.25) 0%, transparent 70%);
+    background: rgba(5, 20, 6, 0.08);
     pointer-events: none;
 }
 .about-hero-logo {
@@ -42,12 +45,13 @@ $this->assign('title', 'About SustainChain');
     color: var(--e1);
 }
 .about-hero-tag {
-    font-size: 0.72rem;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--e1);
+    color: var(--g0);
     margin-bottom: 1.25rem;
+    text-shadow: 0 1px 4px rgba(255,255,255,0.6);
 }
 .about-hero-title {
     font-size: clamp(2rem, 5vw, 3.4rem);
@@ -55,20 +59,23 @@ $this->assign('title', 'About SustainChain');
     font-family: "Fraunces", serif;
     line-height: 1.1;
     letter-spacing: -0.02em;
-    color: var(--e0);
+    color: #ffffff;
     margin-bottom: 1.25rem;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.95), 0 4px 20px rgba(0,0,0,0.85);
 }
 .about-hero-title em {
     font-style: italic;
     font-weight: 300;
     color: var(--e1);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.95);
 }
 .about-hero-sub {
     max-width: 640px;
     margin: 0 auto;
     font-size: 1.05rem;
     line-height: 1.7;
-    color: rgba(254,250,224,.75);
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.95), 0 2px 14px rgba(0,0,0,0.85);
 }
 
 /* ── Mission strip ── */
@@ -260,7 +267,7 @@ $this->assign('title', 'About SustainChain');
 
 /* ── CTA ── */
 .about-cta {
-    background: var(--g0);
+    background: rgba(99, 112, 75, 0.7);
     padding: 5rem 1.5rem;
     text-align: center;
 }
@@ -305,11 +312,7 @@ $this->assign('title', 'About SustainChain');
 </style>
 
 <!-- Hero -->
-<section class="about-hero">
-    <div class="about-hero-logo">
-        <img src="<?= $this->Url->image('logo.png') ?>" alt="SustainChain logo">
-        <span class="about-hero-logo-name">Sustain<span>Chain</span></span>
-    </div>
+<section class="about-hero" style="background-image: url('<?= $this->Url->image('AboutUs.png') ?>')">
     <p class="about-hero-tag">Who we are</p>
     <h1 class="about-hero-title">Commerce that's good<br>for the <em>planet</em></h1>
     <p class="about-hero-sub">
