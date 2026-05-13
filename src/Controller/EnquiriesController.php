@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Mailer\Mailer;
+
 /**
  * Enquiries Controller
  *
@@ -90,7 +92,21 @@ class EnquiriesController extends AppController
             }
 
             if ($this->Enquiries->save($enquiry)) {
-                $this->Flash->success(__('The enquiry has been saved.'));
+                $mailer = new Mailer('default');
+                $mailer
+                    ->setEmailFormat('both')
+                    ->setTo($enquiry->email)
+                    ->setSubject('We received your enquiry — SustainChain');
+                $mailer->viewBuilder()->setTemplate('enquiry_confirmation')->setLayout('sustainchain');
+                $mailer->setViewVars([
+                    'full_name' => $enquiry->full_name,
+                    'email' => $enquiry->email,
+                    'subject' => $enquiry->subject,
+                    'body' => $enquiry->body,
+                ]);
+                $mailer->deliver();
+
+                $this->Flash->success(__('Your enquiry has been submitted. Check your email for a confirmation.'));
 
                 return $this->redirect(['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']);
             }

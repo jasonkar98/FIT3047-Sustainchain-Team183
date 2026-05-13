@@ -25,9 +25,95 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $this->fetch('title') ?></title>
     <?= $this->fetch('meta') ?>
+    <?= $this->Html->meta('csrfToken', $this->request->getAttribute('csrfToken')) ?>
     <?= $this->Html->css(['app', 'nav']) ?>
     <?= $this->fetch('css') ?>
     <style>
+        /* ── Toast notifications ── */
+        .toast-stack {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.25rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            pointer-events: none;
+        }
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #fff;
+            border: 1px solid var(--s2, #d8e8d8);
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(13,31,20,.15);
+            padding: 0.85rem 1rem 0.85rem 1.1rem;
+            min-width: 260px;
+            max-width: 360px;
+            pointer-events: all;
+            animation: toast-in .3s cubic-bezier(.22,1,.36,1) both;
+        }
+        .toast.removing {
+            animation: toast-out .25s ease forwards;
+        }
+        @keyframes toast-in {
+            from { opacity: 0; transform: translateX(30px) scale(.96); }
+            to   { opacity: 1; transform: translateX(0)  scale(1); }
+        }
+        @keyframes toast-out {
+            to { opacity: 0; transform: translateX(30px) scale(.96); max-height: 0; padding: 0; margin: 0; }
+        }
+        .toast-success { border-left: 4px solid #4caf50; }
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            stroke: #4caf50;
+        }
+        .toast-msg {
+            flex: 1;
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--g0, #0d1f14);
+            line-height: 1.3;
+        }
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            line-height: 1;
+            color: var(--ink, #3a4a3e);
+            opacity: 0.45;
+            cursor: pointer;
+            padding: 0 0.1rem;
+            transition: opacity 0.15s;
+        }
+        .toast-close:hover { opacity: 1; }
+
+        .nav-cart-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+        .nav-cart-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--lime, #c8e840);
+            color: var(--g0, #0d1f14);
+            font-size: 0.68rem;
+            font-weight: 800;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            border-radius: 999px;
+            line-height: 1;
+            letter-spacing: 0;
+        }
+
         .nav-user-wrap {
             position: relative;
         }
@@ -35,30 +121,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         .nav-user-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.45rem;
-            background: rgba(200, 232, 64, 0.1);
-            border: 1px solid rgba(200, 232, 64, 0.22);
-            color: var(--e1);
-            font-size: 0.82rem;
-            font-weight: 700;
-            padding: 0.4rem 0.9rem;
-            border-radius: var(--r999);
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.85);
             cursor: pointer;
             transition: background 0.15s, border-color 0.15s;
-            font-family: inherit;
-            letter-spacing: -0.01em;
         }
-
         .nav-user-btn:hover {
-            background: rgba(200, 232, 64, 0.18);
-            border-color: rgba(200, 232, 64, 0.4);
-        }
-
-        .nav-user-btn .chevron {
-            width: 12px;
-            height: 12px;
-            transition: transform 0.2s ease;
-            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.22);
         }
 
         .nav-user-btn .user-dot {
@@ -97,10 +171,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             opacity: 1;
             pointer-events: auto;
             transform: translateY(0);
-        }
-
-        .nav-user-btn[aria-expanded="true"] .chevron {
-            transform: rotate(180deg);
         }
 
         .dropdown-header {
@@ -245,16 +315,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             .nav-user-wrap {
                 grid-area: user;
                 justify-self: end;
-            }
-            .nav-user-btn {
-                padding: 0.3rem 0.6rem !important;
-                font-size: 0.78rem !important;
-                max-width: 140px;
-            }
-            .nav-user-btn > span:not(.user-dot):not(.chevron) {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
             }
 
             /* Auth (logged-out) buttons also land in the user slot */
@@ -589,11 +649,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             font-size: 0.78rem !important;
             max-width: 140px;
         }
-        .nav-user-btn > span:not(.user-dot):not(.chevron) {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+
         /* Search icon stays compact */
         .nav-search-icon {
             padding: 4px !important;
@@ -610,8 +666,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </a>
 
         <ul class="nav-links">
-            <li><?= $this->Html->link('Marketplace', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link('Contact Us', ['plugin' => false, 'prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+            <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link('Discover Innovators', ['prefix' => false, 'controller' => 'Innovators', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link('Contact', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
         </ul>
     </div>
 
@@ -619,7 +676,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         
         <div class="nav-search" id="navSearch">
         <button class="nav-search-icon" id="navSearchBtn" aria-label="Search">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
         </button>
@@ -628,32 +685,39 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </form>
     </div>
 
-
+        <?php
+        $cartQtys = $this->request->getSession()->read('Cart.items') ?? [];
+        $cartCount = 0;
+        foreach ($cartQtys as $id => $qty) {
+            if (is_int($id) && is_int($qty) && $qty > 0) $cartCount += $qty;
+        }
+        ?>
+        <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Cart', 'action' => 'index']) ?>" class="nav-cart-link nav-search-icon" aria-label="Cart">
+            <svg width="18" height="18" viewBox="0 0 122.9 107.5" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.9,7.9C1.8,7.9,0,6.1,0,3.9C0,1.8,1.8,0,3.9,0h10.2c0.1,0,0.3,0,0.4,0c3.6,0.1,6.8,0.8,9.5,2.5c3,1.9,5.2,4.8,6.4,9.1 c0,0.1,0,0.2,0.1,0.3l1,4H119c2.2,0,3.9,1.8,3.9,3.9c0,0.4-0.1,0.8-0.2,1.2l-10.2,41.1c-0.4,1.8-2,3-3.8,3v0H44.7 c1.4,5.2,2.8,8,4.7,9.3c2.3,1.5,6.3,1.6,13,1.5h0.1v0h45.2c2.2,0,3.9,1.8,3.9,3.9c0,2.2-1.8,3.9-3.9,3.9H62.5v0 c-8.3,0.1-13.4-0.1-17.5-2.8c-4.2-2.8-6.4-7.6-8.6-16.3l0,0L23,13.9c0-0.1,0-0.1-0.1-0.2c-0.6-2.2-1.6-3.7-3-4.5 c-1.4-0.9-3.3-1.3-5.5-1.3c-0.1,0-0.2,0-0.3,0H3.9L3.9,7.9z M96,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C86.4,92.6,90.7,88.3,96,88.3L96,88.3z M53.9,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C44.3,92.6,48.6,88.3,53.9,88.3L53.9,88.3z M33.7,23.7l8.9,33.5h63.1l8.3-33.5H33.7L33.7,23.7z"/>
+            </svg>
+            <?php if ($cartCount > 0): ?>
+                <span class="nav-cart-badge"><?= $cartCount ?></span>
+            <?php endif; ?>
+        </a>
 
         <?php $identity = $this->request->getAttribute('identity'); ?>
         <?php if ($identity): ?>
 
-            <!-- User dropdown -->
-            <button
-                class="nav-user-btn"
-                id="user-menu-btn"
-                aria-haspopup="true"
-                aria-expanded="false"
-                aria-controls="user-menu"
-                onclick="toggleUserMenu()"
-            >
-                <div class="user-dot">
-                    <?php 
-                        // Fallback to 'U' if first_name is null to prevent substr error
-                        $fName = $identity->first_name ?? 'User';
-                        echo strtoupper(substr(h($fName), 0, 1)); 
-                    ?>
-                </div>
-                <?= h($identity->first_name ?? 'Account') ?>
-                <svg class="chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M2 4l4 4 4-4"/>
-                </svg>
-            </button>
+            <div class="nav-user-wrap">
+                <button
+                    class="nav-search-icon"
+                    id="user-menu-btn"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="user-menu"
+                    aria-label="User menu"
+                    onclick="toggleUserMenu()"
+                >
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                </button>
 
                 <div class="nav-dropdown" id="user-menu" role="menu">
                     <div class="dropdown-header">
@@ -698,10 +762,110 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </div>
 </nav>
 
-<main class="main">
+<div class="toast-stack" id="toastStack">
     <?= $this->Flash->render() ?>
+</div>
+
+<main class="main">
     <?= $this->fetch('content') ?>
 </main>
+
+<!-- Chat Toggle Button -->
+<button id="chat-toggle" style="position:fixed;bottom:24px;right:24px;z-index:1000;
+    background:var(--g3);color:#fff;border:none;border-radius:50%;width:56px;height:56px;
+    font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2)">💭</button>
+
+<!-- Chat Window -->
+<div id="chat-window" style="display:none;position:fixed;bottom:90px;right:24px;
+    width:340px;height:480px;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.2);
+    z-index:1000;display:none;flex-direction:column;overflow:hidden;">
+  <div style="background:var(--g3);color:#fff;padding:16px;font-weight:bold;">SustainChain Support</div>
+  <div id="chat-messages" style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;"></div>
+  <div style="display:flex;padding:8px;border-top:1px solid var(--s2);gap:8px;">
+    <input id="chat-input" type="text" placeholder="Ask us anything..."
+      style="flex:1;padding:8px 12px;border:1px solid var(--s2);border-radius:20px;outline:none;" />
+    <button id="chat-send"
+      style="background:var(--e1);color:var(--ink);border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;">➤</button>
+  </div>
+</div>
+
+<script>
+const toggle = document.getElementById('chat-toggle');
+const win    = document.getElementById('chat-window');
+const input  = document.getElementById('chat-input');
+const send   = document.getElementById('chat-send');
+const msgs   = document.getElementById('chat-messages');
+
+toggle.addEventListener('click', () => {
+    const isHidden = win.style.display === 'none';
+    win.style.display = isHidden ? 'flex' : 'none';
+    
+    // Show default greeting messages on first open
+    if (isHidden && msgs.children.length === 0) {
+        const greetings = [
+            'Hello! 👋 Welcome to SustainChain Support.',
+            'How can I help you today? Feel free to ask about our products, orders, delivery, or policies.'
+        ];
+        
+        greetings.forEach((greeting, index) => {
+            setTimeout(() => addMessage(greeting, 'bot'), index * 600);
+        });
+    }
+});
+
+function addMessage(text, role) {
+    const el = document.createElement('div');
+    el.textContent = text;
+    el.style.cssText = `
+        max-width:80%;padding:8px 12px;border-radius:12px;font-size:14px;
+        align-self:${role === 'user' ? 'flex-end' : 'flex-start'};
+        background:${role === 'user' ? 'var(--g4)' : 'var(--g6)'};
+        color:${role === 'user' ? '#fff' : 'var(--ink)'};
+    `;
+    msgs.appendChild(el);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    addMessage(text, 'user');
+    addMessage('Typing…', 'bot');
+
+    try {
+        // Read CSRF token from cookie (how CakePHP sets it)
+        const csrfToken = document.querySelector('meta[name="csrfToken"]')?.content ?? '';
+
+        const res = await fetch('<?= $this->Url->build(['controller' => 'Chat', 'action' => 'ask']) ?>', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({ message: text }),
+        });
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.log('Status:', res.status);
+            console.log('Body:', errorText);
+            msgs.lastChild.textContent = `Error: HTTP ${res.status}`;
+            return;
+        }
+
+        const data = await res.json();
+        msgs.lastChild.textContent = data.response || data.error || 'Something went wrong.';
+
+    } catch (error) {
+        msgs.lastChild.textContent = 'Network error: ' + error.message;
+    }
+}
+
+send.addEventListener('click', sendMessage);
+input.addEventListener('keydown', e => e.key === 'Enter' && sendMessage());
+</script>
 
 <!-- footer -->
 <footer class="footer">
@@ -804,6 +968,22 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             document.getElementById('user-menu-btn')?.setAttribute('aria-expanded', 'false');
         }
     });
+</script>
+
+<script>
+(function () {
+    const DISMISS_MS = 4000;
+    document.querySelectorAll('.toast').forEach(function (toast) {
+        const t = setTimeout(function () { dismiss(toast); }, DISMISS_MS);
+        toast.querySelector('.toast-close')?.addEventListener('click', function () {
+            clearTimeout(t);
+        });
+    });
+    function dismiss(toast) {
+        toast.classList.add('removing');
+        toast.addEventListener('animationend', function () { toast.remove(); }, { once: true });
+    }
+})();
 </script>
 
 </body>
