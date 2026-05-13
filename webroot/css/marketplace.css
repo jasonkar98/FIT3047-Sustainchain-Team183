@@ -363,7 +363,7 @@
 
 /* ── Sidebar ─────────────────────────────────────────────── */
 .filter-sidebar {
-    width: 220px;
+    width: 290px;
     flex-shrink: 0;
     background: var(--white);
     border: 1px solid var(--s2);
@@ -551,7 +551,9 @@
     color: var(--g0);
     text-decoration: none;
     background: var(--white);
-    transition: border-color 0.15s, background 0.15s;
+    transition:
+        border-color 0.15s,
+        background 0.15s;
 }
 
 .marketplace-pagination a:hover {
@@ -559,15 +561,18 @@
     background: var(--s1);
 }
 
+.marketplace-pagination .disabled a,
+.marketplace-pagination .disabled span {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: default;
+}
+
+.marketplace-pagination .current span,
 .marketplace-pagination .active span {
     background: var(--g0);
     color: var(--white);
     border-color: var(--g0);
-}
-
-.marketplace-pagination .disabled span {
-    color: var(--muted);
-    pointer-events: none;
 }
 
 .marketplace-pagination ul {
@@ -581,4 +586,26 @@
 
 .marketplace-pagination li {
     list-style: none;
+}
+
+.product-price-original {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--muted);
+    text-decoration: line-through;
+    margin-right: 0.35rem;
+}
+
+.product-discount-badge {
+    display: inline-block;
+    background: var(--e1);
+    color: var(--g0);
+    font-family: "Cabinet Grotesk", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--r999);
+    letter-spacing: 0.02em;
+    vertical-align: middle;
+    margin-left: 0.35rem;
 }
