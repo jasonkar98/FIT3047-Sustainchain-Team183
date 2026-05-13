@@ -84,6 +84,10 @@ return function (RouteBuilder $routes): void {
          * It is NOT recommended to use fallback routes after your initial prototyping phase!
          * See https://book.cakephp.org/5/en/development/routing.html#fallbacks-method for more information
          */
+        $builder->connect('/payments/checkout', ['controller' => 'Payments', 'action' => 'checkout']);
+        $builder->connect('/payments/create-payment-intent', ['controller' => 'Payments', 'action' => 'createPaymentIntent']);
+        $builder->connect('/payments/success', ['controller' => 'Payments', 'action' => 'success']);
+
         $builder->prefix('Admin', function (RouteBuilder $builder): void {
             $builder->connect('/', ['controller' => 'Dashboard', 'action' => 'index']);
             $builder->connect('/enquiries', ['controller' => 'Enquiries', 'action' => 'index']);
