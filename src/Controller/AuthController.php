@@ -218,7 +218,20 @@ class AuthController extends AppController
             $user->nonce_expiry = null;
 
             if ($this->Users->save($user)) {
-                $this->Flash->success('Your password has been successfully reset. Please login with new password. ');
+                $mailer = new Mailer('default');
+                $mailer
+                    ->setEmailFormat('both')
+                    ->setTo($user->email)
+                    ->setSubject('Your SustainChain password has been changed');
+                $mailer->viewBuilder()->setTemplate('password_changed')->setLayout('sustainchain');
+                $mailer->setViewVars([
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => $user->email,
+                ]);
+                $mailer->deliver();
+
+                $this->Flash->success('Your password has been successfully reset. Please login with your new password.');
 
                 return $this->redirect(['action' => 'login']);
             }

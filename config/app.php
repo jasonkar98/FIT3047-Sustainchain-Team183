@@ -93,7 +93,10 @@ return [
         //'timestamp' => true,
         // 'cacheTime' => '+1 year'
     ],
-
+    'Stripe' => [
+        'publishableKey' => env('STRIPE_PUBLISHABLE_KEY'),
+        'secretKey'      => env('STRIPE_SECRET_KEY'),
+    ],
     /*
      * Configure the cache adapters.
      */
@@ -252,7 +255,7 @@ return [
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => 'you@localhost',
+            'from' => ['sustainchainsupport@u26s1183.iedev.org' => 'SustainChain Support'],
             /*
              * Will by default be set to config value of App.encoding, if that exists otherwise to UTF-8.
              */
