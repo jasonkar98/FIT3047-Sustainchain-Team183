@@ -466,6 +466,14 @@ $sortLink = function (string $key, string $label) use ($role, $keyword, $sort, $
         ) ?>
 
         <div class="role-tabs">
+            <?= $this->Html->link(
+                'All <span class="count">' . (int)($roleCounts['all'] ?? 0) . '</span>',
+                ['?' => ['role' => 'all']],
+                [
+                    'class' => 'role-tab' . ($role === 'all' ? ' is-active' : ''),
+                    'escape' => false,
+                ]
+            ) ?>
             <?php foreach ($managedRoles as $r): ?>
                 <?= $this->Html->link(
                     h($roleLabels[$r]) . ' <span class="count">' . (int)$roleCounts[$r] . '</span>',
@@ -516,7 +524,13 @@ $sortLink = function (string $key, string $label) use ($role, $keyword, $sort, $
         <div>
         <?php if (empty($userList)): ?>
             <div class="empty-state">
-                <p>No <?= h(strtolower($roleLabels[$role])) ?> match this search.</p>
+                <p>
+                    <?php if ($role === 'all'): ?>
+                        No users match this search.
+                    <?php else: ?>
+                        No <?= h(strtolower($roleLabels[$role])) ?> match this search.
+                    <?php endif; ?>
+                </p>
             </div>
         <?php else: ?>
             <div class="admin-table-wrap">

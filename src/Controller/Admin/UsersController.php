@@ -33,10 +33,13 @@ class UsersController extends AppController
     {
         $usersTable = $this->fetchTable('Users');
 
-        // Role tab — default to buyer if missing/invalid.
-        $role = $this->request->getQuery('role', 'buyer');
-        if (!in_array($role, self::MANAGED_ROLES, true)) {
-            $role = 'buyer';
+        // Role tab — default 'all' shows every non-admin user; the four
+        // managed roles act as filters. An empty/invalid value also falls
+        // back to 'all' so the table is never left empty by a bad query
+        // string.
+        $role = $this->request->getQuery('role', 'all');
+        if ($role !== 'all' && !in_array($role, self::MANAGED_ROLES, true)) {
+            $role = 'all';
         }
 
         $keyword = trim((string)$this->request->getQuery('keyword', ''));
@@ -51,10 +54,14 @@ class UsersController extends AppController
             $direction = 'desc';
         }
 
-        // Base query — only non-admin users in the selected role.
+        // Base query — never show admins. When a specific role is selected,
+        // narrow further; otherwise show all non-admin users.
         $query = $usersTable->find()
-            ->where(['Users.role' => $role])
             ->where(['Users.role !=' => 'admin']);
+
+        if ($role !== 'all') {
+            $query->where(['Users.role' => $role]);
+        }
 
         if ($keyword !== '') {
             $like = '%' . $keyword . '%';
@@ -86,13 +93,17 @@ class UsersController extends AppController
             $query->orderBy([self::SORTS[$sort] => $direction, 'Users.id' => 'ASC']);
         }
 
-        // Counts per role, for the tab badges. Cheap — one COUNT per role.
-        $roleCounts = [];
+        // Counts per role, for the tab badges. Cheap — one COUNT per role,
+        // plus an 'all' total for the default tab badge.
+        $roleCounts = ['all' => 0];
         foreach (self::MANAGED_ROLES as $r) {
             $roleCounts[$r] = $usersTable->find()
                 ->where(['role' => $r])
                 ->count();
         }
+        $roleCounts['all'] = $usersTable->find()
+            ->where(['role !=' => 'admin'])
+            ->count();
 
         $users = $this->paginate($query, ['limit' => 20]);
 
