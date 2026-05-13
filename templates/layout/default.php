@@ -874,7 +874,7 @@ input.addEventListener('keydown', e => e.key === 'Enter' && sendMessage());
             <div class="footer-logo-wrap">
                 <span class="footer-logo-name">Sustain<span>Chain</span></span>
             </div>
-            <p class="footer-tagline">A vibrant marketplace for responsible consumption and a greener future.</p>
+            <p class="footer-tagline"><?= $this->ContentBlock->text('footer-content') ?></p>
         </div>
 
         <div class="footer-col">
@@ -908,7 +908,7 @@ input.addEventListener('keydown', e => e.key === 'Enter' && sendMessage());
     </div>
 
     <div class="footer-bottom">
-        <p class="footer-copy">© <?= date('Y') ?> SustainChain. All rights reserved.</p>
+        <p class="footer-copy"><?= $this->ContentBlock->text('footer-copyright') ?></p>
     </div>
 </footer>
 
