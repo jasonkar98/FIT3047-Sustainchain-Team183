@@ -117,6 +117,13 @@ return function (RouteBuilder $routes): void {
             $builder->connect('/users/delete/{id}', ['controller' => 'Users', 'action' => 'delete'])
                 ->setPatterns(['id' => '\d+'])
                 ->setPass(['id']);
+            $builder->connect('/users/approvals', ['controller' => 'Users', 'action' => 'approvals']);
+            $builder->connect('/users/approve/{id}', ['controller' => 'Users', 'action' => 'approve'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/reject/{id}', ['controller' => 'Users', 'action' => 'reject'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
             $builder->fallbacks();
         });
         

@@ -17,7 +17,11 @@ $first_name = $identity ? h($identity->first_name) : 'there';
 $avatar_initial = $identity ? strtoupper(substr(h($identity->first_name), 0, 1)) : '?';
 
 /** @var iterable<\App\Model\Entity\User> $newestUsers */
+/** @var iterable<\App\Model\Entity\User> $pendingApprovals */
+/** @var int $pendingApprovalCount */
 $newestUsers = $newestUsers ?? [];
+$pendingApprovals = $pendingApprovals ?? [];
+$pendingApprovalCount = $pendingApprovalCount ?? 0;
 ?>
 
 <style>
@@ -190,6 +194,110 @@ $newestUsers = $newestUsers ?? [];
     }
     .view-all-btn:hover { background: #25623f; }
 
+    /* Sidebar column — stacks the Users widget and Approvals panel together
+       so both sit at the top of column 2 instead of being scattered across
+       grid rows. */
+    .dash-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    /* Approvals panel — sits directly beneath the users widget */
+    .approvals-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 1.25rem;
+    }
+    .approvals-card.has-pending {
+        border-color: #d99a3e;
+        background: #fffaf2;
+    }
+    .approvals-card .section-head { margin-bottom: .75rem; }
+    .approvals-card .section-head h2 {
+        font-family: "DM Serif Display", serif;
+        font-size: 1.15rem;
+        font-weight: 400;
+        margin: 0;
+    }
+    .approvals-card .count-pill {
+        display: inline-flex;
+        align-items: center;
+        background: #e8f0ec;
+        color: #2e7d52;
+        font-size: .72rem;
+        font-weight: 700;
+        padding: .15rem .55rem;
+        border-radius: 999px;
+        margin-left: .35rem;
+        vertical-align: middle;
+    }
+    .approvals-card.has-pending .count-pill {
+        background: #fdecd2;
+        color: #8a5a16;
+    }
+    .approvals-blurb {
+        font-size: .82rem;
+        color: #555;
+        margin: 0 0 .85rem;
+        line-height: 1.4;
+    }
+    .pending-mini-list {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        margin-bottom: .85rem;
+    }
+    .pending-mini {
+        padding: .55rem .75rem;
+        border-radius: 8px;
+        border: 1px solid #f0f0f0;
+        background: #fff;
+        font-size: .85rem;
+    }
+    .pending-mini .name {
+        font-weight: 700;
+        color: #1a1a1a;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+    .pending-mini .meta {
+        font-size: .72rem;
+        color: #666;
+        display: flex;
+        gap: .5rem;
+        align-items: center;
+        margin-top: .15rem;
+    }
+    .pending-mini .role-mini-pill {
+        background: #e8f0ec;
+        color: #2e7d52;
+        padding: .05rem .45rem;
+        border-radius: 999px;
+        font-size: .68rem;
+        font-weight: 700;
+    }
+    .review-approvals-btn {
+        display: block;
+        text-align: center;
+        width: 100%;
+        padding: .55rem;
+        border-radius: 999px;
+        background: #2e7d52;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: .85rem;
+        transition: background .15s;
+    }
+    .review-approvals-btn:hover { background: #25623f; }
+    .approvals-empty {
+        font-size: .85rem;
+        color: #888;
+        padding: .25rem 0 .85rem;
+    }
+
     /* ===== Make entire card clickable ===== */
     /* Wrapping anchors around enquiry items and user-mini blocks */
     a.card-link,
@@ -266,37 +374,77 @@ $newestUsers = $newestUsers ?? [];
             <?php endif; ?>
         </div>
 
-        <!-- Sidebar: Newest Users -->
-        <aside class="side-card">
-            <div class="section-head">
-                <h2>Newest Users</h2>
-            </div>
-
-            <?php if (empty($newestUsers)): ?>
-                <p class="users-empty">No users have signed up yet.</p>
-            <?php else: ?>
-                <div class="users-mini-list">
-                    <?php foreach ($newestUsers as $u): ?>
-                        <?= $this->Html->link(
-                            '<div class="user-mini">'
-                                . '<span class="name">' . h($u->full_name) . '</span>'
-                                . '<span class="meta">'
-                                    . '<span class="role-pill">' . h(ucfirst((string)$u->role)) . '</span>'
-                                    . '<span>' . ($u->created ? $u->created->i18nFormat('dd MMM YYYY') : '') . '</span>'
-                                . '</span>'
-                            . '</div>',
-                            ['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'edit', $u->id],
-                            ['escape' => false, 'class' => 'card-link']
-                        ) ?>
-                    <?php endforeach; ?>
+        <!-- Sidebar column: Users widget + Approval Requests panel stacked -->
+        <div class="dash-sidebar">
+            <!-- Users widget -->
+            <aside class="side-card">
+                <div class="section-head">
+                    <h2>Users</h2>
                 </div>
-            <?php endif; ?>
 
-            <?= $this->Html->link(
-                'View all users',
-                ['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'index'],
-                ['class' => 'view-all-btn']
-            ) ?>
-        </aside>
+                <?php if (empty($newestUsers)): ?>
+                    <p class="users-empty">No users have signed up yet.</p>
+                <?php else: ?>
+                    <div class="users-mini-list">
+                        <?php foreach ($newestUsers as $u): ?>
+                            <?= $this->Html->link(
+                                '<div class="user-mini">'
+                                    . '<span class="name">' . h($u->full_name) . '</span>'
+                                    . '<span class="meta">'
+                                        . '<span class="role-pill">' . h(ucfirst((string)$u->role)) . '</span>'
+                                        . '<span>' . ($u->created ? $u->created->i18nFormat('dd MMM YYYY') : '') . '</span>'
+                                    . '</span>'
+                                . '</div>',
+                                ['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'edit', $u->id],
+                                ['escape' => false, 'class' => 'card-link']
+                            ) ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?= $this->Html->link(
+                    'View all users',
+                    ['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'index'],
+                    ['class' => 'view-all-btn']
+                ) ?>
+            </aside>
+
+            <!-- Pending approvals panel -->
+            <aside class="approvals-card<?= $pendingApprovalCount > 0 ? ' has-pending' : '' ?>">
+                <div class="section-head">
+                    <h2>
+                        Approval Requests
+                        <?php if ($pendingApprovalCount > 0): ?>
+                            <span class="count-pill"><?= (int)$pendingApprovalCount ?></span>
+                        <?php endif; ?>
+                    </h2>
+                </div>
+                <p class="approvals-blurb">
+                    Farmer and manufacturer signups awaiting your review.
+                </p>
+
+                <?php if (empty($pendingApprovals)): ?>
+                    <p class="approvals-empty">No accounts awaiting approval.</p>
+                <?php else: ?>
+                    <div class="pending-mini-list">
+                        <?php foreach ($pendingApprovals as $p): ?>
+                            <div class="pending-mini">
+                                <div class="name"><?= h($p->full_name) ?></div>
+                                <div class="meta">
+                                    <span class="role-mini-pill"><?= h(ucfirst((string)$p->role)) ?></span>
+                                    <span><?= $p->created ? $p->created->i18nFormat('dd MMM YYYY') : '' ?></span>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?= $this->Html->link(
+                    $pendingApprovalCount > 0 ? 'Review approval requests' : 'Open approvals queue',
+                    ['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'approvals'],
+                    ['class' => 'review-approvals-btn']
+                ) ?>
+            </aside>
+        </div>
     </div>
 </div>

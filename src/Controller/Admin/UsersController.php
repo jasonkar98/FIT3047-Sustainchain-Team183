@@ -378,4 +378,109 @@ class UsersController extends AppController
         $this->Flash->error('Could not delete the user. Please try again.');
         return $this->redirect(['action' => 'edit', $id]);
     }
+
+    /**
+     * List farmer + manufacturer signups that are still pending admin
+     * approval (is_active=0). Used by the admin dashboard panel and the
+     * full approvals page.
+     */
+    public function approvals()
+    {
+        $usersTable = $this->fetchTable('Users');
+
+        $pending = $usersTable->find()
+            ->where([
+                'Users.role IN' => ['farmer', 'manufacturer'],
+                'Users.is_active' => 0,
+            ])
+            ->orderBy(['Users.created' => 'DESC'])
+            ->all()
+            ->toArray();
+
+        $this->set(compact('pending'));
+    }
+
+    /**
+     * Approve a pending farmer / manufacturer signup. Flips is_active to 1
+     * so the user can log in. Hard-blocks any attempt to approve an admin.
+     *
+     * Email notification is intentionally deferred until SMTP is wired up.
+     */
+    public function approve(?string $id = null)
+    {
+        $this->request->allowMethod(['post']);
+
+        $usersTable = $this->fetchTable('Users');
+        $user = $usersTable->get($id);
+
+        if ($user->role === 'admin') {
+            throw new NotFoundException('User not found.');
+        }
+
+        if (!in_array($user->role, ['farmer', 'manufacturer'], true)) {
+            $this->Flash->error('Only farmer and manufacturer signups need approval.');
+            return $this->redirect(['action' => 'approvals']);
+        }
+
+        if ((int)$user->is_active === 1) {
+            $this->Flash->error($user->full_name . ' is already approved.');
+            return $this->redirect(['action' => 'approvals']);
+        }
+
+        $user->is_active = 1;
+
+        if (!$usersTable->save($user)) {
+            $this->Flash->error('Could not approve the account. Please try again.');
+            return $this->redirect(['action' => 'approvals']);
+        }
+
+        // TODO: send approval email once SMTP is configured.
+        // $this->sendApprovalEmail($user, approved: true);
+
+        $this->Flash->success($user->full_name . ' has been approved and can now log in.');
+        return $this->redirect(['action' => 'approvals']);
+    }
+
+    /**
+     * Reject a pending farmer / manufacturer signup. Hard-deletes the user
+     * since the account has never been activated, so there's no data to
+     * cascade. Admins cannot reject other admins.
+     *
+     * Email notification is intentionally deferred until SMTP is wired up.
+     */
+    public function reject(?string $id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $usersTable = $this->fetchTable('Users');
+        $user = $usersTable->get($id);
+
+        if ($user->role === 'admin') {
+            throw new NotFoundException('User not found.');
+        }
+
+        if (!in_array($user->role, ['farmer', 'manufacturer'], true)) {
+            $this->Flash->error('Only farmer and manufacturer signups can be rejected via this flow.');
+            return $this->redirect(['action' => 'approvals']);
+        }
+
+        if ((int)$user->is_active === 1) {
+            $this->Flash->error('Already-approved accounts cannot be rejected here. Use the deactivate flow instead.');
+            return $this->redirect(['action' => 'approvals']);
+        }
+
+        $userName  = $user->full_name;
+        $userEmail = $user->email;
+
+        if (!$usersTable->delete($user)) {
+            $this->Flash->error('Could not reject the account. Please try again.');
+            return $this->redirect(['action' => 'approvals']);
+        }
+
+        // TODO: send rejection email once SMTP is configured.
+        // $this->sendApprovalEmail(null, approved: false, name: $userName, email: $userEmail);
+
+        $this->Flash->success($userName . '\'s signup has been rejected and the account removed.');
+        return $this->redirect(['action' => 'approvals']);
+    }
 }
