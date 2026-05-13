@@ -16,7 +16,7 @@ $this->Html->css('marketplace', ['block' => true]);
 <style>
 /* ── Product view layout ── */
 .product-view-wrap {
-    background: var(--s0);
+    background: var(--e0);
     padding: 4rem 2.5rem 6rem;
 }
 .product-view-inner {

@@ -53,7 +53,7 @@ $selectRolesOptions = array_combine(
 <style>
 /* ── Hero banner ── */
 .form-hero {
-    background: var(--g0);
+    background: rgb(99, 112, 75);
     position: relative;
     overflow: hidden;
     padding: 5rem 2.5rem 4rem;
@@ -155,7 +155,7 @@ $selectRolesOptions = array_combine(
 .form-card select,
 .form-card textarea {
     width: 100%;
-    background: var(--s0);
+    background: var(--e0);
     border: 1.5px solid var(--s2);
     border-radius: var(--r16);
     padding: .85rem 1.1rem;

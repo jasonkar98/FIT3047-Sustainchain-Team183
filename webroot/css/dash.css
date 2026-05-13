@@ -429,7 +429,7 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    background: #4dc8e0; /* swap for your brand color or var(--g2) */
+    background: #0A400C;
     color: white;
     border: none;
     border-radius: 50%;
