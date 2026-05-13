@@ -617,6 +617,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         ?>
         <ul class="nav-links">
             <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index'], ['class' => (!$currentPrefix && $currentController === 'Products' && $this->request->getParam('action') !== 'myListings') ? 'active' : '']) ?></li>
+            <li><?= $this->Html->link('About', ['prefix' => false, 'controller' => 'Pages', 'action' => 'about'], ['class' => (!$currentPrefix && $currentController === 'Pages' && $this->request->getParam('action') === 'about') ? 'active' : '']) ?></li>
             <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add'], ['class' => (!$currentPrefix && $currentController === 'Enquiries') ? 'active' : '']) ?></li>
             <?php if ($this->request->getAttribute('identity')): ?>
                 <li><?= $this->Html->link('Dashboard', ['prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'], ['class' => (!$currentPrefix && $currentController === 'Dashboard') ? 'active' : '']) ?></li>
@@ -746,7 +747,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <h4>Company</h4>
             <ul>
                 <li><a href="#mission">Our Mission</a></li>
-                <li><a href="/about">About</a></li>
+                <li><?= $this->Html->link('About', ['prefix' => false, 'controller' => 'Pages', 'action' => 'about']) ?></li>
                 <li><a href="/enquiries">Enquire</a></li>
                 <li><a href="/users/login">Log in</a></li>
             </ul>

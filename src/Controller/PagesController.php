@@ -40,7 +40,7 @@ class PagesController extends AppController
     {
         parent::initialize();
         
-        $this->Authentication->allowUnauthenticated(['display', 'landingPage']);
+        $this->Authentication->allowUnauthenticated(['display', 'landingPage', 'about']);
     }
 
     /**
@@ -86,5 +86,10 @@ class PagesController extends AppController
     public function landingPage(): ?Response
     {
         return $this->render('landing_page');
+    }
+
+    public function about(): ?Response
+    {
+        return $this->render('about');
     }
 }
