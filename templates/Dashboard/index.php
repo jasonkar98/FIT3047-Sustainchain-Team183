@@ -299,6 +299,7 @@ $avatar_initial = ($identity && $identity->first_name) ? strtoupper(substr(h($id
     </div>
     -->
 
+    <?php if ($identity->get('role') !== 'buyer' && $identity->get('role') !== 'admin'): ?>
     <!-- My Listings -->
     <div>
         <div class="section-head">
@@ -326,8 +327,10 @@ $avatar_initial = ($identity && $identity->first_name) ? strtoupper(substr(h($id
             </div>
         <?php endif; ?>
     </div>
+    <?php endif; ?>
 
         <!-- My Inquiries -->
+    <?php if ($identity->get('role') !== 'admin'): ?>
     <div>
         <div class="section-head">
             <h2>My Inquiries</h2>
@@ -362,6 +365,7 @@ $avatar_initial = ($identity && $identity->first_name) ? strtoupper(substr(h($id
         </div>
         <?php endif; ?>
     </div>
+    <?php endif; ?>
 
 </div>
 

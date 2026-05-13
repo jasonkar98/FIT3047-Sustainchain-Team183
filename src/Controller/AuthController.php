@@ -45,30 +45,101 @@ class AuthController extends AppController
      */
     public function register()
     {
+
         $user = $this->Users->newEmptyEntity();
+        // $session = $this->request->getSession();
+        $this->set('step', 1);
+
         if ($this->request->is('post')) {
+
+            $data = $this->request->getData();
+
+
+             if (!empty($data['role_selected'])) {
+                $this->set('step', 2);
+
+                $this->set('role_selected', $data['role']);
+
+            } elseif (!empty($data['submit_details'])) {
+
+                $user = $this->Users->patchEntity($user, $data);
+
+                if ($user['role'] == 'manufacturer' or $user['role'] == 'farmer') {
+                    $user['is_active'] = 0;
+
+                    if ($this->Users->save($user)) {
+                        $this->Flash->success('You have requested a ' . $user['role'] . ' account creation. Please wait for account verification before logging in.');
+
+                        return $this->redirect(['action' => 'login']);
+                    }
+
+                }
+
+                if ($this->Users->save($user)) {
+
+                    $mailer = new Mailer('default');
+                    $mailer
+                        ->setEmailFormat('both')
+                        ->setTo($user->email)
+                        ->setSubject('Welcome to SustainChain!');
+                    $mailer->viewBuilder()->setTemplate('welcome')->setLayout('sustainchain');
+                    $mailer->setViewVars([
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
+                    ]);
+                    $mailer->deliver();
+
+                    $this->Flash->success('You have been registered. Please log in. ');
+
+                    return $this->redirect(['action' => 'login']);
+                }
+                $this->Flash->error('The user could not be registered. Please, try again.');
+                $this->set('step', 2);
+            }
+        }
+
+        $this->set(compact('user'));
+    }
+
+    public function view($id = null)
+    {
+        
+        $user = $this->Authentication->getIdentity();
+        $this->set(compact('user'));
+    }
+
+    public function edit($id = null)
+    {
+        $user = $this->Users->get($id, contain: []);
+        if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
-                $mailer = new Mailer('default');
-                $mailer
-                    ->setEmailFormat('both')
-                    ->setTo($user->email)
-                    ->setSubject('Welcome to SustainChain!');
-                $mailer->viewBuilder()->setTemplate('welcome')->setLayout('sustainchain');
-                $mailer->setViewVars([
-                    'first_name' => $user->first_name,
-                    'last_name' => $user->last_name,
-                    'email' => $user->email,
-                ]);
-                $mailer->deliver();
 
-                $this->Flash->success('You have been registered. Please log in.');
+                $this->Authentication->setIdentity($user->toArray());
+                $this->Flash->success(__('The user has been saved.'));
 
-                return $this->redirect(['action' => 'login']);
+                return $this->redirect(['action' => 'view', $user->get('id')]);
             }
-            $this->Flash->error('The user could not be registered. Please, try again.');
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $this->set(compact('user'));
+    }
+
+    public function delete($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $user = $this->Users->get($id);
+        $user['is_active'] = 0;
+        // $user = $this->Users->patchEntity($user, $this->request->getData());
+        if ($this->Users->save($user)) {
+            $this->Flash->success(__('Your account has been disabled. You will soon be notified of its official deletion.'));
+            $this->logout();
+        } else {
+            $this->Flash->error(__('Your account could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
     }
 
     /**
