@@ -36,6 +36,7 @@ CREATE TABLE users (
   role ENUM('user','admin','buyer','seller','manufacturer','farmer') NOT NULL DEFAULT 'user',
   goals TEXT NULL,
   business_values TEXT NULL,
+  profile varchar(500) DEFAULT NULL,
   nonce varchar(255) DEFAULT NULL,
   nonce_expiry datetime DEFAULT NULL,
   created datetime DEFAULT NULL,

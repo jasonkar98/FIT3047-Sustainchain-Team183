@@ -433,6 +433,31 @@ tr, td {
                 <?php if (h($user->role) == 'manufacturer'): ?>
                     <?= $this->Form->control('goals', ['label' => 'Business Goals', 'placeholder' => 'Describe your business goals...', 'type' => 'textarea']); ?>
                     <?= $this->Form->control('business_values', ['label' => 'Business Values', 'placeholder' => 'Describe your business values...', 'type' => 'textarea']); ?>
+
+                    <div class="input">
+                        <label>Profile image</label>
+                        <?php if (!empty($user->profile)): ?>
+                            <div style="margin-bottom:.5rem;">
+                                <?= $this->Html->image('profiles/' . $user->profile, [
+                                    'alt'   => 'Current profile image',
+                                    'style' => 'max-width:140px; max-height:140px; border-radius:12px; object-fit:cover; border:1px solid var(--s2);',
+                                ]) ?>
+                            </div>
+                            <p style="font-size:.8rem; color: var(--muted); margin: 0 0 .5rem;">
+                                Upload a new image to replace it. Leave blank to keep the current one.
+                            </p>
+                        <?php else: ?>
+                            <p style="font-size:.8rem; color: var(--muted); margin: 0 0 .5rem;">
+                                Shown on your innovator profile and on the Discover Innovators page.
+                            </p>
+                        <?php endif; ?>
+                        <?= $this->Form->control('profile', [
+                            'type'   => 'file',
+                            'label'  => false,
+                            'accept' => 'image/*',
+                            'class'  => 'btn-file',
+                        ]) ?>
+                    </div>
                 <?php endif; ?>
 
                 <div class="form-divider"></div>

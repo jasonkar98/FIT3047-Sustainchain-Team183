@@ -213,8 +213,8 @@ $this->Html->css('marketplace', ['block' => true]);
                 <a class="innovator-card" href="<?= $this->Url->build(['controller' => 'Innovators', 'action' => 'view', $m->id]) ?>">
                     <div class="innovator-card-img">
                         <span class="innovator-card-rank">#<?= $rank ?></span>
-                        <?php if (!empty($m->avatar)): ?>
-                            <?= $this->Html->image($m->avatar, ['alt' => h($m->full_name)]) ?>
+                        <?php if (!empty($m->profile)): ?>
+                            <?= $this->Html->image('profiles/' . $m->profile, ['alt' => h($m->full_name)]) ?>
                         <?php else: ?>
                             <span class="initial"><?= h(strtoupper(substr($m->first_name ?? '?', 0, 1))) ?></span>
                         <?php endif; ?>

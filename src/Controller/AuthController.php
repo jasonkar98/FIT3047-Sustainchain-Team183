@@ -62,6 +62,12 @@ class AuthController extends AppController
 
             } elseif (!empty($data['submit_details'])) {
 
+                // Handle the optional manufacturer profile image. Done before
+                // patchEntity so the saved filename (not the UploadedFile
+                // object) reaches the entity. Mirrors the pattern in
+                // ProductsController::add but writes into /img/profiles/.
+                $data['profile'] = $this->processProfileUpload($data['profile'] ?? null);
+
                 $user = $this->Users->patchEntity($user, $data);
 
                 if ($this->Users->save($user)) {
@@ -105,7 +111,20 @@ class AuthController extends AppController
     {
         $user = $this->Users->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $data = $this->request->getData();
+
+            // Handle the optional profile-image upload. If the user attached
+            // a new image, replace; if they left the field blank, keep the
+            // existing profile string by stripping the empty upload from
+            // the patch payload entirely.
+            $newProfile = $this->processProfileUpload($data['profile'] ?? null);
+            if ($newProfile !== null) {
+                $data['profile'] = $newProfile;
+            } else {
+                unset($data['profile']);
+            }
+
+            $user = $this->Users->patchEntity($user, $data);
             if ($this->Users->save($user)) {
                 $this->Authentication->setIdentity($user->toArray());
                 $this->Flash->success(__('The user has been saved.'));
@@ -313,6 +332,50 @@ class AuthController extends AppController
      *
      * @return \Cake\Http\Response|null|void
      */
+    /**
+     * Handle an uploaded profile-image file. Returns the stored filename
+     * (just the basename, no path) so it can be patched onto the user
+     * entity, or null when no upload was provided / the upload was empty.
+     *
+     * Saves into webroot/img/profiles/ with a uniqid prefix so two users
+     * uploading "logo.png" don't collide.
+     *
+     * @param mixed $file Either a Psr\Http\Message\UploadedFileInterface
+     *                    (Cake's form upload) or null when the field was
+     *                    left blank.
+     * @return string|null Stored filename, or null when no usable file.
+     */
+    private function processProfileUpload($file): ?string
+    {
+        if (!$file || !is_object($file) || !method_exists($file, 'getClientFilename')) {
+            return null;
+        }
+        $clientName = $file->getClientFilename();
+        if (empty($clientName)) {
+            return null;
+        }
+
+        // Normalise the basename and prepend a uniqid so collisions are
+        // statistically impossible.
+        $safeBase = preg_replace('/[^A-Za-z0-9._-]/', '_', basename($clientName));
+        $stored = uniqid('', false) . '_' . $safeBase;
+
+        $targetDir = WWW_ROOT . 'img' . DS . 'profiles';
+        if (!is_dir($targetDir)) {
+            @mkdir($targetDir, 0775, true);
+        }
+
+        try {
+            $file->moveTo($targetDir . DS . $stored);
+        } catch (\Throwable $e) {
+            // Swallow — if the move fails, fall back to "no profile" rather
+            // than blowing up the whole registration / edit flow.
+            return null;
+        }
+
+        return $stored;
+    }
+
     public function logout()
     {
         // We only need to log out a user when they're logged in

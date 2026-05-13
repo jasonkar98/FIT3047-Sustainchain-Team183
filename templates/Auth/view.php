@@ -329,6 +329,15 @@ tr, td {
         </div>
 
         <div class="product-view-details">
+            <?php if (h($user->role) == 'manufacturer' && !empty($user->profile)): ?>
+                <div style="margin-bottom: 1rem;">
+                    <?= $this->Html->image('profiles/' . $user->profile, [
+                        'alt'   => h($user->first_name . ' ' . $user->last_name),
+                        'style' => 'width: 160px; height: 160px; border-radius: 16px; object-fit: cover; border: 1px solid var(--s2);',
+                    ]) ?>
+                </div>
+            <?php endif; ?>
+
             <div>
                 <span class="product-view-category"><?= h($user->role) ?></span>
             </div>

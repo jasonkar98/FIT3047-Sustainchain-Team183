@@ -77,6 +77,55 @@ $roleLabel = ucfirst((string)$user->role);
     border-radius: var(--r999);
 }
 
+/* Header block: avatar + role pill + name side by side */
+.innovator-detail-head {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: .5rem;
+}
+.innovator-detail-head-text {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+.innovator-detail-avatar {
+    flex-shrink: 0;
+    width: 140px;
+    height: 140px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--s2);
+    background: linear-gradient(160deg, #e8f0ec 0%, #b9d4c4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.innovator-detail-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.innovator-detail-avatar--initial {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 3.5rem;
+    color: rgba(13,31,20,.45);
+}
+
+@media (max-width: 600px) {
+    .innovator-detail-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .innovator-detail-avatar {
+        width: 120px;
+        height: 120px;
+    }
+}
+
 .innovator-detail-name {
     font-family: 'Fraunces', serif;
     font-size: clamp(1.8rem, 3vw, 2.6rem);
@@ -139,8 +188,22 @@ $roleLabel = ucfirst((string)$user->role);
         </div>
 
         <div class="innovator-detail-card">
-            <span class="innovator-role-pill"><?= h($roleLabel) ?></span>
-            <h2 class="innovator-detail-name"><?= h($user->full_name) ?></h2>
+            <div class="innovator-detail-head">
+                <?php if (!empty($user->profile)): ?>
+                    <div class="innovator-detail-avatar">
+                        <?= $this->Html->image('profiles/' . $user->profile, ['alt' => h($user->full_name)]) ?>
+                    </div>
+                <?php else: ?>
+                    <div class="innovator-detail-avatar innovator-detail-avatar--initial">
+                        <?= h(strtoupper(substr($user->first_name ?? '?', 0, 1))) ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="innovator-detail-head-text">
+                    <span class="innovator-role-pill"><?= h($roleLabel) ?></span>
+                    <h2 class="innovator-detail-name"><?= h($user->full_name) ?></h2>
+                </div>
+            </div>
 
             <?php $hasGoals  = !empty($user->goals); ?>
             <?php $hasValues = !empty($user->business_values); ?>
