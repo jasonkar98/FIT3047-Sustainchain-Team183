@@ -754,6 +754,12 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     
                     <?php if ($identity->get('role') !== 'admin'): ?>
                     <?= $this->Html->link(
+                        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3" /><path d="M3 14c0-2.5 2-4.5 5-4.5s5 2 5 4.5" /></svg> My Account',
+                        ['prefix' => false, 'controller' => 'Auth', 'action' => 'view', $identity->get('id')],
+                        ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
+                    ) ?>
+
+                    <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 3V2m6 1V2M2 7h12"/></svg> Dashboard',
                         ['plugin' => false,'prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]

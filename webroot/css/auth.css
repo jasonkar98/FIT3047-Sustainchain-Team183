@@ -237,6 +237,8 @@ body {
 .auth-form input[type="email"],
 .auth-form input[type="password"],
 .auth-form input[type="text"],
+.auth-form textarea,
+.auth-form select,
 .auth-form input[type="file"] {
     width: 100%;
     padding: 0.85rem 1.1rem;
@@ -255,19 +257,28 @@ body {
 }
 
 .auth-form input:hover,
-.fg input:hover {
+.auth-form textarea:hover,
+.auth-form select:hover,
+.fg input:hover,
+.fg select:hover {
     border-color: var(--g5);
 }
 
 .auth-form input:focus,
-.fg input:focus {
+.auth-form textarea:focus,
+.auth-form select:focus,
+.fg input:focus,
+.fg select:focus {
     border-color: var(--g3);
     background: var(--white);
     box-shadow: 0 0 0 3px rgba(46, 125, 82, 0.1);
 }
 
 .auth-form input::placeholder,
-.fg input::placeholder {
+.auth-form textarea::placeholder,
+.auth-form select::placeholder,
+.fg input::placeholder,
+.fg select::placeholder {
     color: var(--muted);
     opacity: 0.6;
 }
