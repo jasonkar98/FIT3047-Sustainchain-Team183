@@ -207,11 +207,17 @@ class AuthController extends AppController
             if ($this->request->is('post')) {
                 $identity = $this->Authentication->getIdentity();
 
-                // Block deactivated accounts. The credentials were valid but the
-                // admin has suspended the account — log them straight back out.
+                // Block inactive accounts. Covers two cases:
+                //   (a) admin deactivated an active account
+                //   (b) farmer / manufacturer awaiting admin approval after signup
                 if ($identity && (int)$identity->get('is_active') === 0) {
                     $this->Authentication->logout();
-                    $this->Flash->error('This account has been deactivated. Please contact support.');
+                    $role = (string)$identity->get('role');
+                    if (in_array($role, ['farmer', 'manufacturer'], true)) {
+                        $this->Flash->error('Your account is awaiting admin approval. You will receive an email once it has been reviewed.');
+                    } else {
+                        $this->Flash->error('This account has been deactivated. Please contact support.');
+                    }
                     return $this->redirect(['action' => 'login']);
                 }
 
