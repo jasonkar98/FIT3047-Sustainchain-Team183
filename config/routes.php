@@ -64,10 +64,14 @@ return function (RouteBuilder $routes): void {
         ->setPatterns(['id' => '\d+'])
         ->setPass(['id']);
 
-        $builder->connect('/products/toggle-save/:id', 
+        $builder->connect('/products/toggle-save/:id',
             ['controller' => 'Products', 'action' => 'toggleSave'],
             ['_name' => 'products:togglesave', 'pass' => ['id'], 'id' => '[0-9]+']
         );
+        $builder->connect('/products/admin-toggle-listing/{id}',
+            ['controller' => 'Products', 'action' => 'adminToggleListing'])
+            ->setPatterns(['id' => '\d+'])
+            ->setPass(['id']);
 
         $builder->post('/chat/ask', ['controller' => 'Chat', 'action' => 'ask']);
         
@@ -100,12 +104,36 @@ return function (RouteBuilder $routes): void {
             $builder->connect('/enquiries/toggle-resolved/{id}', ['controller' => 'Enquiries', 'action' => 'toggleResolved'])
                 ->setPatterns(['id' => '\d+'])
                 ->setPass(['id']);
+            $builder->connect('/users', ['controller' => 'Users', 'action' => 'index']);
+            $builder->connect('/users/edit/{id}', ['controller' => 'Users', 'action' => 'edit'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/send-reset-link/{id}', ['controller' => 'Users', 'action' => 'sendResetLink'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/toggle-active/{id}', ['controller' => 'Users', 'action' => 'toggleActive'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/delete/{id}', ['controller' => 'Users', 'action' => 'delete'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/approvals', ['controller' => 'Users', 'action' => 'approvals']);
+            $builder->connect('/users/approve/{id}', ['controller' => 'Users', 'action' => 'approve'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/reject/{id}', ['controller' => 'Users', 'action' => 'reject'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
             $builder->fallbacks();
         });
         
         $builder->fallbacks();
     });
 
+    $routes->plugin('ContentBlocks', ['path' => '/admin/content-blocks'], function (RouteBuilder $builder): void {
+        $builder->connect('/', ['controller' => 'ContentBlocks', 'action' => 'index', 'prefix' => 'Admin']);
+        $builder->connect('/{action}/*', ['controller' => 'ContentBlocks', 'prefix' => 'Admin']);
+    });
     /*
      * If you need a different set of middleware or none at all,
      * open new scope and define routes there.

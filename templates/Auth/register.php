@@ -76,7 +76,7 @@ $this->assign('title', 'Register new user');
 
         <div class="auth-links">
             <?= $this->Html->link('Login', ['controller' => 'Auth', 'action' => 'login']) ?>
-            <?= $this->Html->link('Back', ['controller' => 'Pages', 'action' => 'landingPage']) ?>
+            <?= $this->Html->link('Back', ['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>
         </div>
     </section>
 </div>
