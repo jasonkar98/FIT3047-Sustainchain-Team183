@@ -16,7 +16,7 @@ use Cake\ORM\Entity;
  * @property bool $is_active
  * @property string $first_name
  * @property string $last_name
- * @property string|null $avatar
+ * @property string|null $profile
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
  * @property string|null $nonce
@@ -45,7 +45,7 @@ class User extends Entity
         'password' => true,
         'first_name' => true,
         'last_name' => true,
-        'avatar' => true,
+        'profile' => true,
         'role' => true,   
         'goals' => true,
         'business_values' => true,

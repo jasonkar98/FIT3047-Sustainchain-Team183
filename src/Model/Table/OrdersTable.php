@@ -51,6 +51,11 @@ class OrdersTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
+
+        $this->hasMany('OrderItems', [
+            'foreignKey' => 'order_id',
+            'dependent'  => true,
+        ]);
     }
 
     /**

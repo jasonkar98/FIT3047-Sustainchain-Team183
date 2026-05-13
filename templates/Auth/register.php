@@ -283,7 +283,7 @@ tr, td {
             <p class="auth-card-subtitle">Set up your profile to get started.</p>
 
             <?= $this->Flash->render() ?>
-            <?= $this->Form->create($user, ['class' => 'auth-form']) ?>
+            <?= $this->Form->create($user, ['class' => 'auth-form', 'type' => 'file']) ?>
 
             <?= $this->Form->control('email', ['placeholder' => 'name@company.com', 'required' => true]); ?>
 
@@ -293,11 +293,20 @@ tr, td {
             </div>
 
             <?php if (h($this->request->getData('role')) == 'manufacturer'): ?>
-                <?= $this->Form->control('goals', ['label' => 'Business Goals', 'placeholder' => 'Describe your business goals...', 'type' => 'textarea', 'autocomplete' => 'off']); ?>
-                <?= $this->Form->control('business_values', ['label' => 'Business Values', 'placeholder' => 'Describe your business values...', 'type' => 'textarea', 'autocomplete' => 'off']); ?>
+                <?= $this->Form->control('goals', ['label' => 'Business Goals', 'placeholder' => 'Describe your business goals...', 'type' => 'textarea']); ?>
+                <?= $this->Form->control('business_values', ['label' => 'Business Values', 'placeholder' => 'Describe your business values...', 'type' => 'textarea']); ?>
+                <?= $this->Form->control('profile', [
+                    'type'     => 'file',
+                    'label'    => 'Profile image (optional)',
+                    'accept'   => 'image/*',
+                    'class'    => 'btn-file',
+                ]) ?>
+                <p class="auth-card-subtitle" style="margin-top:.35rem;">
+                    Shown on your innovator profile and on the Discover Innovators page. JPG / PNG / WebP up to a few MB.
+                </p>
             <?php endif; ?>
 
-            <?= $this->Form->control('role', ['type' => 'hidden', 'required' => true, 'default' => $role_selected]) ?>
+            <?= $this->Form->control('role', ['type' => 'hidden', 'required' => true, 'default' => $role_selected ?? $this->request->getData('role')]) ?>
 
             <div class="auth-grid">
                 <?php
@@ -321,7 +330,6 @@ tr, td {
                 <li>One special character</li>
             </ul>
 
-            <!-- <?= $this->Form->control('avatar', ['type' => 'file', 'label' => 'Profile photo (optional)']); ?> -->
 
             <?= $this->Form->hidden('submit_details', ['value' => 1]); ?>
             <?= $this->Form->button('Register', ['class' => 'button auth-primary-btn']) ?>

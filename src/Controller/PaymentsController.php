@@ -146,14 +146,47 @@ class PaymentsController extends AppController
                 $grandTotal += (float)$p->price * $qty;
             }
 
-            $ordersTable = $this->fetchTable('Orders');
-            $order = $ordersTable->newEntity([
-                'user_id'      => $userId,
-                'order_number' => 'SC-' . strtoupper(bin2hex(random_bytes(4))),
-                'total_amount' => $grandTotal,
-                'status'       => 'paid',
-            ]);
-            $ordersTable->saveOrFail($order);
+            $ordersTable     = $this->fetchTable('Orders');
+            $orderItemsTable = $this->fetchTable('OrderItems');
+
+            // Wrap order header + line items in a transaction. If any line
+            // item fails to write we don't want a phantom order with no
+            // contents (and no per-product sales data).
+            $order = $ordersTable->getConnection()->transactional(function () use (
+                $ordersTable, $orderItemsTable, $userId, $grandTotal, $products, $cartQtys
+            ) {
+                $order = $ordersTable->newEntity([
+                    'user_id'      => $userId,
+                    'order_number' => 'SC-' . strtoupper(bin2hex(random_bytes(4))),
+                    'total_amount' => $grandTotal,
+                    'status'       => 'paid',
+                ]);
+                $ordersTable->saveOrFail($order);
+
+                foreach ($products as $p) {
+                    $qty = (int)($cartQtys[$p->id] ?? 1);
+                    if ($qty < 1) {
+                        continue;
+                    }
+
+                    // Snapshot the unit price at time of purchase so future
+                    // price/discount changes don't rewrite history.
+                    $unitPrice = (float)$p->price;
+                    if (!empty($p->discount) && $p->discount > 0) {
+                        $unitPrice = $unitPrice * (1 - (float)$p->discount / 100);
+                    }
+
+                    $item = $orderItemsTable->newEntity([
+                        'order_id'   => $order->id,
+                        'product_id' => $p->id,
+                        'quantity'   => $qty,
+                        'unit_price' => round($unitPrice, 2),
+                    ]);
+                    $orderItemsTable->saveOrFail($item);
+                }
+
+                return $order;
+            });
 
             $session->write($sessionKey, $order->id);
             $session->delete('Cart.items');

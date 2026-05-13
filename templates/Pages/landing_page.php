@@ -151,7 +151,7 @@ $this->assign('title', 'SustainChain');
                     Meet our top manufacturers<br>leading the <em>sustainability revolution</em>
                 </h2>
             </div>
-            <a href="/manufacturers" class="btn btn-lime">Browse all innovators →</a>
+            <a href="<?= $this->Url->build(['controller' => 'Innovators', 'action' => 'index']) ?>" class="btn btn-lime">Browse all innovators →</a>
         </div>
 
         <div class="inno-grid">
