@@ -79,7 +79,7 @@
 /* ── Product grid ────────────────────────────────────────── */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
 }
 
@@ -277,7 +277,7 @@
 
 .marketplace-search {
     background: var(--s1);
-    padding: 1.5rem 2.5rem;
+    padding: 1.5rem 3rem;
     display: flex;
     justify-content: center;
 }
@@ -364,7 +364,9 @@
     display: flex;
     gap: 2rem;
     align-items: flex-start;
-    padding-bottom: 4rem;
+    padding: 0 3rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 /* ── Sidebar ─────────────────────────────────────────────── */
@@ -481,14 +483,24 @@
 
 .btn-clear-all {
     display: block;
-    text-align: left;
-    font-size: 0.8rem;
-    color: var(--g3);
-    text-decoration: underline;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--s2);
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    color: var(--g0);
+    text-decoration: none;
+    margin-top: 1rem;
+    padding: 0.7rem 1rem;
+    border: 1.5px solid var(--g3);
+    border-radius: var(--r16);
+    background: transparent;
     cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.btn-clear-all:hover {
+    background: var(--g3);
+    color: var(--white);
+    border-color: var(--g3);
 }
 
 /* ── Products column ─────────────────────────────────────── */
@@ -523,9 +535,9 @@
         no-repeat right 12px center;
     border: 1px solid var(--s2);
     border-radius: var(--r999);
-    padding: 0.5rem 2.25rem 0.5rem 1rem;
+    padding: 0.7rem 2.5rem 0.7rem 1.25rem;
     font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--g0);
     cursor: pointer;

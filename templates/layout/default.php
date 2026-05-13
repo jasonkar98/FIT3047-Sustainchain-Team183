@@ -168,6 +168,82 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             color: #ff7060;
         }
 
+        /* ── Flash toast notifications ── */
+        #flash-container {
+            position: fixed;
+            top: calc(var(--nav-height) + 1rem);
+            right: 1.25rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            pointer-events: none;
+        }
+
+        .message {
+            pointer-events: auto;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            min-width: 280px;
+            max-width: 380px;
+            background: #fff;
+            border-radius: 14px;
+            padding: 1rem 1.1rem;
+            box-shadow: 0 8px 32px rgba(13,31,20,.18), 0 2px 8px rgba(13,31,20,.1);
+            border-left: 4px solid #C0392B;
+            animation: toast-in .3s cubic-bezier(0.34,1.56,0.64,1) both;
+            transition: opacity .25s ease, transform .25s ease;
+        }
+
+        .message.toast-hiding {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        @keyframes toast-in {
+            from { opacity: 0; transform: translateX(24px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            margin-top: 1px;
+        }
+
+        .message.success .toast-icon { color: var(--g3); }
+        .message.error   .toast-icon { color: #C0392B; }
+        .message.warning .toast-icon { color: #E67E22; }
+        .message.info    .toast-icon { color: #2980B9; }
+
+        .toast-body {
+            flex: 1;
+        }
+
+        .toast-body p {
+            margin: 0;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #1a2e1b;
+            line-height: 1.5;
+        }
+
+        .toast-close {
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            line-height: 1;
+            font-size: 1.1rem;
+            transition: color .15s;
+            margin-top: 1px;
+        }
+        .toast-close:hover { color: #444; }
+
         /* Foundation: no horizontal scroll anywhere */
         html, body {
             max-width: 100vw;
@@ -708,8 +784,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </div>
 </nav>
 
-<main class="main">
+<div id="flash-container">
     <?= $this->Flash->render() ?>
+</div>
+
+<main class="main">
     <?= $this->fetch('content') ?>
 </main>
 
@@ -759,6 +838,39 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 </footer>
 
 <script>
+    // ── Toast notifications ──
+    (function () {
+        const icons = {
+            success: `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M6.5 10.5l2.5 2.5 4.5-5"/></svg>`,
+            error:   `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4m0 4h.01"/></svg>`,
+            warning: `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L18 17H2z"/><path d="M10 9v4m0 2h.01"/></svg>`,
+            info:    `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 9v5m0-7h.01"/></svg>`,
+        };
+
+        function dismissToast(el) {
+            el.classList.add('toast-hiding');
+            setTimeout(() => el.remove(), 270);
+        }
+
+        document.querySelectorAll('#flash-container .message').forEach(msg => {
+            // Detect type
+            const type = ['success','error','warning','info'].find(t => msg.classList.contains(t)) || 'success';
+
+            // Rebuild content
+            const originalContent = msg.innerHTML;
+            msg.innerHTML =
+                (icons[type] || icons.success) +
+                `<div class="toast-body">${originalContent}</div>` +
+                `<button class="toast-close" aria-label="Dismiss">&#x2715;</button>`;
+
+            // Close button
+            msg.querySelector('.toast-close').addEventListener('click', () => dismissToast(msg));
+
+            // Auto-dismiss after 5 s
+            setTimeout(() => dismissToast(msg), 5000);
+        });
+    })();
+
     const navSearch = document.getElementById('navSearch');
     const navSearchBtn = document.getElementById('navSearchBtn');
     const navSearchInput = navSearch.querySelector('.nav-search-input');
