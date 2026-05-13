@@ -616,8 +616,12 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             $currentPrefix     = $this->request->getParam('prefix');
         ?>
         <ul class="nav-links">
-            <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index'], ['class' => (!$currentPrefix && $currentController === 'Products') ? 'active' : '']) ?></li>
+            <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index'], ['class' => (!$currentPrefix && $currentController === 'Products' && $this->request->getParam('action') !== 'myListings') ? 'active' : '']) ?></li>
             <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add'], ['class' => (!$currentPrefix && $currentController === 'Enquiries') ? 'active' : '']) ?></li>
+            <?php if ($this->request->getAttribute('identity')): ?>
+                <li><?= $this->Html->link('Dashboard', ['prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'], ['class' => (!$currentPrefix && $currentController === 'Dashboard') ? 'active' : '']) ?></li>
+                <li><?= $this->Html->link('My Listings', ['prefix' => false, 'controller' => 'Products', 'action' => 'myListings'], ['class' => (!$currentPrefix && $currentController === 'Products' && $this->request->getParam('action') === 'myListings') ? 'active' : '']) ?></li>
+            <?php endif; ?>
         </ul>
     </div>
 
