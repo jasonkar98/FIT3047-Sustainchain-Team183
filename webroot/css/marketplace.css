@@ -363,7 +363,7 @@
 
 /* ── Sidebar ─────────────────────────────────────────────── */
 .filter-sidebar {
-    width: 220px;
+    width: 290px;
     flex-shrink: 0;
     background: var(--white);
     border: 1px solid var(--s2);
@@ -551,7 +551,9 @@
     color: var(--g0);
     text-decoration: none;
     background: var(--white);
-    transition: border-color 0.15s, background 0.15s;
+    transition:
+        border-color 0.15s,
+        background 0.15s;
 }
 
 .marketplace-pagination a:hover {
