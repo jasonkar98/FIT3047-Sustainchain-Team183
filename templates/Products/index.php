@@ -225,9 +225,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="marketplace-pagination">
-                <?= $this->Paginator->prev('← Prev') ?>
-                <?= $this->Paginator->numbers() ?>
-                <?= $this->Paginator->next('Next →') ?>
+                <?= $this->Paginator->prev('←') ?>
+                <?= $this->Paginator->numbers(['modulus' => 5]) ?>
+                <?= $this->Paginator->next('→') ?>
             </div>
         <?php endif; ?>
 

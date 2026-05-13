@@ -561,15 +561,18 @@
     background: var(--s1);
 }
 
+.marketplace-pagination .disabled a,
+.marketplace-pagination .disabled span {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: default;
+}
+
+.marketplace-pagination .current span,
 .marketplace-pagination .active span {
     background: var(--g0);
     color: var(--white);
     border-color: var(--g0);
-}
-
-.marketplace-pagination .disabled span {
-    color: var(--muted);
-    pointer-events: none;
 }
 
 .marketplace-pagination ul {
