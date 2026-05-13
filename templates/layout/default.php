@@ -26,7 +26,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <title><?= $this->fetch('title') ?></title>
     <?= $this->fetch('meta') ?>
     <?= $this->Html->meta('csrfToken', $this->request->getAttribute('csrfToken')) ?>
-    <?= $this->Html->css(['app', 'nav']) ?>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300;1,9..144,700&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <?= $this->Html->css(['fonts', 'app', 'nav']) ?>
     <?= $this->fetch('css') ?>
     <style>
         /* ── Toast notifications ── */
@@ -121,31 +125,54 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         .nav-user-btn {
             display: inline-flex;
             align-items: center;
+<<<<<<< HEAD
             justify-content: center;
             width: 36px;
             height: 36px;
             padding: 0;
             background: rgba(255, 255, 255, 0.06);
             color: rgba(255, 255, 255, 0.85);
+=======
+            gap: 0.45rem;
+            background: rgba(10, 64, 12, 0.08);
+            border: 1px solid rgba(10, 64, 12, 0.2);
+            color: #0A400C;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 0.4rem 0.9rem;
+            border-radius: var(--r999);
+>>>>>>> fix/UI
             cursor: pointer;
             transition: background 0.15s, border-color 0.15s;
         }
         .nav-user-btn:hover {
+<<<<<<< HEAD
             background: rgba(255, 255, 255, 0.12);
             border-color: rgba(255, 255, 255, 0.22);
+=======
+            background: rgba(10, 64, 12, 0.14);
+            border-color: rgba(10, 64, 12, 0.35);
+        }
+
+        .nav-user-btn .chevron {
+            width: 12px;
+            height: 12px;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+>>>>>>> fix/UI
         }
 
         .nav-user-btn .user-dot {
             width: 22px;
             height: 22px;
             border-radius: 50%;
-            background: var(--g3);
+            background: #0A400C;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.62rem;
             font-weight: 700;
-            color: var(--white);
+            color: #FEFAE0;
             flex-shrink: 0;
         }
 
@@ -155,8 +182,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             top: calc(100% + 0.6rem);
             right: 0;
             min-width: 200px;
-            background: var(--g0);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #0A400C;
+            border: 1px solid rgba(254, 250, 224, 0.12);
             border-radius: var(--r16);
             padding: 0.5rem;
             z-index: 200;
@@ -164,7 +191,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             pointer-events: none;
             transform: translateY(-6px);
             transition: opacity 0.18s ease, transform 0.18s ease;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 12px 40px rgba(10, 64, 12, 0.3);
         }
 
         .nav-dropdown.open {
@@ -235,6 +262,82 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             color: #ff7060;
         }
 
+        /* ── Flash toast notifications ── */
+        #flash-container {
+            position: fixed;
+            top: calc(var(--nav-height) + 1rem);
+            right: 1.25rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            pointer-events: none;
+        }
+
+        .message {
+            pointer-events: auto;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            min-width: 280px;
+            max-width: 380px;
+            background: #fff;
+            border-radius: 14px;
+            padding: 1rem 1.1rem;
+            box-shadow: 0 8px 32px rgba(13,31,20,.18), 0 2px 8px rgba(13,31,20,.1);
+            border-left: 4px solid #C0392B;
+            animation: toast-in .3s cubic-bezier(0.34,1.56,0.64,1) both;
+            transition: opacity .25s ease, transform .25s ease;
+        }
+
+        .message.toast-hiding {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        @keyframes toast-in {
+            from { opacity: 0; transform: translateX(24px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            margin-top: 1px;
+        }
+
+        .message.success .toast-icon { color: var(--g3); }
+        .message.error   .toast-icon { color: #C0392B; }
+        .message.warning .toast-icon { color: #E67E22; }
+        .message.info    .toast-icon { color: #2980B9; }
+
+        .toast-body {
+            flex: 1;
+        }
+
+        .toast-body p {
+            margin: 0;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #1a2e1b;
+            line-height: 1.5;
+        }
+
+        .toast-close {
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            line-height: 1;
+            font-size: 1.1rem;
+            transition: color .15s;
+            margin-top: 1px;
+        }
+        .toast-close:hover { color: #444; }
+
         /* Foundation: no horizontal scroll anywhere */
         html, body {
             max-width: 100vw;
@@ -277,6 +380,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 flex-wrap: wrap;
                 gap: 1rem !important;
                 padding-top: 0.25rem;
+<<<<<<< HEAD
+=======
+                border-top: 1px solid rgba(10, 64, 12, 0.1);
+>>>>>>> fix/UI
             }
             .nav-links li a {
                 padding: 0.25rem 0 !important;
@@ -591,7 +698,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             .my-listings-page table td:last-child button {
                 display: inline-block;
                 padding: 0.4rem 0.9rem;
-                background: #2e7d52;
+                background: #52796F;
                 color: #fff;
                 border-radius: 6px;
                 text-decoration: none;
@@ -635,7 +742,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 width: 36px !important;
                 height: 36px !important;
                 border-radius: 50% !important;
-                background: #2e7d52 !important;
+                background: #52796F !important;
                 color: #fff !important;
                 border: none !important;
                 align-items: center;
@@ -648,22 +755,79 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             body .slider-arrow.prev { left: 0 !important; right: auto !important; }
             body .slider-arrow.next { right: 0 !important; left: auto !important; }
             body .slider-arrow:hover {
-                background: #276a46 !important;
+                background: #354F52 !important;
             }
         }
+<<<<<<< HEAD
+=======
+
+        /* ---- Tighter nav clamping on tablet/mobile ---- */
+        .nav {
+            padding: 0.6rem 0.75rem !important;
+        }
+        .nav-left {
+            width: auto !important;
+            flex: 1 1 auto;
+            min-width: 0;
+            gap: 0.75rem !important;
+        }
+        .nav-right {
+            width: auto !important;
+            flex: 0 1 auto;
+            gap: 0.4rem !important;
+        }
+        .nav-links {
+            flex: 1 1 100%;
+            order: 99;
+            width: 100%;
+            justify-content: flex-start;
+            padding-top: 0.35rem;
+            border-top: 1px solid rgba(10, 64, 12, 0.1);
+        }
+        .nav-links li a {
+            padding: 0.25rem 0 !important;
+        }
+        /* User dropdown button: smaller + truncated name */
+        .nav-user-btn {
+            padding: 0.3rem 0.6rem !important;
+            font-size: 0.78rem !important;
+            max-width: 140px;
+        }
+        .nav-user-btn > span:not(.user-dot):not(.chevron) {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        /* Search icon stays compact */
+        .nav-search-icon {
+            padding: 4px !important;
+        }
+>>>>>>> fix/UI
     </style>
 </head>
 
 <body>
 <?php $identity = $this->request->getAttribute('identity'); ?>
 <nav class="nav">
+<<<<<<< HEAD
     <div class="nav-left">
         <a href="<?= $this->Url->build(['plugin' => false, 'prefix' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
             <div class="nav-logo-icon">🌿</div>
             <span class="nav-logo-name">Sustain<span>Chain</span></span>
         </a>
+=======
+    <a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
+        <img src="<?= $this->Url->image('logo.png') ?>" class="nav-logo-img" alt="Logo">
+        <span class="nav-logo-name">Sustain<span>Chain</span></span>
+    </a>
+>>>>>>> fix/UI
 
+        <?php
+            $currentController = $this->request->getParam('controller');
+            $currentPrefix     = $this->request->getParam('prefix');
+        ?>
         <ul class="nav-links">
+<<<<<<< HEAD
             <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
             <li><?= $this->Html->link('Marketplace', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
             <?php endif; ?>
@@ -686,6 +850,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <?php endif; ?>
             <?php if ($identity && $identity->get('role') === 'admin'): ?>
             <?= $this->Html->link('Content Block Management', ['prefix' => 'Admin', 'plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']) ?></li>
+=======
+            <li><?= $this->Html->link('About Us', ['prefix' => false, 'controller' => 'Pages', 'action' => 'about'], ['class' => (!$currentPrefix && $currentController === 'Pages' && $this->request->getParam('action') === 'about') ? 'active' : '']) ?></li>
+            <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index'], ['class' => (!$currentPrefix && $currentController === 'Products' && $this->request->getParam('action') !== 'myListings') ? 'active' : '']) ?></li>
+            <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add'], ['class' => (!$currentPrefix && $currentController === 'Enquiries') ? 'active' : '']) ?></li>
+            <?php if ($this->request->getAttribute('identity')): ?>
+                <li><?= $this->Html->link('Dashboard', ['prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'], ['class' => (!$currentPrefix && $currentController === 'Dashboard') ? 'active' : '']) ?></li>
+                <li><?= $this->Html->link('My Listings', ['prefix' => false, 'controller' => 'Products', 'action' => 'myListings'], ['class' => (!$currentPrefix && $currentController === 'Products' && $this->request->getParam('action') === 'myListings') ? 'active' : '']) ?></li>
+>>>>>>> fix/UI
             <?php endif; ?>
         </ul>
     </div>
@@ -789,7 +961,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </div>
 </nav>
 
+<<<<<<< HEAD
 <div class="toast-stack" id="toastStack">
+=======
+<div id="flash-container">
+>>>>>>> fix/UI
     <?= $this->Flash->render() ?>
 </div>
 
@@ -907,29 +1083,18 @@ input.addEventListener('keydown', e => e.key === 'Enter' && sendMessage());
         <div class="footer-col">
             <h4>Platform</h4>
             <ul>
-                <li><a href="#about">Features</a></li>
-                <li><a href="#marketplace">Marketplace</a></li>
+                <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
                 <li><a href="#innovators">Discover Innovators</a></li>
             </ul>
         </div>
 
-        <div class="footer-col">
-            <h4>Commerce</h4>
-            <ul>
-                <li><a href="/buyers">For Buyers</a></li>
-                <li><a href="/sellers">For Sellers</a></li>
-                <li><a href="/manufacturers">For Manufacturers</a></li>
-                <li><a href="/farmers">For Farmers</a></li>
-            </ul>
-        </div>
 
         <div class="footer-col">
             <h4>Company</h4>
             <ul>
-                <li><a href="#mission">Our Mission</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/enquiries">Enquire</a></li>
-                <li><a href="/users/login">Log in</a></li>
+                <li><?= $this->Html->link('About Us', ['prefix' => false, 'controller' => 'Pages', 'action' => 'about']) ?></li>
+                <li><?= $this->Html->link('Enquire', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+                <li><?= $this->Html->link('Log in', ['prefix' => false, 'controller' => 'Auth', 'action' => 'login']) ?></li>
             </ul>
         </div>
     </div>
@@ -940,6 +1105,39 @@ input.addEventListener('keydown', e => e.key === 'Enter' && sendMessage());
 </footer>
 
 <script>
+    // ── Toast notifications ──
+    (function () {
+        const icons = {
+            success: `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M6.5 10.5l2.5 2.5 4.5-5"/></svg>`,
+            error:   `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4m0 4h.01"/></svg>`,
+            warning: `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L18 17H2z"/><path d="M10 9v4m0 2h.01"/></svg>`,
+            info:    `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 9v5m0-7h.01"/></svg>`,
+        };
+
+        function dismissToast(el) {
+            el.classList.add('toast-hiding');
+            setTimeout(() => el.remove(), 270);
+        }
+
+        document.querySelectorAll('#flash-container .message').forEach(msg => {
+            // Detect type
+            const type = ['success','error','warning','info'].find(t => msg.classList.contains(t)) || 'success';
+
+            // Rebuild content
+            const originalContent = msg.innerHTML;
+            msg.innerHTML =
+                (icons[type] || icons.success) +
+                `<div class="toast-body">${originalContent}</div>` +
+                `<button class="toast-close" aria-label="Dismiss">&#x2715;</button>`;
+
+            // Close button
+            msg.querySelector('.toast-close').addEventListener('click', () => dismissToast(msg));
+
+            // Auto-dismiss after 5 s
+            setTimeout(() => dismissToast(msg), 5000);
+        });
+    })();
+
     const navSearch = document.getElementById('navSearch');
     const navSearchBtn = document.getElementById('navSearchBtn');
 

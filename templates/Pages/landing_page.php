@@ -9,6 +9,12 @@ $this->assign('title', 'SustainChain');
 
 <!-- hero -->
 <section class="hero">
+    <!-- slideshow backgrounds -->
+    <div class="hero-slides">
+        <div class="hero-slide active" style="background-image:url('<?= $this->Url->image('HERO.png') ?>')"></div>
+        <div class="hero-slide" style="background-image:url('<?= $this->Url->image('cowsHomepage.png') ?>')"></div>
+        <div class="hero-slide" style="background-image:url('<?= $this->Url->image('cleanEnergy.png') ?>')"></div>
+    </div>
     <div class="hero-bg"></div>
     <div class="hero-inner">
         <div class="hero-left">
@@ -48,6 +54,13 @@ $this->assign('title', 'SustainChain');
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- slide dots -->
+    <div class="hero-dots">
+        <button class="hero-dot active" data-index="0" aria-label="Slide 1"></button>
+        <button class="hero-dot" data-index="1" aria-label="Slide 2"></button>
+        <button class="hero-dot" data-index="2" aria-label="Slide 3"></button>
     </div>
 </section>
 
@@ -99,6 +112,34 @@ $this->assign('title', 'SustainChain');
 </section>
 
 
+<!-- marketplace -->
+<section class="modes" id="marketplace" style="background-image:url('<?= $this->Url->image('marketplaceHomepage.png') ?>')">
+    <div class="modes-overlay"></div>
+    <div class="modes-text">
+        <h2 class="modes-heading">Shop Sustainable.<br>Live Better.</h2>
+        <p class="modes-sub">Discover eco-friendly products from brands that care for the planet.</p>
+        <div class="modes-actions">
+            <?= $this->Html->link('Shop Now', ['controller' => 'Products', 'action' => 'index'], ['class' => 'btn btn-lime btn-lg']) ?>
+            <a href="#about" class="btn btn-modes-outline btn-lg">Learn More</a>
+        </div>
+        <div class="modes-features">
+            <div class="modes-feature">
+                <span class="modes-feature-icon">🌿</span>
+                <span>Eco-Friendly<br>Products</span>
+            </div>
+            <div class="modes-feature">
+                <span class="modes-feature-icon">📦</span>
+                <span>Ethical<br>Sourcing</span>
+            </div>
+            <div class="modes-feature">
+                <span class="modes-feature-icon">🌍</span>
+                <span>Better for<br>Our Planet</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 <!-- discover innovators -->
 <section class="innovators" id="innovators">
     <div class="innovators-bg"></div>
@@ -107,7 +148,7 @@ $this->assign('title', 'SustainChain');
             <div>
                 <p class="t-label section-tag">Discover Innovators</p>
                 <h2 class="section-title t-display">
-                    Meet the makers<br>changing the world
+                    Meet our top manufacturers<br>leading the <em>sustainability revolution</em>
                 </h2>
             </div>
             <a href="/manufacturers" class="btn btn-lime">Browse all innovators →</a>
@@ -116,63 +157,23 @@ $this->assign('title', 'SustainChain');
         <div class="inno-grid">
             <div class="inno-card">
                 <?= $this->Html->image('manufacturerLanding.png', ['alt' => 'Circular packaging', 'class' => 'inno-img']) ?>
-                <span class="inno-badge">Manufacturer</span>
+                <span class="inno-badge">Reusables</span>
                 <p class="inno-title">Circular packaging solutions</p>
                 <p class="inno-desc">Manufacturers pioneering 100% compostable and reusable packaging for the food and logistics industry.</p>
-                <a href="/manufacturers" class="inno-cta">Explore category →</a>
             </div>
 
             <div class="inno-card">
                 <?= $this->Html->image('farmTech.png', ['alt' => 'Regenerative farming', 'class' => 'inno-img']) ?>
                 <span class="inno-badge">AgriTech</span>
                 <p class="inno-title">Regenerative farming tech</p>
-                <p class="inno-desc">Innovators bringing soil restoration, water-saving irrigation, and precision farming to smallholder farmers worldwide.</p>
-                <a href="/manufacturers" class="inno-cta">Explore category →</a>
+                <p class="inno-desc">Manufacturers bringing soil restoration, water-saving irrigation, and precision farming to smallholder farmers worldwide.</p>
             </div>
 
             <div class="inno-card">
                 <?= $this->Html->image('cleanEnergy.png', ['alt' => 'Clean energy production', 'class' => 'inno-img']) ?>
-                <span class="inno-badge">Clean Energy</span>
-                <p class="inno-title">Renewable-powered production</p>
-                <p class="inno-desc">Manufacturers who have committed to 100% renewable energy across their production lines - verified on-chain.</p>
-                <a href="/manufacturers" class="inno-cta">Explore category →</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<!-- marketplace -->
-<section class="modes" id="marketplace">
-    <div class="modes-inner">
-        <p class="t-label section-tag">Marketplace</p>
-        <h2 class="section-title t-display">
-            Built for every kind of<br><em>sustainable commerce</em>
-        </h2>
-
-        <div class="modes-grid">
-            <div class="mode-card b2c">
-                <span class="mode-chip">B2C · Consumer</span>
-                <h3 class="mode-title">Shop consciously</h3>
-                <p class="mode-desc">Discover and purchase eco-friendly products directly from verified sellers, farmers, and makers. Every product comes with full sustainability transparency.</p>
-                <ul class="mode-list">
-                    <li>Verified eco-labels on every product</li>
-                    <li>Carbon footprint scores at checkout</li>
-                    <li>Direct from farmers; no middlemen</li>
-                    <li>Community reviews and impact stories</li>
-                </ul>
-            </div>
-
-            <div class="mode-card b2b">
-                <span class="mode-chip">B2B · Business</span>
-                <h3 class="mode-title">Scale sustainably</h3>
-                <p class="mode-desc">Build lasting business-to-business relationships with partners who share your commitment to responsible commerce and environmental stewardship.</p>
-                <ul class="mode-list">
-                    <li>Bulk purchasing with verified suppliers</li>
-                    <li>Supply chain transparency dashboard</li>
-                    <li>Connect with certified manufacturers</li>
-                    <li>ESG reporting & compliance tools</li>
-                </ul>
+                <span class="inno-badge">Organic</span>
+                <p class="inno-title">Organically grown produce</p>
+                <p class="inno-desc">Manufacturers who have committed to 100% organic goods across their production lines - verified on-chain.</p>
             </div>
         </div>
     </div>
@@ -216,6 +217,36 @@ $this->assign('title', 'SustainChain');
 </section>
 
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots   = document.querySelectorAll('.hero-dot');
+    if (!slides.length) return;
+    let current = 0;
+    let timer;
+
+    function goTo(n) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (n + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+    }
+
+    function startTimer() { timer = setInterval(function () { goTo(current + 1); }, 5000); }
+    function resetTimer()  { clearInterval(timer); startTimer(); }
+
+    dots.forEach(function (dot) {
+        dot.addEventListener('click', function () {
+            goTo(parseInt(dot.dataset.index));
+            resetTimer();
+        });
+    });
+
+    startTimer();
+});
+</script>
+
 <!-- login/register -->
 <section class="final-cta">
     <div class="cta-blob">
@@ -229,8 +260,8 @@ $this->assign('title', 'SustainChain');
             committed to a greener future.
         </p>
         <div class="cta-actions">
-            <?= $this->Html->link('Sign in', ['controller' => 'Auth', 'action' => 'login'], ['class' => 'btn btn-outline btn-lg']) ?>
-            <?= $this->Html->link('Create an account', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'btn btn-lime btn-lg']) ?>
+            <?= $this->Html->link('Sign in', ['controller' => 'Auth', 'action' => 'login'], ['class' => 'btn btn-outline btn-lg btn-signin-cta']) ?>
+            <?= $this->Html->link('Create an account', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'btn btn-lime btn-lg btn-create']) ?>
         </div>
     </div>
 </section>

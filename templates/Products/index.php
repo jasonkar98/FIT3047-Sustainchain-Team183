@@ -6,7 +6,7 @@ $this->Html->css('marketplace', ['block' => true]);
 <!-- Page header — dark green banner, same style as the landing page hero -->
 <div class="marketplace-header">
     <div class="marketplace-header-inner">
-        <span class="t-label section-tag">SustainChain</span>
+        <span class="t-label section-tag">Welcome, to</span>
         <h1 class="marketplace-title t-display">
             The <em>sustainable</em> marketplace
         </h1>
@@ -31,7 +31,7 @@ $this->Html->css('marketplace', ['block' => true]);
         <?= $this->Form->button('Search', ['class' => 'btn btn-lime', 'type' => 'submit']) ?>
 
         <?php if ($this->request->getQuery('keyword')): ?>
-            <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn-outline">Clear</a>
+            <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn btn-outline">Clear</a>
         <?php endif; ?>
 
         <?php // Preserve any active filters/sort when re-searching ?>
@@ -56,7 +56,7 @@ $this->Html->css('marketplace', ['block' => true]);
 <!-- Results heading — only shows when there is a keyword AND results exist -->
 <?php if (!empty($this->request->getQuery('keyword')) && !$products->items()->isEmpty()): ?>
     <div class="search-results-label">
-        Results for <strong><?= h($this->request->getQuery('keyword')) ?></strong>
+        Here are your results for "<strong><?= h($this->request->getQuery('keyword')) ?></strong>"
     </div>
 <?php endif; ?>
 

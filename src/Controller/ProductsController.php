@@ -79,11 +79,8 @@ class ProductsController extends AppController
             }
         }
 
-        // Get distinct categories for sidebar
-        $conn = $this->Products->getConnection();
-        $result = $conn->execute('SELECT DISTINCT category FROM products WHERE category IS NOT NULL ORDER BY category');
-        $categoriesList = $result->fetchAll('assoc');
-        $categories = array_column($categoriesList, 'category');
+        // Fixed category list — matches the add/edit form options
+        $categories = ['Apparel', 'Bathroom', 'Beauty', 'Food', 'Kitchenware', 'Outdoors', 'Sporting', 'Supplements', 'Other'];
 
         $products = $this->paginate($query, ['limit' => 12]);
 

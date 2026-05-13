@@ -1,17 +1,17 @@
 :root {
-    --g0: #0d1f14;
-    --g1: #163824;
-    --g2: #1f5235;
-    --g3: #2e7d52;
-    --g4: #4daa7a;
-    --g5: #a3cfba;
-    --g6: #d9ede4;
-    --e0: #ffe066;
-    --e1: #c8e840;
-    --s0: #fff8f0;
-    --s2: #e2d5c3;
-    --ink: #0d1209;
-    --muted: #556652;
+    --g0: #0A400C;
+    --g1: #0d5210;
+    --g2: #0A400C;
+    --g3: #819067;
+    --g4: #B1AB86;
+    --g5: #d4ceb8;
+    --g6: #ede9d8;
+    --e0: #FEFAE0;
+    --e1: #B1AB86;
+    --s0: #FEFAE0;
+    --s2: #B1AB86;
+    --ink: #0A400C;
+    --muted: #819067;
     --white: #ffffff;
     --r8: 8px;
     --r16: 16px;
@@ -27,7 +27,11 @@ html {
 body {
     min-height: 100vh;
     margin: 0;
-    background: var(--g0);
+    background-color: var(--g0);
+    background-image: url('../img/signup.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     font-family: "Satoshi", "Cabinet Grotesk", system-ui, sans-serif;
     color: var(--white);
     overflow-x: hidden;
@@ -53,29 +57,14 @@ body {
     max-width: 1300px;
 }
 
-/* background radials matching hero */
+/* dark overlay so text stays readable over the background image */
 .auth-page::before {
     content: "";
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background:
-        radial-gradient(
-            ellipse 70% 60% at 80% 20%,
-            rgba(46, 125, 82, 0.22) 0%,
-            transparent 65%
-        ),
-        radial-gradient(
-            ellipse 50% 70% at 10% 90%,
-            rgba(200, 232, 64, 0.08) 0%,
-            transparent 55%
-        ),
-        radial-gradient(
-            ellipse 40% 40% at 50% 50%,
-            rgba(22, 56, 36, 0.6) 0%,
-            transparent 80%
-        );
+    background: rgba(5, 20, 6, 0.55);
 }
 
 .auth-hero {
@@ -92,8 +81,8 @@ body {
 .auth-card {
     position: relative;
     z-index: 2;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(10, 64, 12, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--r24);
     padding: 3rem;
     backdrop-filter: blur(12px);
@@ -105,9 +94,9 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(200, 232, 64, 0.12);
-    border: 1px solid rgba(200, 232, 64, 0.25);
-    color: var(--e1);
+    background: rgba(99, 112, 75, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--e0);
     padding: 0.35rem 1rem;
     border-radius: var(--r999);
     margin-bottom: 1.75rem;
@@ -115,6 +104,7 @@ body {
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+    backdrop-filter: blur(6px);
 }
 
 .eyebrow-dot {
@@ -154,8 +144,9 @@ body {
 .auth-subtitle {
     font-size: 1rem;
     line-height: 1.8;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.925);
     max-width: 380px;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
 }
 
 /* stat pills */
@@ -167,18 +158,19 @@ body {
 }
 
 .stat-pill {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(99, 112, 75,0.5);
+    border: 1px solid rgba(255, 255, 255, 0.621);
     border-radius: var(--r16);
     padding: 1rem 1.25rem;
+    backdrop-filter: blur(8px);
     transition:
         border-color 0.2s,
         background 0.2s;
 }
 
 .stat-pill:hover {
-    border-color: rgba(200, 232, 64, 0.2);
-    background: rgba(200, 232, 64, 0.04);
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(10, 64, 12, 0.65);
 }
 
 .stat-num {
@@ -192,15 +184,15 @@ body {
 
 .stat-desc {
     font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.8);
     margin-top: 0.3rem;
     line-height: 1.4;
 }
 
 /* ── Card side ── */
 .auth-card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(99, 112, 75,0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--r24);
     padding: 2.5rem;
     backdrop-filter: blur(12px);
@@ -218,7 +210,7 @@ body {
 
 .auth-card h2 {
     font-family: "Fraunces", Georgia, serif;
-    font-size: 1.75rem;
+    font-size: 1.8rem;
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--white);
@@ -227,8 +219,8 @@ body {
 }
 
 .auth-card-subtitle {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.893);
     margin-bottom: 2rem;
     line-height: 1.5;
 }
@@ -271,7 +263,7 @@ body {
 .fg select:focus {
     border-color: var(--g3);
     background: var(--white);
-    box-shadow: 0 0 0 3px rgba(46, 125, 82, 0.1);
+    box-shadow: 0 0 0 3px rgba(10, 64, 12, 0.1);
 }
 
 .auth-form input::placeholder,
@@ -288,11 +280,11 @@ body {
 .fg label {
     display: block;
     font-family: "Cabinet Grotesk", sans-serif;
-    font-size: 0.72rem;
+    font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--g6);
     margin-bottom: 0.5rem;
 }
 
@@ -315,8 +307,8 @@ body {
     justify-content: center;
     width: 100%;
     padding: 0.75rem 1.5rem;
-    background: var(--e1);
-    color: var(--g0);
+    background: #63704b;
+    color: var(--e0);
     border: none;
     border-radius: var(--r16);
     font-family: inherit;
@@ -325,7 +317,7 @@ body {
     letter-spacing: -0.01em;
     cursor: pointer;
     margin-top: 0.5rem;
-    box-shadow: 0 4px 16px rgba(200, 232, 64, 0.25);
+    box-shadow: 0 4px 16px rgba(10, 64, 12, 0.25);
     transition:
         transform 0.18s var(--ease-spring),
         background 0.18s,
@@ -334,8 +326,8 @@ body {
 
 .button.auth-primary-btn:hover,
 .auth-primary-btn.button:hover {
-    background: var(--e0);
-    box-shadow: 0 8px 24px rgba(200, 232, 64, 0.35);
+    background: var(--g1);
+    box-shadow: 0 8px 24px rgba(10, 64, 12, 0.35);
     transform: translateY(-2px);
 }
 
@@ -388,27 +380,28 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(99, 112, 75, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--r16);
     padding: 14px 16px;
+    backdrop-filter: blur(8px);
     transition:
         border-color 0.2s,
         background 0.2s;
 }
 
 .auth-step:hover {
-    border-color: rgba(200, 232, 64, 0.2);
-    background: rgba(200, 232, 64, 0.04);
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(99, 112, 75, 0.6);
 }
 
 .step-num {
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background: rgba(200, 232, 64, 0.12);
-    border: 1px solid rgba(200, 232, 64, 0.25);
-    color: var(--e1);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: var(--e0);
     font-size: 11px;
     font-weight: 700;
     display: flex;
@@ -426,7 +419,7 @@ body {
 
 .step-desc {
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.85);
     margin-top: 3px;
     line-height: 1.4;
 }
