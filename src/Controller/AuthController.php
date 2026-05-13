@@ -64,6 +64,17 @@ class AuthController extends AppController
 
                 $user = $this->Users->patchEntity($user, $data);
 
+                if ($user['role'] == 'manufacturer' or $user['role'] == 'farmer') {
+                    $user['is_active'] = 0;
+
+                    if ($this->Users->save($user)) {
+                        $this->Flash->success('You have requested a ' . $user['role'] . ' account creation. Please wait for account verification before logging in.');
+
+                        return $this->redirect(['action' => 'login']);
+                    }
+
+                }
+
                 if ($this->Users->save($user)) {
                     $this->Flash->success('You have been registered. Please log in. ');
 
