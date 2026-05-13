@@ -831,7 +831,7 @@ a {
 }
 .footer-tagline {
     font-size: 0.82rem;
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.85);
     line-height: 1.6;
     max-width: 240px;
 }
@@ -841,7 +841,7 @@ a {
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.9);
     margin-bottom: 1.25rem;
 }
 .footer-col ul {
@@ -852,7 +852,7 @@ a {
 }
 .footer-col a {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(255, 255, 255, 0.8);
     transition: color 0.2s;
 }
 .footer-col a:hover {
@@ -862,7 +862,7 @@ a {
     max-width: 1180px;
     margin: 2.5rem auto 0;
     padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -871,7 +871,7 @@ a {
 }
 .footer-copy {
     font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.75);
 }
 
 /* ── Nav search (expandable) ───────────────────────────── */

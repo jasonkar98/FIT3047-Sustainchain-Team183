@@ -23,7 +23,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 1rem 2.5rem;
-    background: rgba(99, 112, 75, 0.97);
+    background: rgb(108, 143, 84);
     backdrop-filter: blur(18px) saturate(1.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     transition: padding 0.3s;
@@ -50,7 +50,7 @@
 .nav-logo-name {
     font-family: "Raleway", "Cabinet Grotesk", sans-serif;
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     letter-spacing: -0.03em;
     color: var(--e0);
 }
@@ -59,14 +59,14 @@
 }
 
 .nav-logo-img {
-    width: 48px;
-    height: 48px;
+    width: 55px;
+    height: 55px;
     min-width: 48px;
     object-fit: contain;
     border-radius: 10px;
     flex-shrink: 0;
     display: block;
-    filter: brightness(1.8) drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+    filter: brightness(1.4) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
 }
 
 .nav-links {
