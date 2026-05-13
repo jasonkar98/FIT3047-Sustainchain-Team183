@@ -918,7 +918,7 @@ input.addEventListener('keydown', e => e.key === 'Enter' && sendMessage());
             <ul>
                 <li><a href="/buyers">For Buyers</a></li>
                 <li><a href="/sellers">For Sellers</a></li>
-                <li><?= $this->Html->link('For Manufacturers', ['controller' => 'Innovators', 'action' => 'index']) ?></li>
+                <li><a href="/manufacturers">For Manufacturers</a></li>
                 <li><a href="/farmers">For Farmers</a></li>
             </ul>
         </div>
