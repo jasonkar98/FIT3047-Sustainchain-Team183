@@ -69,7 +69,7 @@ return function (RouteBuilder $routes): void {
             ['_name' => 'products:togglesave', 'pass' => ['id'], 'id' => '[0-9]+']
         );
 
-        $builder->post('/chat/ask', ['controller' => 'Chat', 'action' => 'ask', 'prefix' => null]);
+        $builder->post('/chat/ask', ['controller' => 'Chat', 'action' => 'ask']);
         
         /*
          * Connect catchall routes for all controllers.
