@@ -99,7 +99,8 @@ class AuthController extends AppController
                     // select email template
                     $mailer
                         ->viewBuilder()
-                        ->setTemplate('reset_password');
+                        ->setTemplate('reset_password')
+                        ->setLayout('sustainchain');
 
                     // transfer required view variables to email template
                     $mailer
