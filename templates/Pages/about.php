@@ -249,7 +249,7 @@ $this->assign('title', 'About SustainChain');
     font-size: 2.5rem;
     font-weight: 700;
     color: var(--g0);
-    opacity: 0.15;
+    opacity: 0.5;
     line-height: 1;
     margin-bottom: 0.5rem;
 }

@@ -28,7 +28,7 @@
 
 </style>
 
-<div class="product-card">
+<div class="product-card" style="position: relative;">
     <div class="product-img-wrap">
         <?php if (!empty($product->image_url)): ?>
             <?= $this->Html->image('products/' . $product->image_url, [

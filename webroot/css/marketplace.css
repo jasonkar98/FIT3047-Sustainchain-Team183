@@ -193,12 +193,27 @@
         background 0.18s,
         transform 0.18s var(--ease-spring),
         box-shadow 0.18s;
+    position: static;
+}
+
+/* Stretched link — covers the whole card */
+.btn-product::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
 }
 
 .btn-product:hover {
     background: var(--g2);
-    transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(13, 31, 20, 0.2);
+}
+
+/* Card hover effect when stretched link is hovered */
+.product-card:has(.btn-product:hover) {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(13,31,20,.12);
 }
 
 /* ── Responsive ──────────────────────────────────────────── */
@@ -219,6 +234,7 @@
     position: absolute;
     top: 0.6rem;
     right: 0.6rem;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
