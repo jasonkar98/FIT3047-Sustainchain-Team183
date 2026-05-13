@@ -246,26 +246,26 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         /* Tablet and mobile < 1024px*/
         @media (max-width: 1023px) {
 
-    .nav {
-        display: grid !important;
-        grid-template-columns: auto 1fr auto !important;
-        grid-template-areas:
-            "logo  spacer  search"
-            "links links   user"
-            !important;
-        gap: 0.35rem 0.5rem !important;
-        align-items: center;
-        padding: 0.6rem 0.75rem !important;
-        height: auto !important;
-        min-height: 68px;
-    }
-
-    /* Let children of nav-left / nav-right participate directly
-       in the nav grid (no layout boxes of their own) */
-            .nav-left,
-            .nav-right {
-                display: contents !important;
+            .nav {
+                display: grid !important;
+                grid-template-columns: auto 1fr auto !important;
+                grid-template-areas:
+                    "logo  spacer  search"
+                    "links links   user"
+                    !important;
+                gap: 0.35rem 0.5rem !important;
+                align-items: center;
+                padding: 0.6rem 0.75rem !important;
+                height: auto !important;
+                min-height: 68px;
             }
+
+        /* Let children of nav-left / nav-right participate directly
+        in the nav grid (no layout boxes of their own) */
+                .nav-left,
+                .nav-right {
+                    display: contents !important;
+                }
 
             .nav-logo {
                 grid-area: logo;
@@ -329,6 +329,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 right: 0 !important;
                 left: auto !important;
             }
+        }
 
         /* ==== MOBILE ONLY  (< 640px) ==== */
         @media (max-width: 639px) {
@@ -658,6 +659,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 </head>
 
 <body>
+<?php $identity = $this->request->getAttribute('identity'); ?>
 <nav class="nav">
     <div class="nav-left">
         <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
@@ -666,24 +668,42 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </a>
 
         <ul class="nav-links">
-            <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link('Discover Innovators', ['prefix' => false, 'controller' => 'Innovators', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link('Contact', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+            <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+            <li><?= $this->Html->link('Marketplace', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
+            <?php endif; ?>
+            <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+            <li><?= $this->Html->link('Discover Innovators', ['plugin' => false, 'prefix' => false, 'controller' => 'Innovators', 'action' => 'index']) ?></li>
+            <?php endif; ?> 
+            <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+                <li><?= $this->Html->link('Contact', ['plugin' => false, 'prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+            <?php endif; ?>
+
+            <!-- Admin-only links -->
+            <?php if ($identity && $identity->get('role') === 'admin'): ?>
+                <li><?= $this->Html->link('Product Management', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
+            <?php endif; ?>
+            <?php if ($identity && $identity->get('role') === 'admin'): ?>
+                <li><?= $this->Html->link('User Management', ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'index']) ?></li>
+            <?php endif; ?>
+            <?php if ($identity && $identity->get('role') === 'admin'): ?>
+                <li><?= $this->Html->link('Enquiry Management', ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Enquiries', 'action' => 'index']) ?></li>
+            <?php endif; ?>
         </ul>
     </div>
 
     <div class="nav-right">
-        
+        <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
         <div class="nav-search" id="navSearch">
-        <button class="nav-search-icon" id="navSearchBtn" aria-label="Search">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-        </button>
-        <form class="nav-search-form" action="<?= $this->Url->build(['prefix' => false,'controller' => 'Products', 'action' => 'index'], ['fullBase' => true]) ?>" method="get">
-        <input type="text" name="keyword" class="nav-search-input" placeholder="Search products..." />
-        </form>
-    </div>
+            <button class="nav-search-icon" id="navSearchBtn" aria-label="Search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+            </button>
+            <form class="nav-search-form" action="<?= $this->Url->build(['prefix' => false,'controller' => 'Products', 'action' => 'index'], ['fullBase' => true]) ?>" method="get">
+            <input type="text" name="keyword" class="nav-search-input" placeholder="Search products..." />
+            </form>
+            </div>
+        <?php endif; ?>
 
         <?php
         $cartQtys = $this->request->getSession()->read('Cart.items') ?? [];
@@ -692,18 +712,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             if (is_int($id) && is_int($qty) && $qty > 0) $cartCount += $qty;
         }
         ?>
-        <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Cart', 'action' => 'index']) ?>" class="nav-cart-link nav-search-icon" aria-label="Cart">
-            <svg width="18" height="18" viewBox="0 0 122.9 107.5" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3.9,7.9C1.8,7.9,0,6.1,0,3.9C0,1.8,1.8,0,3.9,0h10.2c0.1,0,0.3,0,0.4,0c3.6,0.1,6.8,0.8,9.5,2.5c3,1.9,5.2,4.8,6.4,9.1 c0,0.1,0,0.2,0.1,0.3l1,4H119c2.2,0,3.9,1.8,3.9,3.9c0,0.4-0.1,0.8-0.2,1.2l-10.2,41.1c-0.4,1.8-2,3-3.8,3v0H44.7 c1.4,5.2,2.8,8,4.7,9.3c2.3,1.5,6.3,1.6,13,1.5h0.1v0h45.2c2.2,0,3.9,1.8,3.9,3.9c0,2.2-1.8,3.9-3.9,3.9H62.5v0 c-8.3,0.1-13.4-0.1-17.5-2.8c-4.2-2.8-6.4-7.6-8.6-16.3l0,0L23,13.9c0-0.1,0-0.1-0.1-0.2c-0.6-2.2-1.6-3.7-3-4.5 c-1.4-0.9-3.3-1.3-5.5-1.3c-0.1,0-0.2,0-0.3,0H3.9L3.9,7.9z M96,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C86.4,92.6,90.7,88.3,96,88.3L96,88.3z M53.9,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C44.3,92.6,48.6,88.3,53.9,88.3L53.9,88.3z M33.7,23.7l8.9,33.5h63.1l8.3-33.5H33.7L33.7,23.7z"/>
-            </svg>
-            <?php if ($cartCount > 0): ?>
-                <span class="nav-cart-badge"><?= $cartCount ?></span>
-            <?php endif; ?>
-        </a>
+        <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+            <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Cart', 'action' => 'index']) ?>" class="nav-cart-link nav-search-icon" aria-label="Cart">
+                <svg width="18" height="18" viewBox="0 0 122.9 107.5" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.9,7.9C1.8,7.9,0,6.1,0,3.9C0,1.8,1.8,0,3.9,0h10.2c0.1,0,0.3,0,0.4,0c3.6,0.1,6.8,0.8,9.5,2.5c3,1.9,5.2,4.8,6.4,9.1 c0,0.1,0,0.2,0.1,0.3l1,4H119c2.2,0,3.9,1.8,3.9,3.9c0,0.4-0.1,0.8-0.2,1.2l-10.2,41.1c-0.4,1.8-2,3-3.8,3v0H44.7 c1.4,5.2,2.8,8,4.7,9.3c2.3,1.5,6.3,1.6,13,1.5h0.1v0h45.2c2.2,0,3.9,1.8,3.9,3.9c0,2.2-1.8,3.9-3.9,3.9H62.5v0 c-8.3,0.1-13.4-0.1-17.5-2.8c-4.2-2.8-6.4-7.6-8.6-16.3l0,0L23,13.9c0-0.1,0-0.1-0.1-0.2c-0.6-2.2-1.6-3.7-3-4.5 c-1.4-0.9-3.3-1.3-5.5-1.3c-0.1,0-0.2,0-0.3,0H3.9L3.9,7.9z M96,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C86.4,92.6,90.7,88.3,96,88.3L96,88.3z M53.9,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C44.3,92.6,48.6,88.3,53.9,88.3L53.9,88.3z M33.7,23.7l8.9,33.5h63.1l8.3-33.5H33.7L33.7,23.7z"/>
+                </svg>
+                <?php if ($cartCount > 0): ?>
+                    <span class="nav-cart-badge"><?= $cartCount ?></span>
+                <?php endif; ?>
+            </a>
+        <?php endif; ?>
 
-        <?php $identity = $this->request->getAttribute('identity'); ?>
         <?php if ($identity): ?>
-
             <div class="nav-user-wrap">
                 <button
                     class="nav-search-icon"
@@ -732,20 +752,22 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                         ) ?>
                         <div class="dropdown-divider"></div>
                     <?php endif; ?>
-
+                    
+                    <?php if ($identity->get('role') !== 'admin'): ?>
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 3V2m6 1V2M2 7h12"/></svg> Dashboard',
                         ['prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
-
+                    <?php endif; ?>
+                    
+                    <?php if ($identity->get('role') !== 'admin'): ?>
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1L2 6.3l4.2-.7z"/></svg> My Listings',
                         ['prefix' => false, 'controller' => 'Products', 'action' => 'myListings'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
-
-                    <div class="dropdown-divider"></div>
+                    <?php endif; ?>
 
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3H3v10h3m3-7 3 3-3 3m3-3H6"/></svg> Log out',

@@ -91,9 +91,9 @@ if ($viewerOwnsProduct) {
 
 </style>
 
-<a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'view', $product->id]) ?>" class="product-card">
+<a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'view', $product->id]) ?>"
+   class="product-card<?= $isUnlisted ? ' is-unlisted' : '' ?>">
 
-<div class="product-card<?= $isUnlisted ? ' is-unlisted' : '' ?>">
     <div class="product-img-wrap">
         <?php if ($isUnlisted): ?>
             <span class="product-card-delisted-badge<?= ($product->unlist_reason ?? null) === 'admin' ? ' is-admin' : '' ?>">
