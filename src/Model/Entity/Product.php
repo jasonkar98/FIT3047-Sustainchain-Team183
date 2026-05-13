@@ -17,6 +17,7 @@ use Cake\ORM\Entity;
  * @property string|null $image_url
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
+ * @property float|null $discount
  * @property \App\Model\Entity\Filtertag[] $filtertags
  */
 class Product extends Entity
@@ -34,6 +35,7 @@ class Product extends Entity
         'name' => true,
         'description' => true,
         'price' => true,
+        'discount' => true,
         'category' => true,
         'user_id' => true,
         'image_url' => true,
