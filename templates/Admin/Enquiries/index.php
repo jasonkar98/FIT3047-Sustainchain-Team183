@@ -227,7 +227,7 @@ $this->assign('title', 'Admin — Enquiries');
     <div class="admin-toolbar">
         <?= $this->Html->link(
             '← Back to dashboard',
-            ['prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
+            ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
             ['class' => 'admin-back', 'escape' => false]
         ) ?>
 

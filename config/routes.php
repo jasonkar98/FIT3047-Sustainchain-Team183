@@ -130,6 +130,10 @@ return function (RouteBuilder $routes): void {
         $builder->fallbacks();
     });
 
+    $routes->plugin('ContentBlocks', ['path' => '/admin/content-blocks'], function (RouteBuilder $builder): void {
+        $builder->connect('/', ['controller' => 'ContentBlocks', 'action' => 'index', 'prefix' => 'Admin']);
+        $builder->connect('/{action}/*', ['controller' => 'ContentBlocks', 'prefix' => 'Admin']);
+    });
     /*
      * If you need a different set of middleware or none at all,
      * open new scope and define routes there.

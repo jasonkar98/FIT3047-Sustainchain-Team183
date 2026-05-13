@@ -250,7 +250,7 @@ class AuthController extends AppController
                 $isAdmin = $identity && ($identity->get('role') === 'admin');
 
                 $fallbackLocation = $isAdmin
-                    ? ['prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index']
+                    ? ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index']
                     : ['controller' => 'Dashboard', 'action' => 'index'];
 
                 return $this->redirect($this->Authentication->getLoginRedirect() ?? $fallbackLocation);

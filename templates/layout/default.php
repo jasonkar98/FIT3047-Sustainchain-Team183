@@ -662,7 +662,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <?php $identity = $this->request->getAttribute('identity'); ?>
 <nav class="nav">
     <div class="nav-left">
-        <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
+        <a href="<?= $this->Url->build(['plugin' => false, 'prefix' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
             <div class="nav-logo-icon">🌿</div>
             <span class="nav-logo-name">Sustain<span>Chain</span></span>
         </a>
@@ -687,6 +687,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <?php endif; ?>
             <?php if ($identity && $identity->get('role') === 'admin'): ?>
                 <li><?= $this->Html->link('Enquiry Management', ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Enquiries', 'action' => 'index']) ?></li>
+            <?php endif; ?>
+            <?php if ($identity && $identity->get('role') === 'admin'): ?>
+            <?= $this->Html->link('Content Block Management', ['prefix' => 'Admin', 'plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']) ?></li>
             <?php endif; ?>
         </ul>
     </div>
@@ -713,7 +716,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         }
         ?>
         <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
-            <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Cart', 'action' => 'index']) ?>" class="nav-cart-link nav-search-icon" aria-label="Cart">
+            <a href="<?= $this->Url->build(['plugin' => false, 'prefix' => false, 'controller' => 'Cart', 'action' => 'index']) ?>" class="nav-cart-link nav-search-icon" aria-label="Cart">
                 <svg width="18" height="18" viewBox="0 0 122.9 107.5" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3.9,7.9C1.8,7.9,0,6.1,0,3.9C0,1.8,1.8,0,3.9,0h10.2c0.1,0,0.3,0,0.4,0c3.6,0.1,6.8,0.8,9.5,2.5c3,1.9,5.2,4.8,6.4,9.1 c0,0.1,0,0.2,0.1,0.3l1,4H119c2.2,0,3.9,1.8,3.9,3.9c0,0.4-0.1,0.8-0.2,1.2l-10.2,41.1c-0.4,1.8-2,3-3.8,3v0H44.7 c1.4,5.2,2.8,8,4.7,9.3c2.3,1.5,6.3,1.6,13,1.5h0.1v0h45.2c2.2,0,3.9,1.8,3.9,3.9c0,2.2-1.8,3.9-3.9,3.9H62.5v0 c-8.3,0.1-13.4-0.1-17.5-2.8c-4.2-2.8-6.4-7.6-8.6-16.3l0,0L23,13.9c0-0.1,0-0.1-0.1-0.2c-0.6-2.2-1.6-3.7-3-4.5 c-1.4-0.9-3.3-1.3-5.5-1.3c-0.1,0-0.2,0-0.3,0H3.9L3.9,7.9z M96,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C86.4,92.6,90.7,88.3,96,88.3L96,88.3z M53.9,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C44.3,92.6,48.6,88.3,53.9,88.3L53.9,88.3z M33.7,23.7l8.9,33.5h63.1l8.3-33.5H33.7L33.7,23.7z"/>
                 </svg>
@@ -747,7 +750,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <?php if ($identity->get('role') === 'admin'): ?>
                         <?= $this->Html->link(
                             '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l6 3v5c0 3.5-2.5 6-6 7-3.5-1-6-3.5-6-7V4z"/></svg> Admin Dashboard',
-                            ['prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
+                            ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
                             ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                         ) ?>
                         <div class="dropdown-divider"></div>
@@ -756,7 +759,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <?php if ($identity->get('role') !== 'admin'): ?>
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 3V2m6 1V2M2 7h12"/></svg> Dashboard',
-                        ['prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'],
+                        ['plugin' => false,'prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
                     <?php endif; ?>
@@ -764,14 +767,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <?php if ($identity->get('role') !== 'admin'): ?>
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1L2 6.3l4.2-.7z"/></svg> My Listings',
-                        ['prefix' => false, 'controller' => 'Products', 'action' => 'myListings'],
+                        ['plugin' => false,'prefix' => false, 'controller' => 'Products', 'action' => 'myListings'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
                     <?php endif; ?>
 
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3H3v10h3m3-7 3 3-3 3m3-3H6"/></svg> Log out',
-                        ['prefix' => false, 'controller' => 'Auth', 'action' => 'logout'],
+                        ['plugin' => false, 'prefix' => false, 'controller' => 'Auth', 'action' => 'logout'],
                         ['class' => 'dropdown-item danger', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
                 </div>
@@ -859,7 +862,7 @@ async function sendMessage() {
         // Read CSRF token from cookie (how CakePHP sets it)
         const csrfToken = document.querySelector('meta[name="csrfToken"]')?.content ?? '';
 
-        const res = await fetch('<?= $this->Url->build(['controller' => 'Chat', 'action' => 'ask']) ?>', {
+        const res = await fetch('<?= $this->request->getAttribute('base') ?>/chat/ask', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -896,7 +899,7 @@ input.addEventListener('keydown', e => e.key === 'Enter' && sendMessage());
             <div class="footer-logo-wrap">
                 <span class="footer-logo-name">Sustain<span>Chain</span></span>
             </div>
-            <p class="footer-tagline">A vibrant marketplace for responsible consumption and a greener future.</p>
+            <p class="footer-tagline"><?= $this->ContentBlock->text('footer-content') ?></p>
         </div>
 
         <div class="footer-col">
@@ -930,7 +933,7 @@ input.addEventListener('keydown', e => e.key === 'Enter' && sendMessage());
     </div>
 
     <div class="footer-bottom">
-        <p class="footer-copy">© <?= date('Y') ?> SustainChain. All rights reserved.</p>
+        <p class="footer-copy"><?= $this->ContentBlock->text('footer-copyright') ?></p>
     </div>
 </footer>
 
