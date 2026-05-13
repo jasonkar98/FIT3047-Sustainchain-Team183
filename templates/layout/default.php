@@ -36,30 +36,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         .nav-user-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.45rem;
-            background: rgba(200, 232, 64, 0.1);
-            border: 1px solid rgba(200, 232, 64, 0.22);
-            color: var(--e1);
-            font-size: 0.82rem;
-            font-weight: 700;
-            padding: 0.4rem 0.9rem;
-            border-radius: var(--r999);
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.85);
             cursor: pointer;
             transition: background 0.15s, border-color 0.15s;
-            font-family: inherit;
-            letter-spacing: -0.01em;
         }
-
         .nav-user-btn:hover {
-            background: rgba(200, 232, 64, 0.18);
-            border-color: rgba(200, 232, 64, 0.4);
-        }
-
-        .nav-user-btn .chevron {
-            width: 12px;
-            height: 12px;
-            transition: transform 0.2s ease;
-            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.22);
         }
 
         .nav-user-btn .user-dot {
@@ -98,10 +86,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             opacity: 1;
             pointer-events: auto;
             transform: translateY(0);
-        }
-
-        .nav-user-btn[aria-expanded="true"] .chevron {
-            transform: rotate(180deg);
         }
 
         .dropdown-header {
@@ -246,16 +230,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             .nav-user-wrap {
                 grid-area: user;
                 justify-self: end;
-            }
-            .nav-user-btn {
-                padding: 0.3rem 0.6rem !important;
-                font-size: 0.78rem !important;
-                max-width: 140px;
-            }
-            .nav-user-btn > span:not(.user-dot):not(.chevron) {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
             }
 
             /* Auth (logged-out) buttons also land in the user slot */
@@ -590,11 +564,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             font-size: 0.78rem !important;
             max-width: 140px;
         }
-        .nav-user-btn > span:not(.user-dot):not(.chevron) {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+
         /* Search icon stays compact */
         .nav-search-icon {
             padding: 4px !important;
@@ -612,7 +582,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
         <ul class="nav-links">
             <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+            <li><?= $this->Html->link('Discover Innovators', ['prefix' => false, 'controller' => 'Innovators', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link('Contact', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
         </ul>
     </div>
 
@@ -634,27 +605,20 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <?php $identity = $this->request->getAttribute('identity'); ?>
         <?php if ($identity): ?>
 
-            <!-- User dropdown -->
-            <button
-                class="nav-user-btn"
-                id="user-menu-btn"
-                aria-haspopup="true"
-                aria-expanded="false"
-                aria-controls="user-menu"
-                onclick="toggleUserMenu()"
-            >
-                <div class="user-dot">
-                    <?php 
-                        // Fallback to 'U' if first_name is null to prevent substr error
-                        $fName = $identity->first_name ?? 'User';
-                        echo strtoupper(substr(h($fName), 0, 1)); 
-                    ?>
-                </div>
-                <?= h($identity->first_name ?? 'Account') ?>
-                <svg class="chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M2 4l4 4 4-4"/>
-                </svg>
-            </button>
+            <div class="nav-user-wrap">
+                <button
+                    class="nav-search-icon"
+                    id="user-menu-btn"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="user-menu"
+                    aria-label="User menu"
+                    onclick="toggleUserMenu()"
+                >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                </button>
 
                 <div class="nav-dropdown" id="user-menu" role="menu">
                     <div class="dropdown-header">
