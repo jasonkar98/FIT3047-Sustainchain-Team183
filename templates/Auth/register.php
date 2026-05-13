@@ -297,7 +297,7 @@ tr, td {
                 <?= $this->Form->control('business_values', ['label' => 'Business Values', 'placeholder' => 'Describe your business values...', 'type' => 'textarea']); ?>
             <?php endif; ?>
 
-            <?= $this->Form->control('role', ['type' => 'hidden', 'required' => true, 'default' => $role_selected]) ?>
+            <?= $this->Form->control('role', ['type' => 'hidden', 'required' => true, 'default' => $role_selected ?? $this->request->getData('role')]) ?>
 
             <div class="auth-grid">
                 <?php

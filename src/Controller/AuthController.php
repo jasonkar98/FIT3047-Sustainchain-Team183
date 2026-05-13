@@ -71,6 +71,12 @@ class AuthController extends AppController
                 }
                 $this->Flash->error('The user could not be registered. Please, try again.');
                 $this->set('step', 2);
+
+                // Re-expose the role to the template so the hidden role
+                // field on the step-2 form keeps its value through the
+                // failed-validation re-render. Without this, the template
+                // hits an undefined-variable warning on $role_selected.
+                $this->set('role_selected', $data['role'] ?? null);
             }
         }
 
@@ -79,9 +85,20 @@ class AuthController extends AppController
 
     public function view($id = null)
     {
-        
+
         $user = $this->Authentication->getIdentity();
-        $this->set(compact('user'));
+
+        // Top 3 most-sold products in the last 30 days (only meaningful for
+        // sellers / manufacturers / farmers — buyers will simply see an
+        // empty-state message). Delegated to InnovatorsController so the
+        // ranking logic lives in one place.
+        $topProducts = [];
+        if ($user) {
+            $innovators = new \App\Controller\InnovatorsController($this->request);
+            $topProducts = $innovators->topProductsFor((int)$user->get('id'));
+        }
+
+        $this->set(compact('user', 'topProducts'));
     }
 
     public function edit($id = null)

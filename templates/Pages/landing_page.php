@@ -110,7 +110,7 @@ $this->assign('title', 'SustainChain');
                     Meet the makers<br>changing the world
                 </h2>
             </div>
-            <a href="/manufacturers" class="btn btn-lime">Browse all innovators →</a>
+            <a href="<?= $this->Url->build(['controller' => 'Innovators', 'action' => 'index']) ?>" class="btn btn-lime">Browse all innovators →</a>
         </div>
 
         <div class="inno-grid">
@@ -119,7 +119,7 @@ $this->assign('title', 'SustainChain');
                 <span class="inno-badge">Manufacturer</span>
                 <p class="inno-title">Circular packaging solutions</p>
                 <p class="inno-desc">Manufacturers pioneering 100% compostable and reusable packaging for the food and logistics industry.</p>
-                <a href="/manufacturers" class="inno-cta">Explore category →</a>
+                <a href="<?= $this->Url->build(['controller' => 'Innovators', 'action' => 'index']) ?>" class="inno-cta">Explore category →</a>
             </div>
 
             <div class="inno-card">
@@ -127,7 +127,7 @@ $this->assign('title', 'SustainChain');
                 <span class="inno-badge">AgriTech</span>
                 <p class="inno-title">Regenerative farming tech</p>
                 <p class="inno-desc">Innovators bringing soil restoration, water-saving irrigation, and precision farming to smallholder farmers worldwide.</p>
-                <a href="/manufacturers" class="inno-cta">Explore category →</a>
+                <a href="<?= $this->Url->build(['controller' => 'Innovators', 'action' => 'index']) ?>" class="inno-cta">Explore category →</a>
             </div>
 
             <div class="inno-card">
@@ -135,7 +135,7 @@ $this->assign('title', 'SustainChain');
                 <span class="inno-badge">Clean Energy</span>
                 <p class="inno-title">Renewable-powered production</p>
                 <p class="inno-desc">Manufacturers who have committed to 100% renewable energy across their production lines - verified on-chain.</p>
-                <a href="/manufacturers" class="inno-cta">Explore category →</a>
+                <a href="<?= $this->Url->build(['controller' => 'Innovators', 'action' => 'index']) ?>" class="inno-cta">Explore category →</a>
             </div>
         </div>
     </div>

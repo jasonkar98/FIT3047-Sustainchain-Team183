@@ -350,6 +350,13 @@ tr, td {
                 <p class="product-view-desc"><?= h($user->business_values) ?></p>
             <?php endif; ?>
 
+            <?php if (in_array((string)$user->role, ['manufacturer', 'farmer', 'seller'], true)): ?>
+                <?= $this->element('top_products', [
+                    'topProducts' => $topProducts ?? [],
+                    'heading'     => 'Your most-sold products this month',
+                ]) ?>
+            <?php endif; ?>
+
         </div>
 
         <div class="product-view-divider"></div>

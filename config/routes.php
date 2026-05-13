@@ -70,6 +70,11 @@ return function (RouteBuilder $routes): void {
         );
 
         $builder->post('/chat/ask', ['controller' => 'Chat', 'action' => 'ask']);
+
+        $builder->connect('/innovators', ['controller' => 'Innovators', 'action' => 'index']);
+        $builder->connect('/innovators/{id}', ['controller' => 'Innovators', 'action' => 'view'])
+            ->setPatterns(['id' => '\d+'])
+            ->setPass(['id']);
         
         /*
          * Connect catchall routes for all controllers.
