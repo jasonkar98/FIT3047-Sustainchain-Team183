@@ -195,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <option value="newest"    <?= ($search['sort'] ?? 'newest') === 'newest'    ? 'selected' : '' ?>>Newest arrivals</option>
                     <option value="price_asc" <?= ($search['sort'] ?? '') === 'price_asc'  ? 'selected' : '' ?>>Price: Low to High</option>
                     <option value="price_desc"<?= ($search['sort'] ?? '') === 'price_desc' ? 'selected' : '' ?>>Price: High to Low</option>
+                    <option value="discount_desc" <?= ($search['sort'] ?? '') === 'discount_desc' ? 'selected' : '' ?>>Discount: High to Low</option>
                     <option value="name_asc"  <?= ($search['sort'] ?? '') === 'name_asc'   ? 'selected' : '' ?>>A–Z by name</option>
                     <option value="name_desc" <?= ($search['sort'] ?? '') === 'name_desc'  ? 'selected' : '' ?>>Z–A by name</option>
                 </select>

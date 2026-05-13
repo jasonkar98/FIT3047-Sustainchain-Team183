@@ -67,7 +67,15 @@
     <div class="product-card-body">
         <span class="product-category"><?= h($product->category) ?></span>
         <h3 class="product-name"><?= h($product->name) ?></h3>
-        <p class="product-price">$<?= h(number_format($product->price, 2)) ?></p>
+        <p class="product-price">
+            <?php if (!empty($product->discount) && $product->discount > 0): ?>
+                <span class="product-price-original">$<?= h(number_format($product->price, 2)) ?></span>
+                $<?= h(number_format($product->price * (1 - $product->discount / 100), 2)) ?>
+                <span class="product-discount-badge">-<?= h($product->discount) ?>%</span>
+            <?php else: ?>
+                $<?= h(number_format($product->price, 2)) ?>
+            <?php endif; ?>
+        </p>
         <p class="product-desc"><?= h(mb_strimwidth($product->description, 0, 90, '...')) ?></p>
     </div>
 </a>

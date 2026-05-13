@@ -57,15 +57,19 @@ class ProductsController extends AppController
 
         // Sorting
         $sortOptions = [
-            'price_asc'  => ['Products.price' => 'ASC'],
-            'price_desc' => ['Products.price' => 'DESC'],
-            'newest'     => ['Products.created' => 'DESC'],
-            'name_asc'   => ['Products.name' => 'ASC'],
-            'name_desc'  => ['Products.name' => 'DESC'],
+            'price_asc'     => ['(Products.price * (1 - COALESCE(Products.discount, 0) / 100))' => 'ASC'],
+            'price_desc'    => ['(Products.price * (1 - COALESCE(Products.discount, 0) / 100))' => 'DESC'],
+            'newest'        => ['Products.created' => 'DESC'],
+            'name_asc'      => ['Products.name' => 'ASC'],
+            'name_desc'     => ['Products.name' => 'DESC'],
+            'discount_desc' => ['Products.discount' => 'DESC'],
         ];
+
         $sort = $search['sort'] ?? 'newest';
         if (isset($sortOptions[$sort])) {
-            $query->orderBy($sortOptions[$sort]);
+            foreach ($sortOptions[$sort] as $field => $direction) {
+                $query->orderBy($query->newExpr($field . ' ' . $direction));
+            }
         }
 
         // Get distinct categories for sidebar
