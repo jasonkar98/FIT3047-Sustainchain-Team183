@@ -18,7 +18,7 @@
     --e0: #FEFAE0;
     --e1: #f0e7ae;
     --e2: #050605;
-    --s0: #FEFAE0;
+    --s0: #79a15f;
     --s1: #f5f1e0;
     --s2: #B1AB86;
     --ink: #0A400C;
@@ -37,7 +37,7 @@ html {
 }
 
 body {
-    background: var(--s0);
+    background: var(--s1);
     color: var(--ink);
     font-family: "Raleway", "Satoshi", "Cabinet Grotesk", sans-serif;
     font-weight: 400;
