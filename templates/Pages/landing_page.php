@@ -148,7 +148,7 @@ $this->assign('title', 'SustainChain');
             <div>
                 <p class="t-label section-tag">Discover Innovators</p>
                 <h2 class="section-title t-display">
-                    Meet the makers<br>changing the world
+                    Meet our top manufacturers<br>leading the <em>sustainability revolution</em>
                 </h2>
             </div>
             <a href="/manufacturers" class="btn btn-lime">Browse all innovators →</a>
@@ -157,26 +157,23 @@ $this->assign('title', 'SustainChain');
         <div class="inno-grid">
             <div class="inno-card">
                 <?= $this->Html->image('manufacturerLanding.png', ['alt' => 'Circular packaging', 'class' => 'inno-img']) ?>
-                <span class="inno-badge">Manufacturer</span>
+                <span class="inno-badge">Reusables</span>
                 <p class="inno-title">Circular packaging solutions</p>
                 <p class="inno-desc">Manufacturers pioneering 100% compostable and reusable packaging for the food and logistics industry.</p>
-                <a href="/manufacturers" class="inno-cta">Explore category →</a>
             </div>
 
             <div class="inno-card">
                 <?= $this->Html->image('farmTech.png', ['alt' => 'Regenerative farming', 'class' => 'inno-img']) ?>
                 <span class="inno-badge">AgriTech</span>
                 <p class="inno-title">Regenerative farming tech</p>
-                <p class="inno-desc">Innovators bringing soil restoration, water-saving irrigation, and precision farming to smallholder farmers worldwide.</p>
-                <a href="/manufacturers" class="inno-cta">Explore category →</a>
+                <p class="inno-desc">Manufacturers bringing soil restoration, water-saving irrigation, and precision farming to smallholder farmers worldwide.</p>
             </div>
 
             <div class="inno-card">
                 <?= $this->Html->image('cleanEnergy.png', ['alt' => 'Clean energy production', 'class' => 'inno-img']) ?>
-                <span class="inno-badge">Clean Energy</span>
-                <p class="inno-title">Renewable-powered production</p>
-                <p class="inno-desc">Manufacturers who have committed to 100% renewable energy across their production lines - verified on-chain.</p>
-                <a href="/manufacturers" class="inno-cta">Explore category →</a>
+                <span class="inno-badge">Organic</span>
+                <p class="inno-title">Organically grown produce</p>
+                <p class="inno-desc">Manufacturers who have committed to 100% organic goods across their production lines - verified on-chain.</p>
             </div>
         </div>
     </div>
