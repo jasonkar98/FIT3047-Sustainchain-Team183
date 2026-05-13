@@ -285,11 +285,11 @@ tr, td {
             <?= $this->Flash->render() ?>
             <?= $this->Form->create($user, ['class' => 'auth-form']) ?>
 
-            <?= $this->Form->control('email', ['placeholder' => 'name@company.com']); ?>
+            <?= $this->Form->control('email', ['placeholder' => 'name@company.com', 'required' => true]); ?>
 
             <div class="auth-grid">
-                <?= $this->Form->control('first_name', ['label' => 'First name', 'placeholder' => 'Ava', 'pattern' => '[a-zA-Z ]+']); ?>
-                <?= $this->Form->control('last_name', ['label' => 'Last name', 'placeholder' => 'Patel', 'pattern' => '[a-zA-Z ]+']); ?>
+                <?= $this->Form->control('first_name', ['label' => 'First name', 'placeholder' => 'Ava', 'required' => true,  'pattern' => '[a-zA-Z ]+']); ?>
+                <?= $this->Form->control('last_name', ['label' => 'Last name', 'placeholder' => 'Patel', 'required' => true,  'pattern' => '[a-zA-Z ]+']); ?>
             </div>
 
             <?php if (h($this->request->getData('role')) == 'manufacturer'): ?>
