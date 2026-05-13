@@ -260,8 +260,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 min-height: 68px;
             }
 
-        /* Let children of nav-left / nav-right participate directly
-        in the nav grid (no layout boxes of their own) */
                 .nav-left,
                 .nav-right {
                     display: contents !important;
@@ -279,7 +277,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 flex-wrap: wrap;
                 gap: 1rem !important;
                 padding-top: 0.25rem;
-                border-top: 1px solid rgba(255, 255, 255, 0.08);
             }
             .nav-links li a {
                 padding: 0.25rem 0 !important;
@@ -328,6 +325,43 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 max-width: calc(100vw - 1rem) !important;
                 right: 0 !important;
                 left: auto !important;
+            }
+
+            /* ---- Tighter nav clamping on tablet/mobile ---- */
+            .nav {
+                padding: 0.6rem 0.75rem !important;
+            }
+            .nav-left {
+                width: auto !important;
+                flex: 1 1 auto;
+                min-width: 0;
+                gap: 0.75rem !important;
+            }
+            .nav-right {
+                width: auto !important;
+                flex: 0 1 auto;
+                gap: 0.4rem !important;
+            }
+            .nav-links {
+                flex: 1 1 100%;
+                order: 99;
+                width: 100%;
+                justify-content: flex-start;
+                padding-top: 0.35rem;
+            }
+            .nav-links li a {
+                padding: 0.25rem 0 !important;
+            }
+            /* User dropdown button: smaller + truncated name */
+            .nav-user-btn {
+                padding: 0.3rem 0.6rem !important;
+                font-size: 0.78rem !important;
+                max-width: 140px;
+            }
+
+            /* Search icon stays compact */
+            .nav-search-icon {
+                padding: 4px !important;
             }
         }
 
@@ -617,44 +651,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 background: #276a46 !important;
             }
         }
-
-        /* ---- Tighter nav clamping on tablet/mobile ---- */
-        .nav {
-            padding: 0.6rem 0.75rem !important;
-        }
-        .nav-left {
-            width: auto !important;
-            flex: 1 1 auto;
-            min-width: 0;
-            gap: 0.75rem !important;
-        }
-        .nav-right {
-            width: auto !important;
-            flex: 0 1 auto;
-            gap: 0.4rem !important;
-        }
-        .nav-links {
-            flex: 1 1 100%;
-            order: 99;
-            width: 100%;
-            justify-content: flex-start;
-            padding-top: 0.35rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .nav-links li a {
-            padding: 0.25rem 0 !important;
-        }
-        /* User dropdown button: smaller + truncated name */
-        .nav-user-btn {
-            padding: 0.3rem 0.6rem !important;
-            font-size: 0.78rem !important;
-            max-width: 140px;
-        }
-
-        /* Search icon stays compact */
-        .nav-search-icon {
-            padding: 4px !important;
-        }
     </style>
 </head>
 
@@ -940,28 +936,20 @@ input.addEventListener('keydown', e => e.key === 'Enter' && sendMessage());
 <script>
     const navSearch = document.getElementById('navSearch');
     const navSearchBtn = document.getElementById('navSearchBtn');
-    const navSearchInput = navSearch.querySelector('.nav-search-input');
 
-    navSearchBtn.addEventListener('click', () => {
-        navSearch.classList.toggle('open');
-        if (navSearch.classList.contains('open')) {
-            navSearchInput.focus();
-        }
-    });
-
-    // Close when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!navSearch.contains(e.target)) {
-            navSearch.classList.remove('open');
-        }
-    });
-
-    // Submit on Enter
-    navSearchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            navSearchInput.closest('form').submit();
-        }
-    });
+    if (navSearch && navSearchBtn) {
+        const navSearchInput = navSearch.querySelector('.nav-search-input');
+        navSearchBtn.addEventListener('click', () => {
+            navSearch.classList.toggle('open');
+            if (navSearch.classList.contains('open')) navSearchInput.focus();
+        });
+        document.addEventListener('click', (e) => {
+            if (!navSearch.contains(e.target)) navSearch.classList.remove('open');
+        });
+        navSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') navSearchInput.closest('form').submit();
+        });
+    }
 </script>
 
 <script>
