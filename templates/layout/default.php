@@ -125,14 +125,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         .nav-user-btn {
             display: inline-flex;
             align-items: center;
-<<<<<<< HEAD
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            padding: 0;
-            background: rgba(255, 255, 255, 0.06);
-            color: rgba(255, 255, 255, 0.85);
-=======
             gap: 0.45rem;
             background: rgba(10, 64, 12, 0.08);
             border: 1px solid rgba(10, 64, 12, 0.2);
@@ -141,15 +133,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             font-weight: 700;
             padding: 0.4rem 0.9rem;
             border-radius: var(--r999);
->>>>>>> fix/UI
             cursor: pointer;
             transition: background 0.15s, border-color 0.15s;
         }
         .nav-user-btn:hover {
-<<<<<<< HEAD
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.22);
-=======
             background: rgba(10, 64, 12, 0.14);
             border-color: rgba(10, 64, 12, 0.35);
         }
@@ -159,7 +146,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             height: 12px;
             transition: transform 0.2s ease;
             flex-shrink: 0;
->>>>>>> fix/UI
         }
 
         .nav-user-btn .user-dot {
@@ -380,10 +366,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 flex-wrap: wrap;
                 gap: 1rem !important;
                 padding-top: 0.25rem;
-<<<<<<< HEAD
-=======
                 border-top: 1px solid rgba(10, 64, 12, 0.1);
->>>>>>> fix/UI
             }
             .nav-links li a {
                 padding: 0.25rem 0 !important;
@@ -758,76 +741,22 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 background: #354F52 !important;
             }
         }
-<<<<<<< HEAD
-=======
-
-        /* ---- Tighter nav clamping on tablet/mobile ---- */
-        .nav {
-            padding: 0.6rem 0.75rem !important;
-        }
-        .nav-left {
-            width: auto !important;
-            flex: 1 1 auto;
-            min-width: 0;
-            gap: 0.75rem !important;
-        }
-        .nav-right {
-            width: auto !important;
-            flex: 0 1 auto;
-            gap: 0.4rem !important;
-        }
-        .nav-links {
-            flex: 1 1 100%;
-            order: 99;
-            width: 100%;
-            justify-content: flex-start;
-            padding-top: 0.35rem;
-            border-top: 1px solid rgba(10, 64, 12, 0.1);
-        }
-        .nav-links li a {
-            padding: 0.25rem 0 !important;
-        }
-        /* User dropdown button: smaller + truncated name */
-        .nav-user-btn {
-            padding: 0.3rem 0.6rem !important;
-            font-size: 0.78rem !important;
-            max-width: 140px;
-        }
-        .nav-user-btn > span:not(.user-dot):not(.chevron) {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        /* Search icon stays compact */
-        .nav-search-icon {
-            padding: 4px !important;
-        }
->>>>>>> fix/UI
     </style>
 </head>
 
 <body>
 <?php $identity = $this->request->getAttribute('identity'); ?>
 <nav class="nav">
-<<<<<<< HEAD
-    <div class="nav-left">
-        <a href="<?= $this->Url->build(['plugin' => false, 'prefix' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
-            <div class="nav-logo-icon">🌿</div>
-            <span class="nav-logo-name">Sustain<span>Chain</span></span>
-        </a>
-=======
     <a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
         <img src="<?= $this->Url->image('logo.png') ?>" class="nav-logo-img" alt="Logo">
         <span class="nav-logo-name">Sustain<span>Chain</span></span>
     </a>
->>>>>>> fix/UI
 
         <?php
             $currentController = $this->request->getParam('controller');
             $currentPrefix     = $this->request->getParam('prefix');
         ?>
         <ul class="nav-links">
-<<<<<<< HEAD
             <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
             <li><?= $this->Html->link('Marketplace', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
             <?php endif; ?>
@@ -850,14 +779,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <?php endif; ?>
             <?php if ($identity && $identity->get('role') === 'admin'): ?>
             <?= $this->Html->link('Content Block Management', ['prefix' => 'Admin', 'plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']) ?></li>
-=======
-            <li><?= $this->Html->link('About Us', ['prefix' => false, 'controller' => 'Pages', 'action' => 'about'], ['class' => (!$currentPrefix && $currentController === 'Pages' && $this->request->getParam('action') === 'about') ? 'active' : '']) ?></li>
-            <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index'], ['class' => (!$currentPrefix && $currentController === 'Products' && $this->request->getParam('action') !== 'myListings') ? 'active' : '']) ?></li>
-            <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add'], ['class' => (!$currentPrefix && $currentController === 'Enquiries') ? 'active' : '']) ?></li>
-            <?php if ($this->request->getAttribute('identity')): ?>
-                <li><?= $this->Html->link('Dashboard', ['prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'], ['class' => (!$currentPrefix && $currentController === 'Dashboard') ? 'active' : '']) ?></li>
-                <li><?= $this->Html->link('My Listings', ['prefix' => false, 'controller' => 'Products', 'action' => 'myListings'], ['class' => (!$currentPrefix && $currentController === 'Products' && $this->request->getParam('action') === 'myListings') ? 'active' : '']) ?></li>
->>>>>>> fix/UI
             <?php endif; ?>
         </ul>
     </div>
@@ -961,11 +882,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </div>
 </nav>
 
-<<<<<<< HEAD
 <div class="toast-stack" id="toastStack">
-=======
-<div id="flash-container">
->>>>>>> fix/UI
     <?= $this->Flash->render() ?>
 </div>
 

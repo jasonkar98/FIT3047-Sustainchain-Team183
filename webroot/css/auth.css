@@ -248,6 +248,7 @@ body {
         background 0.2s;
 }
 
+
 .auth-form input:hover,
 .auth-form textarea:hover,
 .auth-form select:hover,
@@ -261,8 +262,8 @@ body {
 .auth-form select:focus,
 .fg input:focus,
 .fg select:focus {
-    border-color: var(--g3);
-    background: var(--white);
+    border-color: var(--g);
+    background: var(--s2);
     box-shadow: 0 0 0 3px rgba(10, 64, 12, 0.1);
 }
 
