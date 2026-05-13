@@ -806,29 +806,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <div class="footer-col">
             <h4>Platform</h4>
             <ul>
-                <li><a href="#about">Features</a></li>
-                <li><a href="#marketplace">Marketplace</a></li>
+                <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
                 <li><a href="#innovators">Discover Innovators</a></li>
             </ul>
         </div>
 
-        <div class="footer-col">
-            <h4>Commerce</h4>
-            <ul>
-                <li><a href="/buyers">For Buyers</a></li>
-                <li><a href="/sellers">For Sellers</a></li>
-                <li><a href="/manufacturers">For Manufacturers</a></li>
-                <li><a href="/farmers">For Farmers</a></li>
-            </ul>
-        </div>
 
         <div class="footer-col">
             <h4>Company</h4>
             <ul>
-                <li><a href="#mission">Our Mission</a></li>
-                <li><?= $this->Html->link('About', ['prefix' => false, 'controller' => 'Pages', 'action' => 'about']) ?></li>
-                <li><a href="/enquiries">Enquire</a></li>
-                <li><a href="/users/login">Log in</a></li>
+                <li><?= $this->Html->link('About Us', ['prefix' => false, 'controller' => 'Pages', 'action' => 'about']) ?></li>
+                <li><?= $this->Html->link('Enquire', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+                <li><?= $this->Html->link('Log in', ['prefix' => false, 'controller' => 'Auth', 'action' => 'login']) ?></li>
             </ul>
         </div>
     </div>
