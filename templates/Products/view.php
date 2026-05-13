@@ -520,6 +520,7 @@ $this->Html->css('marketplace', ['block' => true]);
                 <?php endif; ?>
 
                 <div class="product-view-actions">
+                    <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
                     <?= $this->Form->create(null, ['url' => ['controller' => 'Cart', 'action' => 'add', $product->id]]) ?>
                         <button type="submit" class="btn-cart">
                             <svg class="btn-cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -529,6 +530,7 @@ $this->Html->css('marketplace', ['block' => true]);
                             Add to Cart
                         </button>
                     <?= $this->Form->end() ?>
+                    <?php endif; ?>
                 </div>
                 <?php if ($isUnlisted): ?>
                     <div class="product-view-delisted-banner<?= $unlistReason === 'admin' ? ' is-admin' : '' ?>">
