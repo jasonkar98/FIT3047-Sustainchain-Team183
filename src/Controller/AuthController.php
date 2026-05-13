@@ -70,7 +70,32 @@ class AuthController extends AppController
 
                 $user = $this->Users->patchEntity($user, $data);
 
+                if ($user['role'] == 'manufacturer' or $user['role'] == 'farmer') {
+                    $user['is_active'] = 0;
+
+                    if ($this->Users->save($user)) {
+                        $this->Flash->success('You have requested a ' . $user['role'] . ' account creation. Please wait for account verification before logging in.');
+
+                        return $this->redirect(['action' => 'login']);
+                    }
+
+                }
+
                 if ($this->Users->save($user)) {
+
+                    $mailer = new Mailer('default');
+                    $mailer
+                        ->setEmailFormat('both')
+                        ->setTo($user->email)
+                        ->setSubject('Welcome to SustainChain!');
+                    $mailer->viewBuilder()->setTemplate('welcome')->setLayout('sustainchain');
+                    $mailer->setViewVars([
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
+                    ]);
+                    $mailer->deliver();
+
                     $this->Flash->success('You have been registered. Please log in. ');
 
                     return $this->redirect(['action' => 'login']);
@@ -126,6 +151,7 @@ class AuthController extends AppController
 
             $user = $this->Users->patchEntity($user, $data);
             if ($this->Users->save($user)) {
+
                 $this->Authentication->setIdentity($user->toArray());
                 $this->Flash->success(__('The user has been saved.'));
 
@@ -313,10 +339,25 @@ class AuthController extends AppController
         if ($result && $result->isValid()) {
             if ($this->request->is('post')) {
                 $identity = $this->Authentication->getIdentity();
+
+                // Block inactive accounts. Covers two cases:
+                //   (a) admin deactivated an active account
+                //   (b) farmer / manufacturer awaiting admin approval after signup
+                if ($identity && (int)$identity->get('is_active') === 0) {
+                    $this->Authentication->logout();
+                    $role = (string)$identity->get('role');
+                    if (in_array($role, ['farmer', 'manufacturer'], true)) {
+                        $this->Flash->error('Your account is awaiting admin approval. You will receive an email once it has been reviewed.');
+                    } else {
+                        $this->Flash->error('This account has been deactivated. Please contact support.');
+                    }
+                    return $this->redirect(['action' => 'login']);
+                }
+
                 $isAdmin = $identity && ($identity->get('role') === 'admin');
 
                 $fallbackLocation = $isAdmin
-                    ? ['prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index']
+                    ? ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index']
                     : ['controller' => 'Dashboard', 'action' => 'index'];
 
                 return $this->redirect($this->Authentication->getLoginRedirect() ?? $fallbackLocation);

@@ -204,6 +204,14 @@ $this->assign('title', 'Admin — Enquiries');
         border-color: #2e7d52;
         color: #fff;
     }
+
+    /* Whole-row click affordance */
+    table.enquiries-table tr.clickable-row {
+        cursor: pointer;
+    }
+    table.enquiries-table tr.clickable-row:hover td {
+        background: #f5f9f6;
+    }
 </style>
 
 <div class="marketplace-header">
@@ -219,7 +227,7 @@ $this->assign('title', 'Admin — Enquiries');
     <div class="admin-toolbar">
         <?= $this->Html->link(
             '← Back to dashboard',
-            ['prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
+            ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
             ['class' => 'admin-back', 'escape' => false]
         ) ?>
 
@@ -252,7 +260,12 @@ $this->assign('title', 'Admin — Enquiries');
                 </thead>
                 <tbody>
                 <?php foreach ($enquiriesList as $enquiry): ?>
-                    <tr class="<?= $enquiry->is_read ? '' : 'is-unread' ?>">
+                    <?php $rowHref = $this->Url->build(['action' => 'view', $enquiry->id]); ?>
+                    <tr class="clickable-row<?= $enquiry->is_read ? '' : ' is-unread' ?>"
+                        data-href="<?= h($rowHref) ?>"
+                        tabindex="0"
+                        role="link"
+                        aria-label="<?= h('View enquiry: ' . $enquiry->subject) ?>">
                         <td data-label="Date"><?= $enquiry->date->i18nFormat('dd MMM YYYY') ?></td>
                         <td data-label="From"><?= h(mb_strimwidth($enquiry->full_name, 0, 10, '…')) ?></td>
                         <td data-label="Email"><?= h(mb_strimwidth($enquiry->email, 0, 18, '…')) ?></td>
@@ -302,3 +315,24 @@ $this->assign('title', 'Admin — Enquiries');
         </div>
     <?php endif; ?>
 </div>
+
+<script>
+// Make table rows fully clickable. Clicks on links/buttons/forms inside the
+// row are excluded so the per-row action buttons keep working.
+(function () {
+    document.querySelectorAll('tr.clickable-row[data-href]').forEach(function (row) {
+        var go = function () { window.location = row.dataset.href; };
+        row.addEventListener('click', function (e) {
+            if (e.target.closest('a, button, form, input, label, select, textarea')) return;
+            go();
+        });
+        row.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                if (e.target.closest('a, button, form, input, label, select, textarea')) return;
+                e.preventDefault();
+                go();
+            }
+        });
+    });
+})();
+</script>

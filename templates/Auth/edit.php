@@ -400,7 +400,7 @@ tr, td {
             Modify User Details
         </div>
         <h1 class="form-hero-title">
-            Modify Your User Details, <em><?= h($user->name) ?></em>
+            Modify Your User Details, <em><?= h($user->first_name) ?></em>
         </h1>
         <p class="form-hero-sub">
             Want to make changes to how others see you on our page? Submit this form and your updated user details will be seen by others.
