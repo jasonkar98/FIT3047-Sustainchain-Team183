@@ -61,33 +61,10 @@ class UsersTable extends Table
 
         $validator
             ->scalar('password')
-            ->minLength('password', 8, 'Password must be at least 8 characters')
             ->maxLength('password', 255)
-            ->add('password', 'hasUppercase', [
-                'rule' => ['custom', '/[A-Z]/'],
-                'message' => 'Password must contain at least one uppercase letter',
-            ])
-            ->add('password', 'hasNumber', [
-                'rule' => ['custom', '/[0-9]/'],
-                'message' => 'Password must contain at least one number',
-            ])
-            ->add('password', 'hasSpecial', [
-                'rule' => ['custom', '/[\W_]/'],
-                'message' => 'Password must contain at least one special character',
-            ])
             ->requirePresence('password', 'create')
             ->notEmptyString('password');
-        
-        $validator
-            ->add('password_confirm', 'matchesPassword', [
-                'rule' => function ($value, $context) {
-                    return $value === $context['data']['password'];
-                },
-                'message' => 'Passwords do not match',
-            ])
-            ->requirePresence('password_confirm', 'create')
-            ->notEmptyString('password_confirm', 'Please confirm your password');
-            
+
         $validator
             ->scalar('nonce')
             ->maxLength('nonce', 255)
@@ -96,6 +73,29 @@ class UsersTable extends Table
         $validator
             ->dateTime('nonce_expiry')
             ->allowEmptyDateTime('nonce_expiry');
+
+        return $validator;
+    }
+
+    /**
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationResetPassword(Validator $validator): Validator
+    {
+        $validator
+            ->scalar('password')
+            ->requirePresence('password', 'reset-password')
+            ->notEmptyString('password');
+
+        $validator
+            ->requirePresence('password_confirm', 'reset-password')
+            ->sameAs('password_confirm', 'password', 'Both passwords must match');
+
+        $validator
+            ->uuid('nonce')
+            ->maxLength('nonce', 128)
+            ->allowEmptyString('nonce');
 
         return $validator;
     }
