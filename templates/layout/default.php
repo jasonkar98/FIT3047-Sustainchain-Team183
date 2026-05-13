@@ -837,7 +837,7 @@ async function sendMessage() {
         // Read CSRF token from cookie (how CakePHP sets it)
         const csrfToken = document.querySelector('meta[name="csrfToken"]')?.content ?? '';
 
-        const res = await fetch('<?= $this->Url->build(['controller' => 'Chat', 'action' => 'ask']) ?>', {
+        const res = await fetch('<?= $this->request->getAttribute('base') ?>/chat/ask', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
