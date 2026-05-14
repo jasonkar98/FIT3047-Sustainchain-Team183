@@ -26,7 +26,7 @@ $this->assign('title', 'Get in Touch — SustainChain');
 <style>
 /* ── Hero banner ── */
 .form-hero {
-    background: var(--g0);
+    background: var(--s0);
     position: relative;
     overflow: hidden;
     padding: 5rem 2.5rem 4rem;
@@ -54,9 +54,9 @@ $this->assign('title', 'Get in Touch — SustainChain');
 }
 .form-eyebrow {
     display: inline-flex; align-items: center; gap: .5rem;
-    background: rgba(200,232,64,.12);
-    border: 1px solid rgba(200,232,64,.22);
-    color: var(--e1);
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.35);
+    color: var(--white);
     padding: .3rem 1rem; border-radius: var(--r999);
     margin-bottom: 1.25rem;
     animation: reveal .5s ease both;
@@ -70,7 +70,7 @@ $this->assign('title', 'Get in Touch — SustainChain');
 
 .form-hero-title {
     font-family: 'Fraunces', serif;
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: clamp(4rem, 5vw, 4rem);
     font-weight: 700; line-height: 1.05; letter-spacing: -0.03em;
     color: var(--white); margin-bottom: .75rem;
     animation: reveal .6s .1s ease both;
@@ -79,8 +79,8 @@ $this->assign('title', 'Get in Touch — SustainChain');
     font-style: italic; font-weight: 300; color: var(--e1);
 }
 .form-hero-sub {
-    font-size: 1rem; line-height: 1.7;
-    color: rgba(255,255,255,.45);
+    font-size: 1.5rem; line-height: 1.7;
+    color: rgba(255,255,255,.85);
     animation: reveal .6s .2s ease both;
 }
 
@@ -91,7 +91,7 @@ $this->assign('title', 'Get in Touch — SustainChain');
 
 /* ── Main form area ── */
 .form-main {
-    background: var(--s0);
+    background: var(--e0);
     padding: 4rem 2.5rem 6rem;
 }
 .form-main-inner {
@@ -126,7 +126,7 @@ $this->assign('title', 'Get in Touch — SustainChain');
 .form-card input[type="email"],
 .form-card textarea {
     width: 100%;
-    background: var(--s0);
+    background: var(--e0);
     border: 1.5px solid var(--s2);
     border-radius: var(--r16);
     padding: .85rem 1.1rem;

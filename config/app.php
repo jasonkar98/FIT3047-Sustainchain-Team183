@@ -17,7 +17,7 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
-    'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
+    'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
 
     /*
      * Configure basic information about the application.
@@ -58,7 +58,6 @@ return [
         'dir' => 'src',
         'webroot' => 'webroot',
         'wwwRoot' => WWW_ROOT,
-        //'baseUrl' => env('SCRIPT_NAME'),
         'fullBaseUrl' => env('APP_FULL_BASE_URL', false),
         'imageBaseUrl' => 'img/',
         'cssBaseUrl' => 'css/',
@@ -68,6 +67,10 @@ return [
             'templates' => [ROOT . DS . 'templates' . DS],
             'locales' => [RESOURCES . 'locales' . DS],
         ],
+    ],
+
+    'Gemini' => [
+        'apiKey' => env('GEMINI_API_KEY'),
     ],
 
     /*
@@ -93,7 +96,10 @@ return [
         //'timestamp' => true,
         // 'cacheTime' => '+1 year'
     ],
-
+    'Stripe' => [
+        'publishableKey' => env('STRIPE_PUBLISHABLE_KEY'),
+        'secretKey'      => env('STRIPE_SECRET_KEY'),
+    ],
     /*
      * Configure the cache adapters.
      */
@@ -252,7 +258,7 @@ return [
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => 'you@localhost',
+            'from' => ['sustainchainsupport@u26s1183.iedev.org' => 'SustainChain Support'],
             /*
              * Will by default be set to config value of App.encoding, if that exists otherwise to UTF-8.
              */

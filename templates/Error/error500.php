@@ -155,7 +155,7 @@ $this->assign('title', '500 - Server Error');
         <div class="error-actions">
             <?= $this->Html->link(
                 'Return to Home',
-                ['controller' => 'Pages', 'action' => 'landingPage', 'prefix' => false],
+                ['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage', 'prefix' => false],
                 ['class' => 'btn btn-lime']
             ) ?>
         </div>

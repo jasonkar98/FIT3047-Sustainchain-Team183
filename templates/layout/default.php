@@ -25,9 +25,99 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $this->fetch('title') ?></title>
     <?= $this->fetch('meta') ?>
-    <?= $this->Html->css(['app', 'nav']) ?>
+    <?= $this->Html->meta('csrfToken', $this->request->getAttribute('csrfToken')) ?>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300;1,9..144,700&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <?= $this->Html->css(['fonts', 'app', 'nav']) ?>
     <?= $this->fetch('css') ?>
     <style>
+        /* ── Toast notifications ── */
+        .toast-stack {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.25rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            pointer-events: none;
+        }
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #fff;
+            border: 1px solid var(--s2, #d8e8d8);
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(13,31,20,.15);
+            padding: 0.85rem 1rem 0.85rem 1.1rem;
+            min-width: 260px;
+            max-width: 360px;
+            pointer-events: all;
+            animation: toast-in .3s cubic-bezier(.22,1,.36,1) both;
+        }
+        .toast.removing {
+            animation: toast-out .25s ease forwards;
+        }
+        @keyframes toast-in {
+            from { opacity: 0; transform: translateX(30px) scale(.96); }
+            to   { opacity: 1; transform: translateX(0)  scale(1); }
+        }
+        @keyframes toast-out {
+            to { opacity: 0; transform: translateX(30px) scale(.96); max-height: 0; padding: 0; margin: 0; }
+        }
+        .toast-success { border-left: 4px solid #4caf50; }
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            stroke: #4caf50;
+        }
+        .toast-msg {
+            flex: 1;
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--g0, #0d1f14);
+            line-height: 1.3;
+        }
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            line-height: 1;
+            color: var(--ink, #3a4a3e);
+            opacity: 0.45;
+            cursor: pointer;
+            padding: 0 0.1rem;
+            transition: opacity 0.15s;
+        }
+        .toast-close:hover { opacity: 1; }
+
+        .nav-cart-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+        .nav-cart-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--lime, #c8e840);
+            color: var(--g0, #0d1f14);
+            font-size: 0.68rem;
+            font-weight: 800;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            border-radius: 999px;
+            line-height: 1;
+            letter-spacing: 0;
+        }
+
         .nav-user-wrap {
             position: relative;
         }
@@ -36,22 +126,19 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             display: inline-flex;
             align-items: center;
             gap: 0.45rem;
-            background: rgba(200, 232, 64, 0.1);
-            border: 1px solid rgba(200, 232, 64, 0.22);
-            color: var(--e1);
+            background: rgba(10, 64, 12, 0.08);
+            border: 1px solid rgba(10, 64, 12, 0.2);
+            color: #0A400C;
             font-size: 0.82rem;
             font-weight: 700;
             padding: 0.4rem 0.9rem;
             border-radius: var(--r999);
             cursor: pointer;
             transition: background 0.15s, border-color 0.15s;
-            font-family: inherit;
-            letter-spacing: -0.01em;
         }
-
         .nav-user-btn:hover {
-            background: rgba(200, 232, 64, 0.18);
-            border-color: rgba(200, 232, 64, 0.4);
+            background: rgba(10, 64, 12, 0.14);
+            border-color: rgba(10, 64, 12, 0.35);
         }
 
         .nav-user-btn .chevron {
@@ -65,13 +152,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             width: 22px;
             height: 22px;
             border-radius: 50%;
-            background: var(--g3);
+            background: #0A400C;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.62rem;
             font-weight: 700;
-            color: var(--white);
+            color: #FEFAE0;
             flex-shrink: 0;
         }
 
@@ -81,8 +168,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             top: calc(100% + 0.6rem);
             right: 0;
             min-width: 200px;
-            background: var(--g0);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #0A400C;
+            border: 1px solid rgba(254, 250, 224, 0.12);
             border-radius: var(--r16);
             padding: 0.5rem;
             z-index: 200;
@@ -90,17 +177,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             pointer-events: none;
             transform: translateY(-6px);
             transition: opacity 0.18s ease, transform 0.18s ease;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 12px 40px rgba(10, 64, 12, 0.3);
         }
 
         .nav-dropdown.open {
             opacity: 1;
             pointer-events: auto;
             transform: translateY(0);
-        }
-
-        .nav-user-btn[aria-expanded="true"] .chevron {
-            transform: rotate(180deg);
         }
 
         .dropdown-header {
@@ -165,6 +248,82 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             color: #ff7060;
         }
 
+        /* ── Flash toast notifications ── */
+        #flash-container {
+            position: fixed;
+            top: calc(var(--nav-height) + 1rem);
+            right: 1.25rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            pointer-events: none;
+        }
+
+        .message {
+            pointer-events: auto;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            min-width: 280px;
+            max-width: 380px;
+            background: #fff;
+            border-radius: 14px;
+            padding: 1rem 1.1rem;
+            box-shadow: 0 8px 32px rgba(13,31,20,.18), 0 2px 8px rgba(13,31,20,.1);
+            border-left: 4px solid #C0392B;
+            animation: toast-in .3s cubic-bezier(0.34,1.56,0.64,1) both;
+            transition: opacity .25s ease, transform .25s ease;
+        }
+
+        .message.toast-hiding {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        @keyframes toast-in {
+            from { opacity: 0; transform: translateX(24px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            margin-top: 1px;
+        }
+
+        .message.success .toast-icon { color: var(--g3); }
+        .message.error   .toast-icon { color: #C0392B; }
+        .message.warning .toast-icon { color: #E67E22; }
+        .message.info    .toast-icon { color: #2980B9; }
+
+        .toast-body {
+            flex: 1;
+        }
+
+        .toast-body p {
+            margin: 0;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #1a2e1b;
+            line-height: 1.5;
+        }
+
+        .toast-close {
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            line-height: 1;
+            font-size: 1.1rem;
+            transition: color .15s;
+            margin-top: 1px;
+        }
+        .toast-close:hover { color: #444; }
+
         /* Foundation: no horizontal scroll anywhere */
         html, body {
             max-width: 100vw;
@@ -176,26 +335,24 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         /* Tablet and mobile < 1024px*/
         @media (max-width: 1023px) {
 
-    .nav {
-        display: grid !important;
-        grid-template-columns: auto 1fr auto !important;
-        grid-template-areas:
-            "logo  spacer  search"
-            "links links   user"
-            !important;
-        gap: 0.35rem 0.5rem !important;
-        align-items: center;
-        padding: 0.6rem 0.75rem !important;
-        height: auto !important;
-        min-height: 68px;
-    }
-
-    /* Let children of nav-left / nav-right participate directly
-       in the nav grid (no layout boxes of their own) */
-            .nav-left,
-            .nav-right {
-                display: contents !important;
+            .nav {
+                display: grid !important;
+                grid-template-columns: auto 1fr auto !important;
+                grid-template-areas:
+                    "logo  spacer  search"
+                    "links links   user"
+                    !important;
+                gap: 0.35rem 0.5rem !important;
+                align-items: center;
+                padding: 0.6rem 0.75rem !important;
+                height: auto !important;
+                min-height: 68px;
             }
+
+                .nav-left,
+                .nav-right {
+                    display: contents !important;
+                }
 
             .nav-logo {
                 grid-area: logo;
@@ -209,7 +366,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 flex-wrap: wrap;
                 gap: 1rem !important;
                 padding-top: 0.25rem;
-                border-top: 1px solid rgba(255, 255, 255, 0.08);
+                border-top: 1px solid rgba(10, 64, 12, 0.1);
             }
             .nav-links li a {
                 padding: 0.25rem 0 !important;
@@ -246,16 +403,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 grid-area: user;
                 justify-self: end;
             }
-            .nav-user-btn {
-                padding: 0.3rem 0.6rem !important;
-                font-size: 0.78rem !important;
-                max-width: 140px;
-            }
-            .nav-user-btn > span:not(.user-dot):not(.chevron) {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
 
             /* Auth (logged-out) buttons also land in the user slot */
             .nav-right > .btn {
@@ -269,6 +416,44 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 right: 0 !important;
                 left: auto !important;
             }
+
+            /* ---- Tighter nav clamping on tablet/mobile ---- */
+            .nav {
+                padding: 0.6rem 0.75rem !important;
+            }
+            .nav-left {
+                width: auto !important;
+                flex: 1 1 auto;
+                min-width: 0;
+                gap: 0.75rem !important;
+            }
+            .nav-right {
+                width: auto !important;
+                flex: 0 1 auto;
+                gap: 0.4rem !important;
+            }
+            .nav-links {
+                flex: 1 1 100%;
+                order: 99;
+                width: 100%;
+                justify-content: flex-start;
+                padding-top: 0.35rem;
+            }
+            .nav-links li a {
+                padding: 0.25rem 0 !important;
+            }
+            /* User dropdown button: smaller + truncated name */
+            .nav-user-btn {
+                padding: 0.3rem 0.6rem !important;
+                font-size: 0.78rem !important;
+                max-width: 140px;
+            }
+
+            /* Search icon stays compact */
+            .nav-search-icon {
+                padding: 4px !important;
+            }
+        }
 
         /* ==== MOBILE ONLY  (< 640px) ==== */
         @media (max-width: 639px) {
@@ -496,7 +681,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             .my-listings-page table td:last-child button {
                 display: inline-block;
                 padding: 0.4rem 0.9rem;
-                background: #2e7d52;
+                background: #52796F;
                 color: #fff;
                 border-radius: 6px;
                 text-decoration: none;
@@ -540,7 +725,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 width: 36px !important;
                 height: 36px !important;
                 border-radius: 50% !important;
-                background: #2e7d52 !important;
+                background: #52796F !important;
                 color: #fff !important;
                 border: none !important;
                 align-items: center;
@@ -553,107 +738,116 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             body .slider-arrow.prev { left: 0 !important; right: auto !important; }
             body .slider-arrow.next { right: 0 !important; left: auto !important; }
             body .slider-arrow:hover {
-                background: #276a46 !important;
+                background: #354F52 !important;
             }
-        }
-
-        /* ---- Tighter nav clamping on tablet/mobile ---- */
-        .nav {
-            padding: 0.6rem 0.75rem !important;
-        }
-        .nav-left {
-            width: auto !important;
-            flex: 1 1 auto;
-            min-width: 0;
-            gap: 0.75rem !important;
-        }
-        .nav-right {
-            width: auto !important;
-            flex: 0 1 auto;
-            gap: 0.4rem !important;
-        }
-        .nav-links {
-            flex: 1 1 100%;
-            order: 99;
-            width: 100%;
-            justify-content: flex-start;
-            padding-top: 0.35rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .nav-links li a {
-            padding: 0.25rem 0 !important;
-        }
-        /* User dropdown button: smaller + truncated name */
-        .nav-user-btn {
-            padding: 0.3rem 0.6rem !important;
-            font-size: 0.78rem !important;
-            max-width: 140px;
-        }
-        .nav-user-btn > span:not(.user-dot):not(.chevron) {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        /* Search icon stays compact */
-        .nav-search-icon {
-            padding: 4px !important;
         }
     </style>
 </head>
 
 <body>
+<?php $identity = $this->request->getAttribute('identity'); ?>
 <nav class="nav">
-    <div class="nav-left">
-        <a href="<?= $this->Url->build(['prefix' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
-            <div class="nav-logo-icon">🌿</div>
-            <span class="nav-logo-name">Sustain<span>Chain</span></span>
-        </a>
+    <a href="<?= $this->Url->build(['prefix' => false, 'plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
+        <img src="<?= $this->Url->image('logo.png') ?>" class="nav-logo-img" alt="Logo">
+        <span class="nav-logo-name">Sustain<span>Chain</span></span>
+    </a>
 
+        <?php
+            $currentController = $this->request->getParam('controller');
+            $currentPrefix     = $this->request->getParam('prefix');
+        ?>
         <ul class="nav-links">
-            <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link('Contact Us', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+            <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+            <li><?= $this->Html->link('About Us', 
+            ['plugin' => false, 'prefix' => false, 'controller' => 'Pages', 'action' => 'about'],
+            ['class' => ($currentController === 'Pages' ? 'active' : '')]) ?></li>
+            <?php endif; ?>
+
+            <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+            <li><?= $this->Html->link('Marketplace', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index'],
+            ['class' => ($currentController === 'Products' ? 'active' : '')] ) ?></li>
+            <?php endif; ?>
+
+            <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+            <li><?= $this->Html->link('Discover Innovators', ['plugin' => false, 'prefix' => false, 'controller' => 'Innovators', 'action' => 'index'],
+            ['class' => ($currentController === 'Innovators' ? 'active' : '')]) ?></li>
+            <?php endif; ?> 
+
+            <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+                <li><?= $this->Html->link('Contact', ['plugin' => false, 'prefix' => false, 'controller' => 'Enquiries', 'action' => 'add'],
+                ['class' => ($currentController === 'Enquiries' ? 'active' : '')]) ?></li>
+            <?php endif; ?>
+
+            <!-- Admin-only links -->
+            <?php if ($identity && $identity->get('role') === 'admin'): ?>
+                <li><?= $this->Html->link('Product Management', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index'],
+                ['class' => ($currentController === 'Products' ? 'active' : '')]) ?></li>
+            <?php endif; ?>
+            
+            <?php if ($identity && $identity->get('role') === 'admin'): ?>
+                <li><?= $this->Html->link('User Management', ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'index'],
+                ['class' => ($currentController === 'Users' ? 'active' : '')]) ?></li>
+            <?php endif; ?>
+           
+            <?php if ($identity && $identity->get('role') === 'admin'): ?>
+                <li><?= $this->Html->link('Enquiry Management', ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Enquiries', 'action' => 'index'],
+                ['class' => ($currentController === 'Enquiries' ? 'active' : '')]) ?></li>
+            <?php endif; ?>
+
+            <?php if ($identity && $identity->get('role') === 'admin'): ?>
+            <?= $this->Html->link('Content Block Management', ['prefix' => 'Admin', 'plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index'],
+                ['class' => ($currentController === 'ContentBlocks' ? 'active' : '')]) ?></li>
+            <?php endif; ?>
         </ul>
     </div>
 
     <div class="nav-right">
-        
+        <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
         <div class="nav-search" id="navSearch">
-        <button class="nav-search-icon" id="navSearchBtn" aria-label="Search">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-        </button>
-        <form class="nav-search-form" action="<?= $this->Url->build(['prefix' => false,'controller' => 'Products', 'action' => 'index'], ['fullBase' => true]) ?>" method="get">
-        <input type="text" name="keyword" class="nav-search-input" placeholder="Search products..." />
-        </form>
-    </div>
-
-
-
-        <?php $identity = $this->request->getAttribute('identity'); ?>
-        <?php if ($identity): ?>
-
-            <!-- User dropdown -->
-            <button
-                class="nav-user-btn"
-                id="user-menu-btn"
-                aria-haspopup="true"
-                aria-expanded="false"
-                aria-controls="user-menu"
-                onclick="toggleUserMenu()"
-            >
-                <div class="user-dot">
-                    <?php 
-                        // Fallback to 'U' if first_name is null to prevent substr error
-                        $fName = $identity->first_name ?? 'User';
-                        echo strtoupper(substr(h($fName), 0, 1)); 
-                    ?>
-                </div>
-                <?= h($identity->first_name ?? 'Account') ?>
-                <svg class="chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M2 4l4 4 4-4"/>
+            <button class="nav-search-icon" id="navSearchBtn" aria-label="Search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
             </button>
+            <form class="nav-search-form" action="<?= $this->Url->build(['prefix' => false,'controller' => 'Products', 'action' => 'index'], ['fullBase' => true]) ?>" method="get">
+            <input type="text" name="keyword" class="nav-search-input" placeholder="Search products..." />
+            </form>
+            </div>
+        <?php endif; ?>
+
+        <?php
+        $cartQtys = $this->request->getSession()->read('Cart.items') ?? [];
+        $cartCount = 0;
+        foreach ($cartQtys as $id => $qty) {
+            if (is_int($id) && is_int($qty) && $qty > 0) $cartCount += $qty;
+        }
+        ?>
+        <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+            <a href="<?= $this->Url->build(['plugin' => false, 'prefix' => false, 'controller' => 'Cart', 'action' => 'index']) ?>" class="nav-cart-link nav-search-icon" aria-label="Cart">
+                <svg width="18" height="18" viewBox="0 0 122.9 107.5" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.9,7.9C1.8,7.9,0,6.1,0,3.9C0,1.8,1.8,0,3.9,0h10.2c0.1,0,0.3,0,0.4,0c3.6,0.1,6.8,0.8,9.5,2.5c3,1.9,5.2,4.8,6.4,9.1 c0,0.1,0,0.2,0.1,0.3l1,4H119c2.2,0,3.9,1.8,3.9,3.9c0,0.4-0.1,0.8-0.2,1.2l-10.2,41.1c-0.4,1.8-2,3-3.8,3v0H44.7 c1.4,5.2,2.8,8,4.7,9.3c2.3,1.5,6.3,1.6,13,1.5h0.1v0h45.2c2.2,0,3.9,1.8,3.9,3.9c0,2.2-1.8,3.9-3.9,3.9H62.5v0 c-8.3,0.1-13.4-0.1-17.5-2.8c-4.2-2.8-6.4-7.6-8.6-16.3l0,0L23,13.9c0-0.1,0-0.1-0.1-0.2c-0.6-2.2-1.6-3.7-3-4.5 c-1.4-0.9-3.3-1.3-5.5-1.3c-0.1,0-0.2,0-0.3,0H3.9L3.9,7.9z M96,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C86.4,92.6,90.7,88.3,96,88.3L96,88.3z M53.9,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C44.3,92.6,48.6,88.3,53.9,88.3L53.9,88.3z M33.7,23.7l8.9,33.5h63.1l8.3-33.5H33.7L33.7,23.7z"/>
+                </svg>
+                <?php if ($cartCount > 0): ?>
+                    <span class="nav-cart-badge"><?= $cartCount ?></span>
+                <?php endif; ?>
+            </a>
+        <?php endif; ?>
+
+        <?php if ($identity): ?>
+            <div class="nav-user-wrap">
+                <button
+                    class="nav-search-icon"
+                    id="user-menu-btn"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="user-menu"
+                    aria-label="User menu"
+                    onclick="toggleUserMenu()"
+                >
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                </button>
 
                 <div class="nav-dropdown" id="user-menu" role="menu">
                     <div class="dropdown-header">
@@ -663,29 +857,37 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <?php if ($identity->get('role') === 'admin'): ?>
                         <?= $this->Html->link(
                             '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l6 3v5c0 3.5-2.5 6-6 7-3.5-1-6-3.5-6-7V4z"/></svg> Admin Dashboard',
-                            ['prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
+                            ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
                             ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                         ) ?>
                         <div class="dropdown-divider"></div>
                     <?php endif; ?>
+                    
+                    <?php if ($identity->get('role') !== 'admin'): ?>
+                    <?= $this->Html->link(
+                        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3" /><path d="M3 14c0-2.5 2-4.5 5-4.5s5 2 5 4.5" /></svg> My Account',
+                        ['prefix' => false, 'controller' => 'Auth', 'action' => 'view', $identity->get('id')],
+                        ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
+                    ) ?>
 
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 3V2m6 1V2M2 7h12"/></svg> Dashboard',
-                        ['prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'],
+                        ['plugin' => false,'prefix' => false, 'controller' => 'Dashboard', 'action' => 'index'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
-
+                    <?php endif; ?>
+                    
+                    <?php if ($identity->get('role') !== 'admin'): ?>
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1L2 6.3l4.2-.7z"/></svg> My Listings',
-                        ['prefix' => false, 'controller' => 'Products', 'action' => 'myListings'],
+                        ['plugin' => false,'prefix' => false, 'controller' => 'Products', 'action' => 'myListings'],
                         ['class' => 'dropdown-item', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
-
-                    <div class="dropdown-divider"></div>
+                    <?php endif; ?>
 
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3H3v10h3m3-7 3 3-3 3m3-3H6"/></svg> Log out',
-                        ['prefix' => false, 'controller' => 'Auth', 'action' => 'logout'],
+                        ['plugin' => false, 'prefix' => false, 'controller' => 'Auth', 'action' => 'logout'],
                         ['class' => 'dropdown-item danger', 'role' => 'menuitem', 'escape' => false]
                     ) ?>
                 </div>
@@ -698,10 +900,110 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </div>
 </nav>
 
-<main class="main">
+<div class="toast-stack" id="toastStack">
     <?= $this->Flash->render() ?>
+</div>
+
+<main class="main">
     <?= $this->fetch('content') ?>
 </main>
+
+<!-- Chat Toggle Button -->
+<button id="chat-toggle" style="position:fixed;bottom:24px;right:24px;z-index:1000;
+    background:var(--g3);color:#fff;border:none;border-radius:50%;width:56px;height:56px;
+    font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2)">💭</button>
+
+<!-- Chat Window -->
+<div id="chat-window" style="display:none;position:fixed;bottom:90px;right:24px;
+    width:340px;height:480px;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.2);
+    z-index:1000;display:none;flex-direction:column;overflow:hidden;">
+  <div style="background:var(--g3);color:#fff;padding:16px;font-weight:bold;">SustainChain Support</div>
+  <div id="chat-messages" style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;"></div>
+  <div style="display:flex;padding:8px;border-top:1px solid var(--s2);gap:8px;">
+    <input id="chat-input" type="text" placeholder="Ask us anything..."
+      style="flex:1;padding:8px 12px;border:1px solid var(--s2);border-radius:20px;outline:none;" />
+    <button id="chat-send"
+      style="background:var(--e1);color:var(--ink);border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;">➤</button>
+  </div>
+</div>
+
+<script>
+const toggle = document.getElementById('chat-toggle');
+const win    = document.getElementById('chat-window');
+const input  = document.getElementById('chat-input');
+const send   = document.getElementById('chat-send');
+const msgs   = document.getElementById('chat-messages');
+
+toggle.addEventListener('click', () => {
+    const isHidden = win.style.display === 'none';
+    win.style.display = isHidden ? 'flex' : 'none';
+    
+    // Show default greeting messages on first open
+    if (isHidden && msgs.children.length === 0) {
+        const greetings = [
+            'Hello! 👋 Welcome to SustainChain Support.',
+            'How can I help you today? Feel free to ask about our products, orders, delivery, or policies.'
+        ];
+        
+        greetings.forEach((greeting, index) => {
+            setTimeout(() => addMessage(greeting, 'bot'), index * 600);
+        });
+    }
+});
+
+function addMessage(text, role) {
+    const el = document.createElement('div');
+    el.textContent = text;
+    el.style.cssText = `
+        max-width:80%;padding:8px 12px;border-radius:12px;font-size:14px;
+        align-self:${role === 'user' ? 'flex-end' : 'flex-start'};
+        background:${role === 'user' ? 'var(--g4)' : 'var(--g6)'};
+        color:${role === 'user' ? '#fff' : 'var(--ink)'};
+    `;
+    msgs.appendChild(el);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    addMessage(text, 'user');
+    addMessage('Typing…', 'bot');
+
+    try {
+        // Read CSRF token from cookie (how CakePHP sets it)
+        const csrfToken = document.querySelector('meta[name="csrfToken"]')?.content ?? '';
+
+        const res = await fetch('<?= $this->request->getAttribute('base') ?>/chat/ask', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({ message: text }),
+        });
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.log('Status:', res.status);
+            console.log('Body:', errorText);
+            msgs.lastChild.textContent = `Error: HTTP ${res.status}`;
+            return;
+        }
+
+        const data = await res.json();
+        msgs.lastChild.textContent = data.response || data.error || 'Something went wrong.';
+
+    } catch (error) {
+        msgs.lastChild.textContent = 'Network error: ' + error.message;
+    }
+}
+
+send.addEventListener('click', sendMessage);
+input.addEventListener('keydown', e => e.key === 'Enter' && sendMessage());
+</script>
 
 <!-- footer -->
 <footer class="footer">
@@ -710,69 +1012,83 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <div class="footer-logo-wrap">
                 <span class="footer-logo-name">Sustain<span>Chain</span></span>
             </div>
-            <p class="footer-tagline">A vibrant marketplace for responsible consumption and a greener future.</p>
+            <p class="footer-tagline"><?= $this->ContentBlock->text('footer-content') ?></p>
         </div>
 
         <div class="footer-col">
             <h4>Platform</h4>
             <ul>
-                <li><a href="#about">Features</a></li>
-                <li><a href="#marketplace">Marketplace</a></li>
+                <li><?= $this->Html->link('Marketplace', ['prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
                 <li><a href="#innovators">Discover Innovators</a></li>
             </ul>
         </div>
 
-        <div class="footer-col">
-            <h4>Commerce</h4>
-            <ul>
-                <li><a href="/buyers">For Buyers</a></li>
-                <li><a href="/sellers">For Sellers</a></li>
-                <li><a href="/manufacturers">For Manufacturers</a></li>
-                <li><a href="/farmers">For Farmers</a></li>
-            </ul>
-        </div>
 
         <div class="footer-col">
             <h4>Company</h4>
             <ul>
-                <li><a href="#mission">Our Mission</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/enquiries">Enquire</a></li>
-                <li><a href="/users/login">Log in</a></li>
+                <li><?= $this->Html->link('About Us', ['prefix' => false, 'controller' => 'Pages', 'action' => 'about']) ?></li>
+                <li><?= $this->Html->link('Enquire', ['prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+                <li><?= $this->Html->link('Log in', ['prefix' => false, 'controller' => 'Auth', 'action' => 'login']) ?></li>
             </ul>
         </div>
     </div>
 
     <div class="footer-bottom">
-        <p class="footer-copy">© <?= date('Y') ?> SustainChain. All rights reserved.</p>
+        <p class="footer-copy"><?= $this->ContentBlock->text('footer-copyright') ?></p>
     </div>
 </footer>
 
 <script>
+    // ── Toast notifications ──
+    (function () {
+        const icons = {
+            success: `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M6.5 10.5l2.5 2.5 4.5-5"/></svg>`,
+            error:   `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4m0 4h.01"/></svg>`,
+            warning: `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L18 17H2z"/><path d="M10 9v4m0 2h.01"/></svg>`,
+            info:    `<svg class="toast-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 9v5m0-7h.01"/></svg>`,
+        };
+
+        function dismissToast(el) {
+            el.classList.add('toast-hiding');
+            setTimeout(() => el.remove(), 270);
+        }
+
+        document.querySelectorAll('#flash-container .message').forEach(msg => {
+            // Detect type
+            const type = ['success','error','warning','info'].find(t => msg.classList.contains(t)) || 'success';
+
+            // Rebuild content
+            const originalContent = msg.innerHTML;
+            msg.innerHTML =
+                (icons[type] || icons.success) +
+                `<div class="toast-body">${originalContent}</div>` +
+                `<button class="toast-close" aria-label="Dismiss">&#x2715;</button>`;
+
+            // Close button
+            msg.querySelector('.toast-close').addEventListener('click', () => dismissToast(msg));
+
+            // Auto-dismiss after 5 s
+            setTimeout(() => dismissToast(msg), 5000);
+        });
+    })();
+
     const navSearch = document.getElementById('navSearch');
     const navSearchBtn = document.getElementById('navSearchBtn');
-    const navSearchInput = navSearch.querySelector('.nav-search-input');
 
-    navSearchBtn.addEventListener('click', () => {
-        navSearch.classList.toggle('open');
-        if (navSearch.classList.contains('open')) {
-            navSearchInput.focus();
-        }
-    });
-
-    // Close when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!navSearch.contains(e.target)) {
-            navSearch.classList.remove('open');
-        }
-    });
-
-    // Submit on Enter
-    navSearchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            navSearchInput.closest('form').submit();
-        }
-    });
+    if (navSearch && navSearchBtn) {
+        const navSearchInput = navSearch.querySelector('.nav-search-input');
+        navSearchBtn.addEventListener('click', () => {
+            navSearch.classList.toggle('open');
+            if (navSearch.classList.contains('open')) navSearchInput.focus();
+        });
+        document.addEventListener('click', (e) => {
+            if (!navSearch.contains(e.target)) navSearch.classList.remove('open');
+        });
+        navSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') navSearchInput.closest('form').submit();
+        });
+    }
 </script>
 
 <script>
@@ -804,6 +1120,22 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             document.getElementById('user-menu-btn')?.setAttribute('aria-expanded', 'false');
         }
     });
+</script>
+
+<script>
+(function () {
+    const DISMISS_MS = 4000;
+    document.querySelectorAll('.toast').forEach(function (toast) {
+        const t = setTimeout(function () { dismiss(toast); }, DISMISS_MS);
+        toast.querySelector('.toast-close')?.addEventListener('click', function () {
+            clearTimeout(t);
+        });
+    });
+    function dismiss(toast) {
+        toast.classList.add('removing');
+        toast.addEventListener('animationend', function () { toast.remove(); }, { once: true });
+    }
+})();
 </script>
 
 </body>
