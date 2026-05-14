@@ -72,28 +72,5 @@ class CanAuthenticateBehavior extends Behavior {
         return $validator;
     }
 
-    /**
-     * Reset Password validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationResetPassword(Validator $validator): Validator {
-        $validator
-            ->scalar('password')
-            ->requirePresence('password', 'reset-password')
-            ->notEmptyString('password');
 
-        // Validate retyped password
-        $validator
-            ->requirePresence('password_confirm', 'reset-password')
-            ->sameAs('password_confirm', 'password', 'Both passwords must match');
-
-        $validator
-            ->uuid('nonce')
-            ->maxLength('nonce', 128)
-            ->allowEmptyString('nonce');
-
-        return $validator;
-    }
 }

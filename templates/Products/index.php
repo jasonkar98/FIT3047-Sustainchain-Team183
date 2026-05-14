@@ -6,7 +6,7 @@ $this->Html->css('marketplace', ['block' => true]);
 <!-- Page header — dark green banner, same style as the landing page hero -->
 <div class="marketplace-header">
     <div class="marketplace-header-inner">
-        <span class="t-label section-tag">SustainChain</span>
+        <span class="t-label section-tag">Welcome, to</span>
         <h1 class="marketplace-title t-display">
             The <em>sustainable</em> marketplace
         </h1>
@@ -31,7 +31,7 @@ $this->Html->css('marketplace', ['block' => true]);
         <?= $this->Form->button('Search', ['class' => 'btn btn-lime', 'type' => 'submit']) ?>
 
         <?php if ($this->request->getQuery('keyword')): ?>
-            <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn-outline">Clear</a>
+            <a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'index']) ?>" class="btn btn-outline">Clear</a>
         <?php endif; ?>
 
         <?php // Preserve any active filters/sort when re-searching ?>
@@ -56,7 +56,7 @@ $this->Html->css('marketplace', ['block' => true]);
 <!-- Results heading — only shows when there is a keyword AND results exist -->
 <?php if (!empty($this->request->getQuery('keyword')) && !$products->items()->isEmpty()): ?>
     <div class="search-results-label">
-        Here are our results for <strong><?= h($this->request->getQuery('keyword')) ?></strong>
+        Here are your results for "<strong><?= h($this->request->getQuery('keyword')) ?></strong>"
     </div>
 <?php endif; ?>
 
@@ -195,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <option value="newest"    <?= ($search['sort'] ?? 'newest') === 'newest'    ? 'selected' : '' ?>>Newest arrivals</option>
                     <option value="price_asc" <?= ($search['sort'] ?? '') === 'price_asc'  ? 'selected' : '' ?>>Price: Low to High</option>
                     <option value="price_desc"<?= ($search['sort'] ?? '') === 'price_desc' ? 'selected' : '' ?>>Price: High to Low</option>
+                    <option value="discount_desc" <?= ($search['sort'] ?? '') === 'discount_desc' ? 'selected' : '' ?>>Discount: High to Low</option>
                     <option value="name_asc"  <?= ($search['sort'] ?? '') === 'name_asc'   ? 'selected' : '' ?>>A–Z by name</option>
                     <option value="name_desc" <?= ($search['sort'] ?? '') === 'name_desc'  ? 'selected' : '' ?>>Z–A by name</option>
                 </select>
@@ -225,9 +226,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="marketplace-pagination">
-                <?= $this->Paginator->prev('← Prev') ?>
-                <?= $this->Paginator->numbers() ?>
-                <?= $this->Paginator->next('Next →') ?>
+                <?= $this->Paginator->prev('←') ?>
+                <?= $this->Paginator->numbers(['modulus' => 5]) ?>
+                <?= $this->Paginator->next('→') ?>
             </div>
         <?php endif; ?>
 

@@ -64,7 +64,7 @@ $this->assign('title', 'Login');
         <div class="auth-links">
             <?= $this->Html->link('Forgot password?', ['controller' => 'Auth', 'action' => 'forgetPassword']) ?>
             <?= $this->Html->link('Sign up', ['controller' => 'Auth', 'action' => 'register']) ?>
-            <?= $this->Html->link('Back', ['controller' => 'Pages', 'action' => 'landingPage']) ?>
+            <?= $this->Html->link('Back', ['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>
         </div>
     </section>
 </div>

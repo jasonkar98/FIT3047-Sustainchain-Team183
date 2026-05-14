@@ -55,13 +55,8 @@ return function (RouteBuilder $routes): void {
          * its action called 'display', and we pass a param to select the view file
          * to use (in this case, templates/Pages/home.php)...
          */
-//        $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
-        $builder->connect('/', ['controller' => 'Pages', 'action' => 'landingPage']);
-//        $builder->connect('/landingPage', ['controller' => 'Pages', 'action' => 'landingPage']);
 
-        /*
-         * ...and connect the rest of 'Pages' controller's URLs.
-         */
+        $builder->connect('/', ['controller' => 'Pages', 'action' => 'landingPage']);
         $builder->connect('/pages/*', 'Pages::display');
         $builder->connect('/dashboard', ['controller' => 'Dashboard', 'action' => 'index']);
         $builder->connect('/products', ['controller' => 'Products', 'action' => 'index']);
@@ -69,10 +64,22 @@ return function (RouteBuilder $routes): void {
         ->setPatterns(['id' => '\d+'])
         ->setPass(['id']);
 
-        $builder->connect('/products/toggle-save/:id', 
+        $builder->connect('/products/toggle-save/:id',
             ['controller' => 'Products', 'action' => 'toggleSave'],
             ['_name' => 'products:togglesave', 'pass' => ['id'], 'id' => '[0-9]+']
         );
+        $builder->connect('/products/admin-toggle-listing/{id}',
+            ['controller' => 'Products', 'action' => 'adminToggleListing'])
+            ->setPatterns(['id' => '\d+'])
+            ->setPass(['id']);
+
+        $builder->post('/chat/ask', ['controller' => 'Chat', 'action' => 'ask']);
+
+        $builder->connect('/innovators', ['controller' => 'Innovators', 'action' => 'index']);
+        $builder->connect('/innovators/{id}', ['controller' => 'Innovators', 'action' => 'view'])
+            ->setPatterns(['id' => '\d+'])
+            ->setPass(['id']);
+        
         /*
          * Connect catchall routes for all controllers.
          *
@@ -86,6 +93,10 @@ return function (RouteBuilder $routes): void {
          * It is NOT recommended to use fallback routes after your initial prototyping phase!
          * See https://book.cakephp.org/5/en/development/routing.html#fallbacks-method for more information
          */
+        $builder->connect('/payments/checkout', ['controller' => 'Payments', 'action' => 'checkout']);
+        $builder->connect('/payments/create-payment-intent', ['controller' => 'Payments', 'action' => 'createPaymentIntent']);
+        $builder->connect('/payments/success', ['controller' => 'Payments', 'action' => 'success']);
+
         $builder->prefix('Admin', function (RouteBuilder $builder): void {
             $builder->connect('/', ['controller' => 'Dashboard', 'action' => 'index']);
             $builder->connect('/enquiries', ['controller' => 'Enquiries', 'action' => 'index']);
@@ -98,11 +109,36 @@ return function (RouteBuilder $routes): void {
             $builder->connect('/enquiries/toggle-resolved/{id}', ['controller' => 'Enquiries', 'action' => 'toggleResolved'])
                 ->setPatterns(['id' => '\d+'])
                 ->setPass(['id']);
+            $builder->connect('/users', ['controller' => 'Users', 'action' => 'index']);
+            $builder->connect('/users/edit/{id}', ['controller' => 'Users', 'action' => 'edit'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/send-reset-link/{id}', ['controller' => 'Users', 'action' => 'sendResetLink'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/toggle-active/{id}', ['controller' => 'Users', 'action' => 'toggleActive'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/delete/{id}', ['controller' => 'Users', 'action' => 'delete'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/approvals', ['controller' => 'Users', 'action' => 'approvals']);
+            $builder->connect('/users/approve/{id}', ['controller' => 'Users', 'action' => 'approve'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
+            $builder->connect('/users/reject/{id}', ['controller' => 'Users', 'action' => 'reject'])
+                ->setPatterns(['id' => '\d+'])
+                ->setPass(['id']);
             $builder->fallbacks();
         });
+        
         $builder->fallbacks();
     });
 
+    $routes->plugin('ContentBlocks', ['path' => '/admin/content-blocks'], function (RouteBuilder $builder): void {
+        $builder->connect('/', ['controller' => 'ContentBlocks', 'action' => 'index', 'prefix' => 'Admin']);
+        $builder->connect('/{action}/*', ['controller' => 'ContentBlocks', 'prefix' => 'Admin']);
+    });
     /*
      * If you need a different set of middleware or none at all,
      * open new scope and define routes there.

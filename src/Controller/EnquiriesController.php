@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Mailer\Mailer;
+
 /**
  * Enquiries Controller
  *
@@ -24,7 +26,7 @@ class EnquiriesController extends AppController
      */
     public function index()
     {
-        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+        return $this->redirect(['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']);
 //        $query = $this->Enquiries->find();
 //        $enquiries = $this->paginate($query);
 //
@@ -90,9 +92,23 @@ class EnquiriesController extends AppController
             }
 
             if ($this->Enquiries->save($enquiry)) {
-                $this->Flash->success(__('The enquiry has been saved.'));
+                $mailer = new Mailer('default');
+                $mailer
+                    ->setEmailFormat('both')
+                    ->setTo($enquiry->email)
+                    ->setSubject('We received your enquiry — SustainChain');
+                $mailer->viewBuilder()->setTemplate('enquiry_confirmation')->setLayout('sustainchain');
+                $mailer->setViewVars([
+                    'full_name' => $enquiry->full_name,
+                    'email' => $enquiry->email,
+                    'subject' => $enquiry->subject,
+                    'body' => $enquiry->body,
+                ]);
+                $mailer->deliver();
 
-                return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+                $this->Flash->success(__('Your enquiry has been submitted. Check your email for a confirmation.'));
+
+                return $this->redirect(['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']);
             }
             $this->Flash->error(__('The enquiry could not be saved. Please, try again.'));
         }
@@ -108,7 +124,7 @@ class EnquiriesController extends AppController
      */
     public function edit($id = null)
     {
-        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+        return $this->redirect(['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']);
 //        $enquiry = $this->Enquiries->get($id, contain: []);
 //        if ($this->request->is(['patch', 'post', 'put'])) {
 //            $enquiry = $this->Enquiries->patchEntity($enquiry, $this->request->getData());
@@ -131,7 +147,7 @@ class EnquiriesController extends AppController
      */
     public function delete($id = null)
     {
-        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
+        return $this->redirect(['plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']);
 //        $this->request->allowMethod(['post', 'delete']);
 //        $enquiry = $this->Enquiries->get($id);
 //        if ($this->Enquiries->delete($enquiry)) {

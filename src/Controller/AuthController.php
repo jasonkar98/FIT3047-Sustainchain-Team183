@@ -45,17 +45,137 @@ class AuthController extends AppController
      */
     public function register()
     {
-        $user = $this->Users->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success('You have been registered. Please log in. ');
 
-                return $this->redirect(['action' => 'login']);
+        $user = $this->Users->newEmptyEntity();
+        // $session = $this->request->getSession();
+        $this->set('step', 1);
+
+        if ($this->request->is('post')) {
+
+            $data = $this->request->getData();
+
+
+             if (!empty($data['role_selected'])) {
+                $this->set('step', 2);
+
+                $this->set('role_selected', $data['role']);
+
+            } elseif (!empty($data['submit_details'])) {
+
+                // Handle the optional manufacturer profile image. Done before
+                // patchEntity so the saved filename (not the UploadedFile
+                // object) reaches the entity. Mirrors the pattern in
+                // ProductsController::add but writes into /img/profiles/.
+                $data['profile'] = $this->processProfileUpload($data['profile'] ?? null);
+
+                $user = $this->Users->patchEntity($user, $data);
+
+                if ($user['role'] == 'manufacturer' or $user['role'] == 'farmer') {
+                    $user['is_active'] = 0;
+
+                    if ($this->Users->save($user)) {
+                        $this->Flash->success('You have requested a ' . $user['role'] . ' account creation. Please wait for account verification before logging in.');
+
+                        return $this->redirect(['action' => 'login']);
+                    }
+
+                }
+
+                if ($this->Users->save($user)) {
+
+                    $mailer = new Mailer('default');
+                    $mailer
+                        ->setEmailFormat('both')
+                        ->setTo($user->email)
+                        ->setSubject('Welcome to SustainChain!');
+                    $mailer->viewBuilder()->setTemplate('welcome')->setLayout('sustainchain');
+                    $mailer->setViewVars([
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
+                    ]);
+                    $mailer->deliver();
+
+                    $this->Flash->success('You have been registered. Please log in. ');
+
+                    return $this->redirect(['action' => 'login']);
+                }
+                $this->Flash->error('The user could not be registered. Please, try again.');
+                $this->set('step', 2);
+
+                // Re-expose the role to the template so the hidden role
+                // field on the step-2 form keeps its value through the
+                // failed-validation re-render. Without this, the template
+                // hits an undefined-variable warning on $role_selected.
+                $this->set('role_selected', $data['role'] ?? null);
             }
-            $this->Flash->error('The user could not be registered. Please, try again.');
+        }
+
+        $this->set(compact('user'));
+    }
+
+    public function view($id = null)
+    {
+
+        $user = $this->Authentication->getIdentity();
+
+        // Top 3 most-sold products in the last 30 days (only meaningful for
+        // sellers / manufacturers / farmers — buyers will simply see an
+        // empty-state message). Delegated to InnovatorsController so the
+        // ranking logic lives in one place.
+        $topProducts = [];
+        if ($user) {
+            $innovators = new \App\Controller\InnovatorsController($this->request);
+            $topProducts = $innovators->topProductsFor((int)$user->get('id'));
+        }
+
+        $this->set(compact('user', 'topProducts'));
+    }
+
+    public function edit($id = null)
+    {
+        $user = $this->Users->get($id, contain: []);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+
+            // Handle the optional profile-image upload. If the user attached
+            // a new image, replace; if they left the field blank, keep the
+            // existing profile string by stripping the empty upload from
+            // the patch payload entirely.
+            $newProfile = $this->processProfileUpload($data['profile'] ?? null);
+            if ($newProfile !== null) {
+                $data['profile'] = $newProfile;
+            } else {
+                unset($data['profile']);
+            }
+
+            $user = $this->Users->patchEntity($user, $data);
+            if ($this->Users->save($user)) {
+
+                $this->Authentication->setIdentity($user->toArray());
+                $this->Flash->success(__('The user has been saved.'));
+
+                return $this->redirect(['action' => 'view', $user->get('id')]);
+            }
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $this->set(compact('user'));
+    }
+
+    public function delete($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $user = $this->Users->get($id);
+        $user['is_active'] = 0;
+        // $user = $this->Users->patchEntity($user, $this->request->getData());
+        if ($this->Users->save($user)) {
+            $this->Flash->success(__('Your account has been disabled. You will soon be notified of its official deletion.'));
+            $this->logout();
+        } else {
+            $this->Flash->error(__('Your account could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['controller' => 'Pages', 'action' => 'landingPage']);
     }
 
     /**
@@ -160,7 +280,20 @@ class AuthController extends AppController
             $user->nonce_expiry = null;
 
             if ($this->Users->save($user)) {
-                $this->Flash->success('Your password has been successfully reset. Please login with new password. ');
+                $mailer = new Mailer('default');
+                $mailer
+                    ->setEmailFormat('both')
+                    ->setTo($user->email)
+                    ->setSubject('Your SustainChain password has been changed');
+                $mailer->viewBuilder()->setTemplate('password_changed')->setLayout('sustainchain');
+                $mailer->setViewVars([
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => $user->email,
+                ]);
+                $mailer->deliver();
+
+                $this->Flash->success('Your password has been successfully reset. Please login with your new password.');
 
                 return $this->redirect(['action' => 'login']);
             }
@@ -206,10 +339,25 @@ class AuthController extends AppController
         if ($result && $result->isValid()) {
             if ($this->request->is('post')) {
                 $identity = $this->Authentication->getIdentity();
+
+                // Block inactive accounts. Covers two cases:
+                //   (a) admin deactivated an active account
+                //   (b) farmer / manufacturer awaiting admin approval after signup
+                if ($identity && (int)$identity->get('is_active') === 0) {
+                    $this->Authentication->logout();
+                    $role = (string)$identity->get('role');
+                    if (in_array($role, ['farmer', 'manufacturer'], true)) {
+                        $this->Flash->error('Your account is awaiting admin approval. You will receive an email once it has been reviewed.');
+                    } else {
+                        $this->Flash->error('This account has been deactivated. Please contact support.');
+                    }
+                    return $this->redirect(['action' => 'login']);
+                }
+
                 $isAdmin = $identity && ($identity->get('role') === 'admin');
 
                 $fallbackLocation = $isAdmin
-                    ? ['prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index']
+                    ? ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index']
                     : ['controller' => 'Dashboard', 'action' => 'index'];
 
                 return $this->redirect($this->Authentication->getLoginRedirect() ?? $fallbackLocation);
@@ -225,6 +373,50 @@ class AuthController extends AppController
      *
      * @return \Cake\Http\Response|null|void
      */
+    /**
+     * Handle an uploaded profile-image file. Returns the stored filename
+     * (just the basename, no path) so it can be patched onto the user
+     * entity, or null when no upload was provided / the upload was empty.
+     *
+     * Saves into webroot/img/profiles/ with a uniqid prefix so two users
+     * uploading "logo.png" don't collide.
+     *
+     * @param mixed $file Either a Psr\Http\Message\UploadedFileInterface
+     *                    (Cake's form upload) or null when the field was
+     *                    left blank.
+     * @return string|null Stored filename, or null when no usable file.
+     */
+    private function processProfileUpload($file): ?string
+    {
+        if (!$file || !is_object($file) || !method_exists($file, 'getClientFilename')) {
+            return null;
+        }
+        $clientName = $file->getClientFilename();
+        if (empty($clientName)) {
+            return null;
+        }
+
+        // Normalise the basename and prepend a uniqid so collisions are
+        // statistically impossible.
+        $safeBase = preg_replace('/[^A-Za-z0-9._-]/', '_', basename($clientName));
+        $stored = uniqid('', false) . '_' . $safeBase;
+
+        $targetDir = WWW_ROOT . 'img' . DS . 'profiles';
+        if (!is_dir($targetDir)) {
+            @mkdir($targetDir, 0775, true);
+        }
+
+        try {
+            $file->moveTo($targetDir . DS . $stored);
+        } catch (\Throwable $e) {
+            // Swallow — if the move fails, fall back to "no profile" rather
+            // than blowing up the whole registration / edit flow.
+            return null;
+        }
+
+        return $stored;
+    }
+
     public function logout()
     {
         // We only need to log out a user when they're logged in

@@ -25,7 +25,7 @@ $this->Html->css('marketplace', ['block' => true]);
 <style>
 /* ── Hero banner ── */
 .form-hero {
-    background: var(--g0);
+    background: var(--s0);
     position: relative;
     overflow: hidden;
     padding: 5rem 2.5rem 4rem;
@@ -53,9 +53,9 @@ $this->Html->css('marketplace', ['block' => true]);
 }
 .form-eyebrow {
     display: inline-flex; align-items: center; gap: .5rem;
-    background: rgba(200,232,64,.12);
-    border: 1px solid rgba(200,232,64,.22);
-    color: var(--e1);
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.35);
+    color: var(--white);
     padding: .3rem 1rem; border-radius: var(--r999);
     margin-bottom: 1.25rem;
     animation: reveal .5s ease both;
@@ -79,7 +79,7 @@ $this->Html->css('marketplace', ['block' => true]);
 }
 .form-hero-sub {
     font-size: 1rem; line-height: 1.7;
-    color: rgba(255,255,255,.45);
+    color: rgba(255,255,255,.85);
     animation: reveal .6s .2s ease both;
 }
 
@@ -90,7 +90,7 @@ $this->Html->css('marketplace', ['block' => true]);
 
 /* ── Main form area ── */
 .form-main {
-    background: var(--s0);
+    background: var(--e0);
     padding: 4rem 2.5rem 6rem;
 }
 .form-main-inner {
@@ -127,7 +127,7 @@ $this->Html->css('marketplace', ['block' => true]);
 .form-card select,
 .form-card textarea {
     width: 100%;
-    background: var(--s0);
+    background: var(--e0);
     border: 1.5px solid var(--s2);
     border-radius: var(--r16);
     padding: .85rem 1.1rem;
@@ -390,6 +390,15 @@ $this->Html->css('marketplace', ['block' => true]);
                     'label' => 'Price (AUD) *',
                     'placeholder' => 'e.g. 6.50',
                     'min' => '0.01',
+                ]) ?>
+
+                <?= $this->Form->control('discount', [
+                    'label' => 'Discount (%)',
+                    'placeholder' => 'e.g. 10 (leave blank for no discount)',
+                    'type' => 'number',
+                    'min' => '0',
+                    'max' => '100',
+                    'step' => '1',
                 ]) ?>
 
                 <?= $this->Form->control('category', [

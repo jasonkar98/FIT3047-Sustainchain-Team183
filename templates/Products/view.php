@@ -14,9 +14,14 @@ $this->Html->css('marketplace', ['block' => true]);
 ?>
 
 <style>
+/* ── Compact header for view page ── */
+.marketplace-header {
+    padding: 2.5rem 2.5rem 2rem;
+}
+
 /* ── Product view layout ── */
 .product-view-wrap {
-    background: var(--s0);
+    background: var(--e0);
     padding: 4rem 2.5rem 6rem;
 }
 .product-view-inner {
@@ -249,6 +254,151 @@ $this->Html->css('marketplace', ['block' => true]);
     height: 16px;
 }
 
+/* ── Unlisted state ── */
+.product-view-card.is-unlisted .product-view-img,
+.product-view-card.is-unlisted .product-view-img-wrap img {
+    filter: grayscale(.6) brightness(.85);
+}
+.product-view-delisted-banner {
+    background: #fcf6f5;
+    border: 1px solid #f0c6c6;
+    border-radius: var(--r16);
+    padding: .9rem 1.1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    color: #7a2025;
+    font-size: .85rem;
+    line-height: 1.5;
+}
+.product-view-delisted-banner.is-admin {
+    background: #faf6ec;
+    border-color: #d9c79a;
+    color: #6a4f1c;
+}
+.product-view-delisted-banner .banner-pill {
+    flex-shrink: 0;
+    background: #b00020;
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .25rem .65rem;
+    border-radius: 999px;
+}
+.product-view-delisted-banner.is-admin .banner-pill {
+    background: #6a4f1c;
+}
+.product-view-delisted-pill {
+    display: inline-flex;
+    align-items: center;
+    background: #b00020;
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .3rem .85rem;
+    border-radius: 999px;
+}
+.product-view-delisted-pill.is-admin { background: #6a4f1c; }
+
+/* Edit / moderation actions */
+.product-view-mod-actions {
+    display: flex;
+    gap: .6rem;
+    flex-wrap: wrap;
+    margin-top: .25rem;
+}
+.btn-edit-product {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .7rem 1.4rem;
+    border-radius: var(--r16);
+    background: var(--white);
+    border: 1px solid var(--g0);
+    color: var(--g0);
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: .9rem;
+    text-decoration: none;
+    transition: background .15s, color .15s, transform .18s var(--ease-spring);
+}
+.btn-edit-product:hover {
+    background: var(--g0);
+    color: var(--white);
+    transform: translateY(-1px);
+}
+.btn-edit-product.is-admin {
+    background: #6a4f1c;
+    color: #fff;
+    border-color: #6a4f1c;
+}
+.btn-edit-product.is-admin:hover {
+    background: #523c14;
+    border-color: #523c14;
+}
+
+/* Admin unlist / relist buttons */
+.btn-unlist-product, .btn-relist-product {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .7rem 1.4rem;
+    border-radius: var(--r16);
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: .9rem;
+    border: 1px solid;
+    background: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .15s, color .15s, transform .18s var(--ease-spring);
+}
+.btn-unlist-product {
+    color: #b00020;
+    border-color: #b00020;
+}
+.btn-unlist-product:hover {
+    background: #b00020;
+    color: #fff;
+    transform: translateY(-1px);
+}
+.btn-relist-product {
+    color: #2e7d52;
+    border-color: #2e7d52;
+}
+.btn-relist-product:hover {
+    background: #2e7d52;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* Admin hard-delete — solid red for unmistakable destruction */
+.btn-delete-product {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .7rem 1.4rem;
+    border-radius: var(--r16);
+    background: #b00020;
+    border: 1px solid #b00020;
+    color: #fff;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: .9rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .15s, transform .18s var(--ease-spring);
+}
+.btn-delete-product:hover {
+    background: #8c0019;
+    border-color: #8c0019;
+    transform: translateY(-1px);
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
     .product-view-card {
@@ -292,7 +442,17 @@ $this->Html->css('marketplace', ['block' => true]);
             </a>
         </div>
 
-        <div class="product-view-card">
+        <?php
+            // Unlisted state — derived from is_listed + unlist_reason.
+            $isUnlisted = (int)($product->is_listed ?? 1) === 0;
+            $unlistReason = $product->unlist_reason ?? null;
+            $unlistLabel = $unlistReason === 'admin' ? 'Admin Unlisted' : 'Unlisted';
+            $unlistExplain = $unlistReason === 'admin'
+                ? 'This product has been unlisted by a SustainChain admin and is no longer available for purchase. It will remain in your saved items until you remove it.'
+                : 'This product is currently unlisted because the seller\'s account is deactivated. It is no longer available for purchase. It will remain in your saved items until you remove it.';
+        ?>
+
+        <div class="product-view-card<?= $isUnlisted ? ' is-unlisted' : '' ?>">
 
             <!-- Image -->
             <div class="product-view-img-wrap">
@@ -305,9 +465,13 @@ $this->Html->css('marketplace', ['block' => true]);
                     <img class="product-view-img" src="https://placehold.co/800x600/d9ede4/2e7d52?text=No+Image" alt="No image">
                 <?php endif; ?>
 
-                <!-- Save / star button -->
-                <?php $identity = $this->request->getAttribute('identity'); ?>
-                <?php if ($identity): ?>
+                <!-- Save / star button — hidden for owners (cannot favourite own product) -->
+                <?php
+                    $identity = $this->request->getAttribute('identity');
+                    $viewerOwnsProduct = $identity
+                        && (int)$identity->getIdentifier() === (int)$product->user_id;
+                ?>
+                <?php if ($identity && !$viewerOwnsProduct): ?>
                 <button type="button"
                     class="product-view-save product-save-btn<?= !empty($isSaved) ? ' is-saved' : '' ?>"
                     aria-pressed="<?= !empty($isSaved) ? 'true' : 'false' ?>"
@@ -324,8 +488,13 @@ $this->Html->css('marketplace', ['block' => true]);
 
             <!-- Details -->
             <div class="product-view-details">
-                <div>
+                <div style="display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;">
                     <span class="product-view-category"><?= h($product->category) ?></span>
+                    <?php if ($isUnlisted): ?>
+                        <span class="product-view-delisted-pill<?= $unlistReason === 'admin' ? ' is-admin' : '' ?>">
+                            <?= h($unlistLabel) ?>
+                        </span>
+                    <?php endif; ?>
                 </div>
 
                 <h1 class="product-view-name"><?= h($product->name) ?></h1>
@@ -355,6 +524,73 @@ $this->Html->css('marketplace', ['block' => true]);
                 </div>
                 <?php endif; ?>
 
+                <div class="product-view-actions">
+                    <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+                    <?= $this->Form->create(null, ['url' => ['controller' => 'Cart', 'action' => 'add', $product->id]]) ?>
+                        <button type="submit" class="btn-cart">
+                            <svg class="btn-cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            </svg>
+                            Add to Cart
+                        </button>
+                    <?= $this->Form->end() ?>
+                    <?php endif; ?>
+                </div>
+                <?php if ($isUnlisted): ?>
+                    <div class="product-view-delisted-banner<?= $unlistReason === 'admin' ? ' is-admin' : '' ?>">
+                        <span class="banner-pill"><?= h($unlistLabel) ?></span>
+                        <span><?= h($unlistExplain) ?></span>
+                    </div>
+                <?php endif; ?>
+
+                <?php
+                    $viewerIsAdmin = $identity && $identity->get('role') === 'admin';
+                    $canEdit = $viewerIsAdmin || $viewerOwnsProduct;
+                ?>
+                <?php if ($canEdit || $viewerIsAdmin): ?>
+                    <div class="product-view-mod-actions">
+                        <?php if ($canEdit): ?>
+                            <?= $this->Html->link(
+                                ($viewerIsAdmin && !$viewerOwnsProduct ? 'Edit' : 'Edit product'),
+                                ['controller' => 'Products', 'action' => 'edit', $product->id],
+                                ['class' => 'btn-edit-product' . ($viewerIsAdmin && !$viewerOwnsProduct ? ' is-admin' : '')]
+                            ) ?>
+                        <?php endif; ?>
+
+                        <?php if ($viewerIsAdmin): ?>
+                            <?php if ($isUnlisted): ?>
+                                <?= $this->Form->postLink(
+                                    'Relist product',
+                                    ['controller' => 'Products', 'action' => 'adminToggleListing', $product->id],
+                                    [
+                                        'class' => 'btn-relist-product',
+                                        'confirm' => 'Relist "' . $product->name . '" on the marketplace?',
+                                    ]
+                                ) ?>
+                            <?php else: ?>
+                                <?= $this->Form->postLink(
+                                    'Unlist product',
+                                    ['controller' => 'Products', 'action' => 'adminToggleListing', $product->id],
+                                    [
+                                        'class' => 'btn-unlist-product',
+                                        'confirm' => 'Unlist "' . $product->name . '" from the marketplace? It will be tagged as Admin Unlisted and removed from public browse.',
+                                    ]
+                                ) ?>
+                            <?php endif; ?>
+
+                            <?= $this->Form->postLink(
+                                'Delete product',
+                                ['controller' => 'Products', 'action' => 'delete', $product->id],
+                                [
+                                    'class' => 'btn-delete-product',
+                                    'method' => 'delete',
+                                    'confirm' => 'PERMANENTLY delete "' . $product->name . '"?' . "\n\n" . 'This cannot be undone. The product will be removed from the marketplace and from any saved listings.',
+                                ]
+                            ) ?>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
 
             </div>
 

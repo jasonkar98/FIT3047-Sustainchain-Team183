@@ -51,6 +51,11 @@ class OrdersTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
+
+        $this->hasMany('OrderItems', [
+            'foreignKey' => 'order_id',
+            'dependent'  => true,
+        ]);
     }
 
     /**
@@ -64,6 +69,12 @@ class OrdersTable extends Table
         $validator
             ->nonNegativeInteger('user_id')
             ->notEmptyString('user_id');
+
+        $validator
+            ->scalar('order_number')
+            ->maxLength('order_number', 20)
+            ->requirePresence('order_number', 'create')
+            ->notEmptyString('order_number');
 
         $validator
             ->decimal('total_amount')

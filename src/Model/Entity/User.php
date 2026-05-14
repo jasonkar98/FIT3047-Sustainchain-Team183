@@ -13,9 +13,10 @@ use Cake\ORM\Entity;
  * @property string $email
  * @property string $password
  * @property string $role
+ * @property bool $is_active
  * @property string $first_name
  * @property string $last_name
- * @property string|null $avatar
+ * @property string|null $profile
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
  * @property string|null $nonce
@@ -42,16 +43,18 @@ class User extends Entity
     protected array $_accessible = [
         'email' => true,
         'password' => true,
-        'role' => false,
         'first_name' => true,
         'last_name' => true,
-        'avatar' => true,
-        'role' => false,   
+        'profile' => true,
+        'role' => true,   
+        'goals' => true,
+        'business_values' => true,
         'created' => false,
         'modified' => false,
         'nonce' => false, // Nonce and expiry dates are to be set in Controller directly, not through patching
         'nonce_expiry' => false,
         'blog_articles' => true,
+        'is_active' => true
     ];
 
     /**

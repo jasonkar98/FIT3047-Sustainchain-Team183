@@ -44,6 +44,10 @@ class UsersTable extends Table
         $this->setPrimaryKey('id');
         $this->addBehavior('CanAuthenticate');
         $this->addBehavior('Timestamp');
+
+        $this->hasMany('Products', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     /**
@@ -61,33 +65,10 @@ class UsersTable extends Table
 
         $validator
             ->scalar('password')
-            ->minLength('password', 8, 'Password must be at least 8 characters')
             ->maxLength('password', 255)
-            ->add('password', 'hasUppercase', [
-                'rule' => ['custom', '/[A-Z]/'],
-                'message' => 'Password must contain at least one uppercase letter',
-            ])
-            ->add('password', 'hasNumber', [
-                'rule' => ['custom', '/[0-9]/'],
-                'message' => 'Password must contain at least one number',
-            ])
-            ->add('password', 'hasSpecial', [
-                'rule' => ['custom', '/[\W_]/'],
-                'message' => 'Password must contain at least one special character',
-            ])
             ->requirePresence('password', 'create')
             ->notEmptyString('password');
-        
-        $validator
-            ->add('password_confirm', 'matchesPassword', [
-                'rule' => function ($value, $context) {
-                    return $value === $context['data']['password'];
-                },
-                'message' => 'Passwords do not match',
-            ])
-            ->requirePresence('password_confirm', 'create')
-            ->notEmptyString('password_confirm', 'Please confirm your password');
-            
+
         $validator
             ->scalar('nonce')
             ->maxLength('nonce', 255)
@@ -97,6 +78,61 @@ class UsersTable extends Table
             ->dateTime('nonce_expiry')
             ->allowEmptyDateTime('nonce_expiry');
 
+        return $validator;
+    }
+
+    /**
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationResetPassword(Validator $validator): Validator
+    {
+        $validator
+            ->scalar('password')
+            ->requirePresence('password', 'reset-password')
+            ->notEmptyString('password');
+    
+        $validator
+            ->requirePresence('password_confirm', 'reset-password')
+            ->sameAs('password_confirm', 'password', 'Both passwords must match');
+    
+        $validator
+            ->uuid('nonce')
+            ->maxLength('nonce', 128)
+            ->allowEmptyString('nonce');
+    
+        return $validator;
+    }
+    /**
+     * Validation rules used by the admin edit screen — only first_name and
+     * last_name are validated here. Role is not patched (not mass-assignable
+     * on the User entity) and is validated manually in the controller.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationAdminEdit(Validator $validator): Validator
+    {
+        $validator
+            ->scalar('first_name')
+            ->maxLength('first_name', 50)
+            ->requirePresence('first_name')
+            ->notEmptyString('first_name', 'First name is required')
+            ->add('first_name', 'lettersOnly', [
+                'rule' => ['custom', '/^[a-zA-Z ]+$/'],
+                'message' => 'First name may only contain letters and spaces',
+            ]);
+
+        $validator
+            ->scalar('last_name')
+            ->maxLength('last_name', 50)
+            ->requirePresence('last_name')
+            ->notEmptyString('last_name', 'Last name is required')
+            ->add('last_name', 'lettersOnly', [
+                'rule' => ['custom', '/^[a-zA-Z ]+$/'],
+                'message' => 'Last name may only contain letters and spaces',
+            ]);
+            
         return $validator;
     }
 
