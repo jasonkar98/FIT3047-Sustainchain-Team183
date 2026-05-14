@@ -53,7 +53,7 @@ $selectRolesOptions = array_combine(
 <style>
 /* ── Hero banner ── */
 .form-hero {
-    background: rgb(99, 112, 75);
+    background: rgba(121,161,95,0.95);
     position: relative;
     overflow: hidden;
     padding: 5rem 2.5rem 4rem;
@@ -107,7 +107,7 @@ $selectRolesOptions = array_combine(
 }
 .form-hero-sub {
     font-size: 1rem; line-height: 1.7;
-    color: rgba(255,255,255,.45);
+    color: rgba(255, 255, 255);
     animation: reveal .6s .2s ease both;
 }
 
@@ -118,7 +118,7 @@ $selectRolesOptions = array_combine(
 
 /* ── Main form area ── */
 .form-main {
-    background: var(--s0);
+    background: var(--e0);
     padding: 4rem 2.5rem 6rem;
 }
 .form-main-inner {

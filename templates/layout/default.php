@@ -758,27 +758,45 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         ?>
         <ul class="nav-links">
             <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
-            <li><?= $this->Html->link('Marketplace', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link('About Us', 
+            ['plugin' => false, 'prefix' => false, 'controller' => 'Pages', 'action' => 'about'],
+            ['class' => ($currentController === 'Pages' ? 'active' : '')]) ?></li>
             <?php endif; ?>
+
             <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
-            <li><?= $this->Html->link('Discover Innovators', ['plugin' => false, 'prefix' => false, 'controller' => 'Innovators', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link('Marketplace', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index'],
+            ['class' => ($currentController === 'Products' ? 'active' : '')] ) ?></li>
+            <?php endif; ?>
+
+            <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+            <li><?= $this->Html->link('Discover Innovators', ['plugin' => false, 'prefix' => false, 'controller' => 'Innovators', 'action' => 'index'],
+            ['class' => ($currentController === 'Innovators' ? 'active' : '')]) ?></li>
             <?php endif; ?> 
+
             <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
-                <li><?= $this->Html->link('Contact', ['plugin' => false, 'prefix' => false, 'controller' => 'Enquiries', 'action' => 'add']) ?></li>
+                <li><?= $this->Html->link('Contact', ['plugin' => false, 'prefix' => false, 'controller' => 'Enquiries', 'action' => 'add'],
+                ['class' => ($currentController === 'Enquiries' ? 'active' : '')]) ?></li>
             <?php endif; ?>
 
             <!-- Admin-only links -->
             <?php if ($identity && $identity->get('role') === 'admin'): ?>
-                <li><?= $this->Html->link('Product Management', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index']) ?></li>
+                <li><?= $this->Html->link('Product Management', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index'],
+                ['class' => ($currentController === 'Products' ? 'active' : '')]) ?></li>
             <?php endif; ?>
+            
             <?php if ($identity && $identity->get('role') === 'admin'): ?>
-                <li><?= $this->Html->link('User Management', ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'index']) ?></li>
+                <li><?= $this->Html->link('User Management', ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'index'],
+                ['class' => ($currentController === 'Users' ? 'active' : '')]) ?></li>
             <?php endif; ?>
+           
             <?php if ($identity && $identity->get('role') === 'admin'): ?>
-                <li><?= $this->Html->link('Enquiry Management', ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Enquiries', 'action' => 'index']) ?></li>
+                <li><?= $this->Html->link('Enquiry Management', ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Enquiries', 'action' => 'index'],
+                ['class' => ($currentController === 'Enquiries' ? 'active' : '')]) ?></li>
             <?php endif; ?>
+
             <?php if ($identity && $identity->get('role') === 'admin'): ?>
-            <?= $this->Html->link('Content Block Management', ['prefix' => 'Admin', 'plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']) ?></li>
+            <?= $this->Html->link('Content Block Management', ['prefix' => 'Admin', 'plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index'],
+                ['class' => ($currentController === 'ContentBlocks' ? 'active' : '')]) ?></li>
             <?php endif; ?>
         </ul>
     </div>

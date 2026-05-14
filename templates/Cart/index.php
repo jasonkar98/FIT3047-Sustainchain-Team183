@@ -15,7 +15,7 @@ foreach ($products as $p) {
 <style>
 /* ── Header ── */
 .cart-header {
-    background: var(--g0);
+    background: rgba(121,161,95,0.95);
     color: var(--white);
     padding: 4rem 2.5rem 3rem;
     text-align: center;
@@ -331,7 +331,7 @@ foreach ($products as $p) {
 <!-- Header -->
 <div class="cart-header">
     <div class="cart-header-inner">
-        <span class="t-label section-tag">SustainChain</span>
+        
         <h1 class="cart-title">Your Cart</h1>
     </div>
 </div>

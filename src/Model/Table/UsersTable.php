@@ -103,7 +103,7 @@ class UsersTable extends Table
     
         return $validator;
     }
-    
+    /**
      * Validation rules used by the admin edit screen — only first_name and
      * last_name are validated here. Role is not patched (not mass-assignable
      * on the User entity) and is validated manually in the controller.
