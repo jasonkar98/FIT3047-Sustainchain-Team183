@@ -23,15 +23,10 @@ $this->assign('title', 'SustainChain');
                 Sustainable Commerce Platform
             </div>
 
-            <h1 class="hero-title t-display">
-                Commerce that's<br>
-                good for the <em>planet</em>
-            </h1>
+            <?= $this->ContentBlock->html('landing-page-slogan') ?>
 
             <p class="hero-sub">
-                SustainChain connects buyers, sellers, manufacturers, and farmers
-                in a vibrant marketplace built on transparency, sustainability, and
-                ethical trade - from farm to door.
+                <?= $this->ContentBlock->text('landing-page-description') ?>
             </p>
 
             <div class="hero-actions">
@@ -73,8 +68,7 @@ $this->assign('title', 'SustainChain');
             Everything you need to <em>trade sustainably</em>
         </h2>
         <p class="section-body">
-            SustainChain is more than a marketplace. It's a complete ecosystem for responsible commerce,
-            giving every participant the tools to make a measurable difference.
+            <?= $this->ContentBlock->text('landing-page-pillar-about') ?>
         </p>
     </div>
 
@@ -184,34 +178,11 @@ $this->assign('title', 'SustainChain');
 <section class="mission" id="mission">
     <div class="mission-text">
         <p class="t-label section-tag">Our Mission</p>
-        <h2 class="section-title t-display">
-            A greener future<br>starts with <em>better trade</em>
-        </h2>
-        <p class="section-body">
-            SustainChain was founded on the belief that commerce can be a force
-            for good. By connecting every participant in the supply chain - from the farmer growing the crop
-            to the consumer at the door, we make sustainability the default, not the exception.
-        </p>
+
+        <?= $this->ContentBlock->html('landing-page-mission') ?>
 
         <ul class="values">
-            <li>
-                <div class="values-body">
-                    <p class="values-title">Responsible consumption</p>
-                    <p class="values-desc">Every product on SustainChain is vetted for genuine environmental credentials - no greenwashing.</p>
-                </div>
-            </li>
-            <li>
-                <div class="values-body">
-                    <p class="values-title">Ethical commerce</p>
-                    <p class="values-desc">Fair pricing for farmers, transparent margins for sellers, and trust for buyers.</p>
-                </div>
-            </li>
-            <li>
-                <div class="values-body">
-                    <p class="values-title">Community-driven</p>
-                    <p class="values-desc">A living, growing community of people who believe trade and ecology can co-exist.</p>
-                </div>
-            </li>
+            <?= $this->ContentBlock->html('landing-page-values') ?>
         </ul>
     </div>
 </section>
@@ -250,15 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- login/register -->
 <section class="final-cta">
     <div class="cta-blob">
-        <p class="t-label section-tag" style="margin-bottom:.75rem">Get started today</p>
-        <h2 class="section-title t-display">
-            Ready to join the<br><em>sustainable commerce</em> revolution?
-        </h2>
-        <p class="section-body">
-            Whether you're a buyer, seller, manufacturer, or farmer,
-            SustainChain has a place for you. Join a growing community
-            committed to a greener future.
-        </p>
+        <?= $this->ContentBlock->html('landing-page-register') ?>
         <div class="cta-actions">
             <?= $this->Html->link('Sign in', ['controller' => 'Auth', 'action' => 'login'], ['class' => 'btn btn-outline btn-lg btn-signin-cta']) ?>
             <?= $this->Html->link('Create an account', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'btn btn-lime btn-lg btn-create']) ?>
