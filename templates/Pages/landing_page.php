@@ -23,7 +23,10 @@ $this->assign('title', 'SustainChain');
                 Sustainable Commerce Platform
             </div>
 
-            <?= $this->ContentBlock->html('landing-page-slogan') ?>
+             <h1 class="hero-title t-display">
+                Commerce that's<br>
+                good for the <em>planet</em>
+            </h1>
 
             <p class="hero-sub">
                 <?= $this->ContentBlock->text('landing-page-description') ?>

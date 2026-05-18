@@ -197,13 +197,13 @@
 }
 
 /* Stretched link — covers the whole card */
-.btn-product::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    border-radius: inherit;
-}
+/*.btn-product::after {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    inset: 0;*/
+/*    z-index: 1;*/
+/*    border-radius: inherit;*/
+/*}*/
 
 .btn-product:hover {
     background: var(--g2);
