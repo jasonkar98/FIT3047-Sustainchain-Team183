@@ -15,7 +15,7 @@ $this->Html->css('marketplace', ['block' => true]);
 .innovators-page {
     /* Fill the viewport — no scroll on desktop. Header + grid stack vertically. */
     min-height: calc(100vh - var(--nav-h, 80px));
-    background: var(--s0);
+    background: var(--e0);
     padding: 1.5rem 1.5rem 1.5rem;
     box-sizing: border-box;
     display: flex;
