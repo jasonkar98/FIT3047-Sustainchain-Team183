@@ -163,17 +163,25 @@ foreach ($products as $p) {
 }
 .qty-btn:hover { background: var(--s2); }
 .qty-display {
-    width: 36px;
+    width: 42px;
     text-align: center;
     font-family: 'Cabinet Grotesk', sans-serif;
     font-weight: 700;
     font-size: 0.95rem;
     color: var(--g0);
-    pointer-events: none;
     border-left: 1.5px solid var(--s2);
     border-right: 1.5px solid var(--s2);
+    border-top: none;
+    border-bottom: none;
+    border-radius: 0;
     padding: 0.1rem 0;
+    background: var(--white);
+    -moz-appearance: textfield;
 }
+.qty-display::-webkit-outer-spin-button,
+.qty-display::-webkit-inner-spin-button { -webkit-appearance: none; }
+.qty-display:focus { outline: none; background: var(--s1); }
+
 .btn-delete {
     background: none;
     border: none;
@@ -383,24 +391,30 @@ foreach ($products as $p) {
                     </div>
 
                     <div class="cart-item-controls">
-                        <!-- Decrease qty -->
-                        <?= $this->Form->create(null, ['url' => ['controller' => 'Cart', 'action' => 'updateQty', $product->id], 'style' => 'display:contents']) ?>
-                            <?= $this->Form->hidden('delta', ['value' => -1]) ?>
+                        <?= $this->Form->create(null, [
+                            'url'   => ['controller' => 'Cart', 'action' => 'setQty', $product->id],
+                            'style' => 'display:contents',
+                            'class' => 'qty-form',
+                            'data-product-id' => $product->id,
+                            'data-unit-price' => $product->price,
+                        ]) ?>
                             <div class="qty-box">
-                                <button type="submit" class="qty-btn" aria-label="Decrease quantity">−</button>
-                                <span class="qty-display"><?= $qty ?></span>
+                                <button type="button" class="qty-btn qty-dec" aria-label="Decrease quantity">−</button>
+                                <input
+                                    type="number"
+                                    name="qty"
+                                    class="qty-display qty-input"
+                                    value="<?= $qty ?>"
+                                    min="1"
+                                    max="99"
+                                    aria-label="Quantity"
+                                >
+                                <button type="button" class="qty-btn qty-inc" aria-label="Increase quantity">+</button>
                             </div>
                         <?= $this->Form->end() ?>
 
-                        <!-- Increase qty -->
-                        <?= $this->Form->create(null, ['url' => ['controller' => 'Cart', 'action' => 'updateQty', $product->id], 'style' => 'display:contents']) ?>
-                            <?= $this->Form->hidden('delta', ['value' => 1]) ?>
-                            <button type="submit" class="qty-btn" style="border:1.5px solid var(--s2);border-radius:var(--r16);" aria-label="Increase quantity">+</button>
-                        <?= $this->Form->end() ?>
-
-                        <!-- Delete entirely -->
                         <?= $this->Form->create(null, ['url' => ['controller' => 'Cart', 'action' => 'remove', $product->id], 'style' => 'display:contents']) ?>
-                            <button type="submit" class="btn-delete">Delete</button>
+                            <button type="submit" class="btn-delete">Remove</button>
                         <?= $this->Form->end() ?>
                     </div>
                 </div>
@@ -457,5 +471,97 @@ foreach ($products as $p) {
     </div>
 
 <?php endif; ?>
+
+<script>
+    (function () {
+        const csrfToken = <?= json_encode($this->request->getAttribute('csrfToken')) ?>;
+        const setQtyBase = <?= json_encode($this->Url->build(['controller' => 'Cart', 'action' => 'setQty'])) ?>;
+        const removeBase = <?= json_encode($this->Url->build(['controller' => 'Cart', 'action' => 'remove'])) ?>;
+
+        document.querySelectorAll('.qty-form').forEach(form => {
+            const productId   = form.dataset.productId;
+            const unitPrice   = parseFloat(form.dataset.unitPrice);
+            const input       = form.querySelector('.qty-input');
+            const item        = form.closest('.cart-item');
+            let debounce;
+
+            function syncServer(qty) {
+                clearTimeout(debounce);
+                debounce = setTimeout(() => {
+                    fetch(setQtyBase + '/' + productId, {
+                        method: 'POST',
+                        headers: { 'X-CSRF-Token': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'qty=' + qty,
+                    });
+                }, 400);
+            }
+
+            function applyQty(qty) {
+                qty = Math.max(1, Math.min(99, qty));
+                input.value = qty;
+                const lineEl = item.querySelector('.cart-item-line-total');
+                if (lineEl) lineEl.textContent = '$' + (unitPrice * qty).toFixed(2);
+                recalcSummary();
+                syncServer(qty);
+            }
+
+            form.querySelector('.qty-dec').addEventListener('click', () => applyQty(parseInt(input.value) - 1));
+            form.querySelector('.qty-inc').addEventListener('click', () => applyQty(parseInt(input.value) + 1));
+
+            input.addEventListener('input', () => {
+                const val = parseInt(input.value);
+                if (!isNaN(val)) applyQty(val);
+            });
+
+            input.addEventListener('blur', () => {
+                // Snap to 1 if left empty or invalid
+                if (!input.value || parseInt(input.value) < 1) applyQty(1);
+            });
+        });
+
+        // Delete buttons
+        document.querySelectorAll('.cart-item').forEach(item => {
+            const deleteForm = [...item.querySelectorAll('form')].find(f => f.action.includes('remove'));
+            if (!deleteForm) return;
+            const productId = deleteForm.action.split('/').pop();
+            deleteForm.addEventListener('submit', async e => {
+                e.preventDefault();
+                item.style.transition = 'opacity .2s, transform .2s';
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-8px)';
+                await fetch(removeBase + '/' + productId, { method: 'POST', headers: { 'X-CSRF-Token': csrfToken } });
+                setTimeout(() => { item.remove(); recalcSummary(); if (!document.querySelector('.cart-item')) location.reload(); }, 200);
+            });
+        });
+
+        function recalcSummary() {
+            const summaryRows = [...document.querySelectorAll('.summary-row')];
+            const cartItems   = [...document.querySelectorAll('.cart-item')];
+            let grandTotal = 0, totalItems = 0;
+
+            cartItems.forEach((item, i) => {
+                const input    = item.querySelector('.qty-input');
+                const qty      = parseInt(input?.value ?? '1', 10);
+                const unitPrice = parseFloat(item.querySelector('.qty-form')?.dataset.unitPrice ?? 0);
+                const line     = unitPrice * qty;
+                grandTotal    += line;
+                totalItems    += qty;
+                if (summaryRows[i]) {
+                    const nameSpan = summaryRows[i].querySelector('span:first-child');
+                    const amtSpan  = summaryRows[i].querySelector('span:last-child');
+                    if (nameSpan) nameSpan.textContent = nameSpan.textContent.replace(/×\d+/, '×' + qty);
+                    if (amtSpan)  amtSpan.textContent  = '$' + line.toFixed(2);
+                }
+            });
+
+            summaryRows.forEach((row, i) => { if (i >= cartItems.length) row.remove(); });
+
+            const label = document.querySelector('.summary-total-label');
+            const amt   = document.querySelector('.summary-total-amount');
+            if (label) label.textContent = 'Total (' + totalItems + ' item' + (totalItems !== 1 ? 's' : '') + ')';
+            if (amt)   amt.textContent   = '$' + grandTotal.toFixed(2);
+        }
+    })();
+</script>
 
 </div>
