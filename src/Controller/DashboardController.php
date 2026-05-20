@@ -24,9 +24,10 @@ class DashboardController extends AppController
 
         $orders = $this->fetchTable('Orders')
             ->find()
-            ->where(['user_id' => $identity->id])
-            ->all()
-            ->toArray();
+            ->where(['Orders.user_id' => $identity->get('id')])
+            ->contain(['OrderItems' => ['Products']])
+            ->orderBy(['Orders.created' => 'DESC'])
+            ->all();
 
         $enquiries = $this->fetchTable('Enquiries')
         ->find()

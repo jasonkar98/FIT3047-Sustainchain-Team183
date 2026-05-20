@@ -1,16 +1,16 @@
 :root {
-    --g0: #0A400C;
+    --g0: #0a400c;
     --g1: #0d5210;
-    --g2: #0A400C;
+    --g2: #0a400c;
     --g3: #819067;
-    --g4: #B1AB86;
+    --g4: #b1ab86;
     --g5: #d4ceb8;
     --g6: #ede9d8;
-    --e0: #FEFAE0;
-    --e1: #B1AB86;
-    --s0: #FEFAE0;
-    --s2: #B1AB86;
-    --ink: #0A400C;
+    --e0: #fefae0;
+    --e1: #b1ab86;
+    --s0: #fefae0;
+    --s2: #b1ab86;
+    --ink: #0a400c;
     --muted: #819067;
     --white: #ffffff;
     --r8: 8px;
@@ -28,7 +28,7 @@ body {
     min-height: 100vh;
     margin: 0;
     background-color: var(--g0);
-    background-image: url('../img/signup.png');
+    background-image: url("../img/signup.png");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -158,7 +158,7 @@ body {
 }
 
 .stat-pill {
-    background: rgba(99, 112, 75,0.5);
+    background: rgba(99, 112, 75, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.621);
     border-radius: var(--r16);
     padding: 1rem 1.25rem;
@@ -191,7 +191,7 @@ body {
 
 /* ── Card side ── */
 .auth-card {
-    background: rgba(99, 112, 75,0.45);
+    background: rgba(99, 112, 75, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--r24);
     padding: 2.5rem;
@@ -247,7 +247,6 @@ body {
         box-shadow 0.2s,
         background 0.2s;
 }
-
 
 .auth-form input:hover,
 .auth-form textarea:hover,
@@ -308,7 +307,7 @@ body {
     justify-content: center;
     width: 100%;
     padding: 0.75rem 1.5rem;
-    background: #63704b;
+    background: #2e3523;
     color: var(--e0);
     border: none;
     border-radius: var(--r16);
