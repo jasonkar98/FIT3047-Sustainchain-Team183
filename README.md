@@ -153,40 +153,134 @@ When opening a PR, target `rev`. After review and approval, the reviewer merges 
 
 ---
 
-## Project layout (key folders)
+## Codebase Structure
+
+This section documents how the code is organised, the language/runtime requirements that constrain how we write it, the third-party packages we depend on, and the conventions the team follows when adding new code. New contributors should read this end-to-end before opening a PR.
+
+### Compatibility requirements
+
+The project will not boot if any of these are missing or below the listed version. They're enforced by `composer.json`'s `platform-check` and by Cake itself at runtime.
+
+| Component | Minimum | Notes |
+|---|---|---|
+| PHP | 8.2 | Uses typed class properties, readonly fields, enums, and `match` expressions. |
+| Database | MySQL 5.7+ / MariaDB 10.5+ | Developed against MariaDB 11.8. ENUM columns and `ON DELETE CASCADE` foreign keys assume InnoDB. |
+| Apache | 2.4+ | `mod_rewrite` and `AllowOverride All` must be enabled for `webroot/.htaccess` to route requests through `index.php`. |
+| Composer | 2.x | Required to install / autoload dependencies. |
+| PHP extensions | `pdo_mysql`, `mbstring`, `intl`, `openssl`, `fileinfo`, `gd` | Standard XAMPP / cPanel PHP builds ship these by default. |
+
+When deploying, run `php -v` and `php -m` on the server first to verify.
+
+### Packages and their usage
+
+These are the runtime dependencies declared in `composer.json`. Each is loaded via Composer's PSR-4 autoloader.
+
+| Package | Why we use it |
+|---|---|
+| `cakephp/cakephp` (^5.3) | The MVC framework underpinning everything. Provides routing, ORM, validators, view rendering, middleware. |
+| `cakephp/authentication` (^4.0) | Session-based login, password hashing, identity middleware. Wraps `AuthController` and feeds the `identity` request attribute used in every guarded controller. |
+| `cakephp/migrations` (^4.0) | Reserved for future schema migrations. The current schema lives in `config/schema/*.sql` dumps. |
+| `cakephp/plugin-installer` (^2.0) | Lets Composer install the local `ContentBlocks` plugin via the `plugins/` directory. |
+| `stripe/stripe-php` (^20.1) | Payment Intents and webhook signature verification for the cart checkout flow in `PaymentsController`. |
+| `ezyang/htmlpurifier` (^4.19) | Sanitises rich-text fields (product descriptions, business goals/values) before save. Defends against stored-XSS. |
+| `mobiledetect/mobiledetectlib` (^4.8) | Server-side device detection so mobile-specific layout decisions can be made before render. |
+
+Dev-only dependencies (in `require-dev`) cover testing and code style: `phpunit/phpunit`, `cakephp/bake`, `cakephp/cakephp-codesniffer`, `cakephp/debug_kit`, `josegonzalez/dotenv`. They are not deployed to production.
+
+Local plugin (not on Packagist): `ContentBlocks` under `plugins/ContentBlocks/`. Used to drive editable homepage content. Loaded via `App::loadPlugin('ContentBlocks')` in `src/Application.php`.
+
+### Folder layout
 
 ```
 config/
-  routes.php              # All URL routing
-  schema/                 # SQL dumps for fresh installs
-  .env.example            # Template — copy to .env and fill in keys
+  app.php                 Core framework config, transport setup, salt
+  bootstrap.php           Boot sequence, .env loading, plugin loading
+  routes.php              All URL routing — every route lives here
+  .env.example            Template — copy to .env and fill in keys
+  schema/                 SQL dumps for fresh installs
 
-src/Controller/
-  Admin/                  # Admin-prefixed controllers (Users, Enquiries, Dashboard)
-  AuthController.php      # Register, login, edit profile, password reset
-  CartController.php      # Session-backed cart
-  ChatController.php      # Gemini chatbot proxy
-  InnovatorsController.php  # Discover Innovators landing + detail
-  PaymentsController.php  # Stripe checkout + order persistence
-  ProductsController.php  # Marketplace browse, add/edit/delete, save toggle
-
-src/Model/
-  Entity/                 # User, Product, Order, OrderItem, Favourite, Enquiry, ...
-  Table/                  # Corresponding *Table.php with associations + validators
+src/
+  Application.php         Middleware stack + plugin registration
+  Controller/             Request handlers
+    AppController.php       Shared base for the public surface
+    Admin/                  Admin-prefixed controllers (Users, Enquiries, Dashboard)
+    AuthController.php      Register, login, edit profile, password reset
+    CartController.php      Session-backed cart add/remove/update
+    ChatController.php      Gemini chatbot proxy
+    InnovatorsController.php  Discover Innovators landing + detail
+    PaymentsController.php  Stripe checkout + order persistence
+    ProductsController.php  Marketplace browse, add/edit/delete, save toggle
+  Model/
+    Entity/                 ORM entities (User, Product, Order, OrderItem, …)
+    Table/                  Corresponding *Table.php with associations + validators
+    Behavior/               Custom Cake behaviours (e.g. CanAuthenticate)
 
 templates/
-  Admin/                  # Admin dashboard + user management pages
-  Auth/                   # Register / login / my-account / edit / password reset
-  Innovators/             # Discover Innovators landing + detail
-  Products/               # Marketplace, product detail, my-listings, add/edit
-  Cart/, Payments/        # Cart, checkout, success
-  element/                # Reusable partials (product_card, top_products, flash)
-  layout/                 # default.php (main layout w/ nav and footer)
+  Admin/                  Admin dashboard + user management pages
+  Auth/                   Register / login / my-account / edit / password reset
+  Cart/, Payments/        Cart, checkout, success
+  Innovators/             Discover Innovators landing + detail
+  Products/               Marketplace, product detail, my-listings, add/edit
+  element/                Reusable partials (product_card, top_products, flash, …)
+  email/                  Transactional email templates (HTML + text variants)
+  layout/                 default.php (main layout w/ nav and footer), login.php
 
 webroot/
-  img/products/           # Product images (uploaded)
-  img/profiles/           # Manufacturer profile images (uploaded)
-  css/, js/, font/        # Static assets
+  index.php               Apache document root / Cake front controller
+  css/, js/, font/        Static assets
+  img/products/           Uploaded product images
+  img/profiles/           Uploaded manufacturer profile images
+
+plugins/
+  ContentBlocks/          Local plugin for editable homepage content
+
+tests/                    PHPUnit test suites (TestCase + Fixture)
+tmp/                      Cake cache + log scratch directory (do not commit contents)
+vendor/                   Composer-managed third-party code (do not edit)
+```
+
+### Code-writing guidelines
+
+The team follows these conventions. Code reviewers reject PRs that violate them without a clear reason.
+
+**Framework conventions**
+
+- Stick to CakePHP's MVC structure. Controllers route + orchestrate; Tables hold queries and validators; Entities hold getters/setters/mutators and `_accessible` flags; Templates render. No business logic in templates.
+- Database fields are `snake_case`. PHP variables, methods, and class members are `camelCase`. Classes are `PascalCase`. Templates use `snake_case.php` filenames.
+- Every controller action should `set()` the variables its template needs and either render or `redirect()`. No echoing or direct output from controllers.
+- For destructive actions, use `Form->postLink(..., ['confirm' => ...])` with `allowMethod(['post'])` or `['post', 'delete']` so CSRF protection and accidental-click guards apply.
+- Mass-assignable fields live in the entity's `_accessible` array. Anything sensitive (`password` hash, `role`, `is_active`, `approval_status`) is `false` and assigned directly in the controller after manual validation.
+
+**PHP style**
+
+- PSR-12 with CakePHP's overrides — enforced by `cakephp/cakephp-codesniffer`.
+- Run `composer cs-check` locally before committing. Auto-fix with `composer cs-fix`.
+- Use `declare(strict_types=1);` at the top of every new PHP file.
+- Type-hint everything that can be: parameters, return types, properties.
+
+**SQL & schema**
+
+- Live schema changes are made manually in phpMyAdmin and mirrored into `config/schema/*.sql` in the same PR.
+- New columns are nullable or get sensible DEFAULTs so existing rows survive ALTERs.
+- Foreign keys use `ON DELETE CASCADE` where dependent rows should disappear with their parent; otherwise `ON DELETE SET NULL` (e.g. enquiries detached on user delete to preserve the audit trail).
+- Indexes are added explicitly for columns used in `WHERE`, `JOIN`, or `ORDER BY` on tables expected to grow (`order_items.product_id`, `order_items.created`, etc.).
+
+**Templates**
+
+- Use Cake helpers (`$this->Html->link`, `$this->Form->postLink`, `$this->Url->build`) for any URL or form. **Never** hardcode `href="/something"` — it breaks the cPanel subpath deployment (`/team183-app_fit3047/...`).
+- Escape output with `h()` for plain text. Escape with `urlencode()` for URL fragments. Use `'escape' => false` on Cake helpers only when you're inserting already-escaped HTML.
+- Reusable UI lives in `templates/element/`. Pass data via the element's second argument; do not rely on global variables.
+
+**Routing**
+
+- All routes live in `config/routes.php`. The admin surface lives behind the `Admin` prefix and is guarded by `Admin/AppController::beforeFilter`.
+- ID-constrained routes use `setPatterns(['id' => '\d+'])` and `setPass(['id'])` so non-numeric IDs 404 cleanly and the controller receives the ID as a positional arg.
+
+**Security**
+
+- File uploads write to `webroot/img/{subdir}/` with a `uniqid()` prefix so two users uploading the same filename never collide. Sanitise the original basename with a `/[^A-Za-z0-9._-]/` allowlist.
+- Authorization checks happen in the controller (admin role + ownership), not the template. The template merely shows or hides the affordance.
+- Never trust the form's hidden `role` field to set the user's role — always assign roles in the controller from a server-side allowlist.
   index.php               # Front controller — Apache document root
 ```
 
@@ -241,9 +335,12 @@ By design — these roles require admin approval. As an admin, visit `/admin/use
 
 | Member | Focus area |
 |---|---|
-| Jason Kariuki | Admin management, Discover Innovators, schema design |
+| Undram Batdelger | User Dashboard, Contentblocks, content polish |
 | Naveen Sellathurai | User roles, register flow, content polish |
-| Other team members | Cart / payments / chat / docs |
+| Sanika Yelane | Web UI, Marketplace, content polish |
+| Jason Kariuki | Admin management, Discover Innovators, Accessibility |
+| Naman Jain | Security, Payments, Product Page |
+| Weihao Zhang | Business Analyst Insights |
 
 See the iteration reports under `docs/` for design rationale and acceptance criteria.
 
