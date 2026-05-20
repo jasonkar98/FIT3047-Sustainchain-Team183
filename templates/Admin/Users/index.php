@@ -239,9 +239,14 @@ $sortLink = function (string $key, string $label) use ($role, $keyword, $sort, $
         font-weight: 600;
         white-space: nowrap;
     }
-    .role-pill        { background: #e8f0ec; color: #2e7d52; }
-    .status-pill.ok   { background: #d4edda; color: #155724; }
-    .status-pill.warn { background: #f8d7da; color: #721c24; }
+    .role-pill                   { display: inline-block; padding: .2rem .6rem; border-radius: 20px; font-size: .72rem; font-weight: 600; white-space: nowrap; }
+    .role-pill.role-buyer        { background: #e6f1fb; color: #185fa5; }
+    .role-pill.role-seller       { background: #e8f0ec; color: #2e7d52; }
+    .role-pill.role-manufacturer { background: #faeeda; color: #854f0b; }
+    .role-pill.role-farmer       { background: #eaf3de; color: #3b6d11; }
+    .role-pill.role-admin        { background: #fbeaf0; color: #993556; }
+    .status-pill.ok              { background: #d4edda; color: #155724; }
+    .status-pill.warn            { background: #f8d7da; color: #721c24; }
 
     /* Empty state */
     .empty-state {
@@ -565,7 +570,7 @@ $sortLink = function (string $key, string $label) use ($role, $keyword, $sort, $
                         </td>
                         <td data-label="Email"><?= h($user->email) ?></td>
                         <td data-label="Role">
-                            <span class="role-pill"><?= h(ucfirst((string)$user->role)) ?></span>
+                            <span class="role-pill role-<?= h($user->role) ?>"><?= h(ucfirst((string)$user->role)) ?></span>
                         </td>
                         <td data-label="Status">
                             <span class="status-pill <?= $isActive ? 'ok' : 'warn' ?>">
