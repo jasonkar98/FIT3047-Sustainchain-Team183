@@ -531,22 +531,22 @@ $this->assign('title', 'About SustainChain');
             <h2 class="about-chatbot-title">Meet your <em>sustainability</em> guide</h2>
             <p class="about-chatbot-desc">
                 Not sure where to start? Our built-in AI assistant is trained on sustainable
-                commerce — ask it anything. Whether you're looking for the most eco-friendly
+                commerce, ask it anything. Whether you're looking for the most eco-friendly
                 option in a category, want to understand a seller's certifications, or need help
                 navigating your supply chain, it gives you clear, honest answers in seconds.
             </p>
             <ul class="chatbot-points">
                 <li>
-                    <span class="chatbot-point-icon">🔍</span>
-                    <span><strong>Product guidance</strong> — Compare eco-credentials across listings and find the right fit for your values.</span>
+                    <span class="chatbot-point-icon">🌿</span>
+                    <span><strong>Platform questions</strong> - Ask about SustainChain's mission, how the platform works, and what kinds of products and sellers we feature.</span>
                 </li>
                 <li>
-                    <span class="chatbot-point-icon">📦</span>
-                    <span><strong>Seller insights</strong> — Understand certifications, sourcing practices, and supply chain transparency at a glance.</span>
+                    <span class="chatbot-point-icon">🤝</span>
+                    <span><strong>Seller & manufacturer info</strong> - Learn about our verified sellers, innovators, and the eco-credentials we require to join the platform.</span>
                 </li>
                 <li>
                     <span class="chatbot-point-icon">💬</span>
-                    <span><strong>Always available</strong> — No wait times, no hold music. Get answers any time, on any device.</span>
+                    <span><strong>Quick answers</strong> - Get instant responses about orders, delivery, sustainability initiatives, and policies; any time, on any device.</span>
                 </li>
             </ul>
             <?= $this->Html->link('Try the assistant →', ['prefix' => false, 'controller' => 'Products', 'action' => 'index'], ['class' => 'feature-link']) ?>
