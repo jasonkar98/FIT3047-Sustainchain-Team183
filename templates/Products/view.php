@@ -414,6 +414,36 @@ $this->Html->css('marketplace', ['block' => true]);
         padding: 2rem 1.25rem 4rem;
     }
 }
+
+.product-view-price-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.product-view-discount-badge {
+    display: inline-flex;
+    align-items: center;
+    background: #e8f5e3;
+    border: 1px solid #a8d89a;
+    color: #2e7d32;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--r999);
+}
+
+.product-view-price-original {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    text-decoration: line-through;
+    opacity: 0.55;
+    margin-top: 0.1rem;
+}
 </style>
 
 <!-- Page header — dark green banner, same style as the landing page hero -->
@@ -505,8 +535,30 @@ $this->Html->css('marketplace', ['block' => true]);
                 </div>
                 <?php endif; ?>
 
-                <div class="product-view-price">
-                    $<?= $this->Number->format($product->price, ['places' => 2]) ?>
+                <?php
+                    $hasDiscount = !empty($product->discount) && (float)$product->discount > 0;
+                    $discountPct = $hasDiscount ? (float)$product->discount : 0;
+                    $originalPrice = (float)$product->price;
+                    $salePrice = $hasDiscount ? round($originalPrice * (1 - $discountPct / 100), 2) : $originalPrice;
+                ?>
+                <div class="product-view-price-wrap">
+                    <?php if ($hasDiscount): ?>
+                        <div class="product-view-price-row">
+                            <span class="product-view-price">
+                                $<?= $this->Number->format($salePrice, ['places' => 2]) ?>
+                            </span>
+                            <span class="product-view-discount-badge">
+                                <?= (int)$discountPct ?>% off
+                            </span>
+                        </div>
+                        <div class="product-view-price-original">
+                            Was $<?= $this->Number->format($originalPrice, ['places' => 2]) ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="product-view-price">
+                            $<?= $this->Number->format($product->price, ['places' => 2]) ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="product-view-divider"></div>
