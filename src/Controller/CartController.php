@@ -91,4 +91,14 @@ class CartController extends AppController
         $this->Flash->success(__('Product removed from your cart.'));
         return $this->redirect(['controller' => 'Cart', 'action' => 'index']);
     }
+
+    public function setQty($productId = null)
+    {
+        $this->request->allowMethod(['post']);
+        $qty = max(1, (int)$this->request->getData('qty'));
+        $cart = $this->request->getSession()->read('Cart') ?? [];
+        $cart[$productId] = $qty;
+        $this->request->getSession()->write('Cart', $cart);
+        return $this->response->withType('application/json')->withStringBody(json_encode(['ok' => true]));
+    }
 }

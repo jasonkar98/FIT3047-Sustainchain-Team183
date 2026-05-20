@@ -160,6 +160,64 @@ $avatar_initial = ($identity && $identity->first_name) ? strtoupper(substr(h($id
         color: #721c24;
     }
 
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e0e0e0;
+    }
+
+    .orders-table thead tr {
+        background: var(--g0);
+        color: var(--e0);
+        text-align: left;
+    }
+
+    .orders-table th {
+        padding: 0.85rem 1.25rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .orders-table tbody tr {
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .orders-table tbody tr:nth-child(even) {
+        background: #fafafa;
+    }
+
+    .orders-table td {
+        padding: 1rem 1.25rem;
+        font-size: 0.9rem;
+        color: #555;
+        vertical-align: top;
+    }
+
+    .order-item-row {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .order-item-name {
+        font-weight: 600;
+        color: var(--g0);
+    }
+
+    .order-item-qty {
+        color: #999;
+    }
+
+    .order-item-empty {
+        color: #bbb;
+    }
+
     /* Slider */
     .saved-listings-wrapper {
         position: relative;
@@ -269,35 +327,57 @@ $avatar_initial = ($identity && $identity->first_name) ? strtoupper(substr(h($id
         <?php endif; ?>
     </div>
 
-    <!--
+    
     <div>
         <div class="section-head">
             <h2>My Orders</h2>
         </div>
 
-        <?php if (empty($orders)): ?>
-        <div class="favourites-empty">
-            <p><?= __('You have not placed any orders.') ?></p>
-            <?= $this->Html->link('Browse Products', ['controller' => 'Products', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
-        </div>
-        <?php else: ?>
-        <div class="orders-list">
-            <?php foreach ($orders as $order): ?>
-            <div class="order-item">
-                <div class="order-header">
-                    <h3>Order #<?= h($order->order_number) ?></h3>
-                    <span class="order-date"><?= $order->created->i18nFormat('dd MMM YYYY') ?></span>
-                </div>
-                <div class="order-details">
-                    <span class="order-amount">$<?= h($order->total_amount) ?></span>
-                    <span class="order-status status-<?= h($order->status) ?>"><?= h(ucfirst($order->status)) ?></span>
-                </div>
+        <?php if ($orders->isEmpty()): ?>
+            <div class="favourites-empty">
+                <p><?= __('You have not placed any orders.') ?></p>
+                <?= $this->Html->link('Browse Products', ['controller' => 'Products', 'action' => 'index'], ['class' => 'btn btn-lime']) ?>
             </div>
-            <?php endforeach; ?>
-        </div>
+        <?php else: ?>
+            <div class="orders-list">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Date</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($orders as $order): ?>
+                        <tr>
+                            <td>#<?= h($order->id) ?></td>
+                            <td class="order-date"><?= $order->created->i18nFormat('dd MMM yyyy') ?></td>
+                            <td>
+                                <?php if (!empty($order->order_items)): ?>
+                                    <?php foreach ($order->order_items as $item): ?>
+                                        <div class="order-item-row">
+                                            <span class="order-item-name"><?= h($item->product->name ?? 'Product') ?></span>
+                                            <span class="order-item-qty">×<?= h($item->quantity) ?></span>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <span class="order-item-empty">—</span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="order-amount">$<?= number_format($order->total_amount, 2) ?></td>
+                            <td>
+                                <span class="order-status status-<?= h($order->status) ?>"><?= h(ucfirst($order->status)) ?></span>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php endif; ?>
     </div>
-    -->
 
     <?php if ($identity->get('role') !== 'buyer' && $identity->get('role') !== 'admin'): ?>
     <!-- My Listings -->

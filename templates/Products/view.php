@@ -331,7 +331,7 @@ $this->Html->css('marketplace', ['block' => true]);
     color: var(--white);
     transform: translateY(-1px);
 }
-.btn-edit-product.is-admin {
+/* .btn-edit-product.is-admin {
     background: #6a4f1c;
     color: #fff;
     border-color: #6a4f1c;
@@ -339,7 +339,7 @@ $this->Html->css('marketplace', ['block' => true]);
 .btn-edit-product.is-admin:hover {
     background: #523c14;
     border-color: #523c14;
-}
+} */
 
 /* Admin unlist / relist buttons */
 .btn-unlist-product, .btn-relist-product {
@@ -545,18 +545,15 @@ $this->Html->css('marketplace', ['block' => true]);
                 <?php endif; ?>
 
                 <?php
-                    $viewerIsAdmin = $identity && $identity->get('role') === 'admin';
-                    $canEdit = $viewerIsAdmin || $viewerOwnsProduct;
+                    $canEdit = $viewerOwnsProduct;
                 ?>
-                <?php if ($canEdit || $viewerIsAdmin): ?>
+                <?php if ($canEdit): ?>
                     <div class="product-view-mod-actions">
-                        <?php if ($canEdit): ?>
-                            <?= $this->Html->link(
-                                ($viewerIsAdmin && !$viewerOwnsProduct ? 'Edit' : 'Edit product'),
-                                ['controller' => 'Products', 'action' => 'edit', $product->id],
-                                ['class' => 'btn-edit-product' . ($viewerIsAdmin && !$viewerOwnsProduct ? ' is-admin' : '')]
-                            ) ?>
-                        <?php endif; ?>
+                       <?= $this->Html->link(
+                            'Edit product',
+                            ['controller' => 'Products', 'action' => 'edit', $product->id],
+                            ['class' => 'btn-edit-product']
+                        ) ?>
 
                         <?php if ($viewerIsAdmin): ?>
                             <?php if ($isUnlisted): ?>

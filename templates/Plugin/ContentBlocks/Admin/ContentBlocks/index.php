@@ -70,6 +70,7 @@ $sectionIcons = [
                                         'class'   => 'cb-btn cb-btn-restore',
                                         'escape'  => false,
                                         'confirm' => __("Restore previous version of \"{0}\"?\n{1}/{2}\n\nThis cannot be undone.", $contentBlock->label, $contentBlock->parent, $contentBlock->slug),
+                                        'block'   => true,
                                     ]
                                 ) ?>
                             <?php endif; ?>
@@ -91,5 +92,5 @@ $sectionIcons = [
         </div>
 
     <?php endforeach; ?>
-
+<?= $this->fetch('postLink') ?>
 </div>

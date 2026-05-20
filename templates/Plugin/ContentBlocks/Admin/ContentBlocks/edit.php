@@ -46,6 +46,7 @@ $this->Html->css('contentblocks', ['block' => true]);
                             'class'   => 'cb-prev-link',
                             'escape'  => false,
                             'confirm' => __("Restore previous version of \"{0}\"?\n{1}/{2}\n\nThis cannot be undone.", $contentBlock->label, $contentBlock->parent, $contentBlock->slug),
+                            'block'   => true,
                         ]
                     ) ?>
                     instead.

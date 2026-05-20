@@ -11,9 +11,10 @@ $this->assign('title', 'SustainChain');
 <section class="hero">
     <!-- slideshow backgrounds -->
     <div class="hero-slides">
-        <div class="hero-slide active" style="background-image:url('<?= $this->Url->image('HERO.png') ?>')"></div>
-        <div class="hero-slide" style="background-image:url('<?= $this->Url->image('cowsHomepage.png') ?>')"></div>
-        <div class="hero-slide" style="background-image:url('<?= $this->Url->image('cleanEnergy.png') ?>')"></div>
+        
+        <div class="hero-slide active"> <?= $this->ContentBlock->image('about-section-slide1') ?> </div>
+        <div class="hero-slide"> <?= $this->ContentBlock->image('about-section-slide2') ?> </div>
+        <div class="hero-slide"> <?= $this->ContentBlock->image('about-section-slide3') ?> </div>
     </div>
     <div class="hero-bg"></div>
     <div class="hero-inner">
@@ -21,7 +22,7 @@ $this->assign('title', 'SustainChain');
             <div class="hero-eyebrow t-label">
                 <span class="eyebrow-dot"></span>
                 Sustainable Commerce Platform
-            </div>
+            </div>1
 
              <h1 class="hero-title t-display">
                 Commerce that's<br>
@@ -101,9 +102,9 @@ $this->assign('title', 'SustainChain');
         </div>
 
         <div class="pillar pillar-light">
-            <p class="t-label pillar-tag">Trust & Verification</p>
-            <p class="pillar-title">Certified & verified</p>
-            <p class="pillar-desc">Every seller goes through our rigorous eco-certification process before joining the platform.</p>
+            <p class="t-label pillar-tag">AI Assistant</p>
+            <p class="pillar-title">Your sustainability guide</p>
+            <p class="pillar-desc">Ask our built-in AI anything - find the most eco-friendly option in a category, understand a seller's certifications, or get supply chain advice in seconds.</p>
         </div>
     </div>
 </section>
@@ -131,6 +132,10 @@ $this->assign('title', 'SustainChain');
             <div class="modes-feature">
                 <span class="modes-feature-icon">🌍</span>
                 <span>Better for<br>Our Planet</span>
+            </div>
+            <div class="modes-feature">
+                <span class="modes-feature-icon">🤖</span>
+                <span>AI Shopping<br>Assistant</span>
             </div>
         </div>
     </div>
@@ -224,12 +229,21 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- login/register -->
 <section class="final-cta">
     <div class="cta-blob">
-        <?= $this->ContentBlock->html('landing-page-register') ?>
+        <p class="t-label section-tag" style="margin-bottom:.75rem">Get started today</p>
+        <h2 class="section-title t-display">
+            Ready to join the<br><em>sustainable commerce</em> revolution?
+        </h2>
+        <p class="section-body">
+            Whether you're a buyer, seller, manufacturer, or farmer,
+            SustainChain has a place for you. Join a growing community
+            committed to a greener future.
+        </p>
         <div class="cta-actions">
             <?= $this->Html->link('Sign in', ['controller' => 'Auth', 'action' => 'login'], ['class' => 'btn btn-outline btn-lg btn-signin-cta']) ?>
             <?= $this->Html->link('Create an account', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'btn btn-lime btn-lg btn-create']) ?>
         </div>
     </div>
 </section>
+
 
 
