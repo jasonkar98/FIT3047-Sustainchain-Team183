@@ -768,7 +768,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             ['class' => ($currentController === 'Products' ? 'active' : '')] ) ?></li>
             <?php endif; ?>
 
-            <?php if (!$identity || $identity->get('role') !== 'admin'): ?>
+            <?php if (!$identity || $identity->get('role') !== 'admin') && ($identity->get('role') !== 'buyer'): ?>
             <li><?= $this->Html->link('Discover Innovators', ['plugin' => false, 'prefix' => false, 'controller' => 'Innovators', 'action' => 'index'],
             ['class' => ($currentController === 'Innovators' ? 'active' : '')]) ?></li>
             <?php endif; ?> 
@@ -779,11 +779,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <?php endif; ?>
 
             <!-- Admin-only links -->
-            <?php if ($identity && $identity->get('role') === 'admin'): ?>
-                <li><?= $this->Html->link('Product Management', ['plugin' => false, 'prefix' => false, 'controller' => 'Products', 'action' => 'index'],
-                ['class' => ($currentController === 'Products' ? 'active' : '')]) ?></li>
-            <?php endif; ?>
-            
             <?php if ($identity && $identity->get('role') === 'admin'): ?>
                 <li><?= $this->Html->link('User Management', ['plugin' => false, 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'index'],
                 ['class' => ($currentController === 'Users' ? 'active' : '')]) ?></li>
@@ -877,7 +872,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     ) ?>
                     <?php endif; ?>
                     
-                    <?php if ($identity->get('role') !== 'admin'): ?>
+                    <?php if ($identity->get('role') !== 'admin' && $identity->get('role') !== 'buyer'): ?>
                     <?= $this->Html->link(
                         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1L2 6.3l4.2-.7z"/></svg> My Listings',
                         ['plugin' => false,'prefix' => false, 'controller' => 'Products', 'action' => 'myListings'],

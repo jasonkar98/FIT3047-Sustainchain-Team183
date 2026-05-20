@@ -28,6 +28,11 @@ class EnquiriesController extends AppController
     {
         $enquiry = $this->Enquiries->get($id, contain: ['Users']);
 
+        if (!$enquiry->is_read) {
+            $enquiry->is_read = true;
+            $this->Enquiries->save($enquiry);
+        }
+
         $prev = $this->Enquiries->find()
             ->where(['id <' => $id])
             ->orderBy(['id' => 'DESC'])
