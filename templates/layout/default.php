@@ -327,7 +327,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         /* Foundation: no horizontal scroll anywhere */
         html, body {
             max-width: 100vw;
-            overflow-x: hidden;
+            overflow-x: clip;
         }
         *, *::before, *::after { box-sizing: border-box; }
         img, svg, video { max-width: 100%; height: auto; }
@@ -749,7 +749,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <nav class="nav">
     <a href="<?= $this->Url->build(['prefix' => false, 'plugin' => false, 'controller' => 'Pages', 'action' => 'landingPage']) ?>" class="nav-logo">
         <img src="<?= $this->Url->image('logo.png') ?>" class="nav-logo-img" alt="Logo">
-        <span class="nav-logo-name">Sustain<span>Chain</span></span>
+
+        <!-- <span class="nav-logo-name">Sustain<span>Chain</span></span> -->
+        <span class="nav-logo-name"><?= $this->ContentBlock->text('website-title') ?></span>
     </a>
 
         <?php

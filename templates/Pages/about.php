@@ -424,11 +424,12 @@ $this->assign('title', 'About SustainChain');
 <section class="about-hero" style="background-image: url('<?= $this->Url->image('AboutUs.png') ?>')">
     <p class="about-hero-tag">Who we are</p>
     <h1 class="about-hero-title">Commerce that's good<br>for the <em>planet</em></h1>
-    <p class="about-hero-sub">
+    <!-- <p class="about-hero-sub">
         SustainChain is a sustainable marketplace that connects buyers, sellers,
         manufacturers, and farmers in a single transparent ecosystem. Every transaction
         on SustainChain is designed to make a measurable difference.
-    </p>
+    </p> -->
+    <p class="about-hero-sub"><?= $this->ContentBlock->text('about-us-content') ?></p>
 </section>
 
 <!-- Mission -->

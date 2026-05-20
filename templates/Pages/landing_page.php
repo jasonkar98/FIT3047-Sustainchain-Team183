@@ -11,9 +11,10 @@ $this->assign('title', 'SustainChain');
 <section class="hero">
     <!-- slideshow backgrounds -->
     <div class="hero-slides">
-        <div class="hero-slide active" style="background-image:url('<?= $this->Url->image('HERO.png') ?>')"></div>
-        <div class="hero-slide" style="background-image:url('<?= $this->Url->image('cowsHomepage.png') ?>')"></div>
-        <div class="hero-slide" style="background-image:url('<?= $this->Url->image('cleanEnergy.png') ?>')"></div>
+        
+        <div class="hero-slide active"> <?= $this->ContentBlock->image('about-section-slide1') ?> </div>
+        <div class="hero-slide"> <?= $this->ContentBlock->image('about-section-slide2') ?> </div>
+        <div class="hero-slide"> <?= $this->ContentBlock->image('about-section-slide3') ?> </div>
     </div>
     <div class="hero-bg"></div>
     <div class="hero-inner">
@@ -21,7 +22,7 @@ $this->assign('title', 'SustainChain');
             <div class="hero-eyebrow t-label">
                 <span class="eyebrow-dot"></span>
                 Sustainable Commerce Platform
-            </div>
+            </div>1
 
              <h1 class="hero-title t-display">
                 Commerce that's<br>
