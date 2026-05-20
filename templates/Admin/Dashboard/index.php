@@ -167,13 +167,23 @@ $pendingApprovalCount = $pendingApprovalCount ?? 0;
         flex-wrap: wrap;
     }
     .user-mini .role-pill {
-        background: #e8f0ec;
-        color: #2e7d52;
-        padding: .1rem .5rem;
-        border-radius: 999px;
-        font-size: .68rem;
+        display: inline-block;
+        padding: .2rem .6rem;
+        border-radius: 20px;
+        font-size: .72rem;
         font-weight: 600;
+        white-space: nowrap;
     }
+
+    .user-mini .role-pill                   { display: inline-block; padding: .2rem .6rem; border-radius: 20px; font-size: .72rem; font-weight: 600; white-space: nowrap; }
+    .user-mini .role-pill.role-buyer        { background: #e6f1fb; color: #185fa5; }
+    .user-mini .role-pill.role-seller       { background: #e8f0ec; color: #2e7d52; }
+    .user-mini .role-pill.role-manufacturer { background: #faeeda; color: #854f0b; }
+    .user-mini .role-pill.role-farmer       { background: #eaf3de; color: #3b6d11; }
+    .user-mini .role-pill.role-admin        { background: #fbeaf0; color: #993556; }
+    .user-mini .status-pill.ok              { background: #d4edda; color: #155724; }
+    .user-mini .status-pill.warn            { background: #f8d7da; color: #721c24; }
+
     .users-empty {
         font-size: .85rem;
         color: #888;
@@ -391,7 +401,7 @@ $pendingApprovalCount = $pendingApprovalCount ?? 0;
                                 '<div class="user-mini">'
                                     . '<span class="name">' . h($u->full_name) . '</span>'
                                     . '<span class="meta">'
-                                        . '<span class="role-pill">' . h(ucfirst((string)$u->role)) . '</span>'
+                                        . '<span class="role-pill role-' . h($u->role) . '">' . h(ucfirst((string)$u->role)) . '</span>'
                                         . '<span>' . ($u->created ? $u->created->i18nFormat('dd MMM YYYY') : '') . '</span>'
                                     . '</span>'
                                 . '</div>',
