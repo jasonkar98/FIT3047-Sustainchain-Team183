@@ -101,12 +101,6 @@ $this->assign('title', 'SustainChain');
         </div>
 
         <div class="pillar pillar-light">
-            <p class="t-label pillar-tag">Trust & Verification</p>
-            <p class="pillar-title">Certified & verified</p>
-            <p class="pillar-desc">Every seller goes through our rigorous eco-certification process before joining the platform.</p>
-        </div>
-
-        <div class="pillar pillar-forest">
             <p class="t-label pillar-tag">AI Assistant</p>
             <p class="pillar-title">Your sustainability guide</p>
             <p class="pillar-desc">Ask our built-in AI anything - find the most eco-friendly option in a category, understand a seller's certifications, or get supply chain advice in seconds.</p>
@@ -234,12 +228,21 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- login/register -->
 <section class="final-cta">
     <div class="cta-blob">
-        <?= $this->ContentBlock->html('landing-page-register') ?>
+        <p class="t-label section-tag" style="margin-bottom:.75rem">Get started today</p>
+        <h2 class="section-title t-display">
+            Ready to join the<br><em>sustainable commerce</em> revolution?
+        </h2>
+        <p class="section-body">
+            Whether you're a buyer, seller, manufacturer, or farmer,
+            SustainChain has a place for you. Join a growing community
+            committed to a greener future.
+        </p>
         <div class="cta-actions">
             <?= $this->Html->link('Sign in', ['controller' => 'Auth', 'action' => 'login'], ['class' => 'btn btn-outline btn-lg btn-signin-cta']) ?>
             <?= $this->Html->link('Create an account', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'btn btn-lime btn-lg btn-create']) ?>
         </div>
     </div>
 </section>
+
 
 

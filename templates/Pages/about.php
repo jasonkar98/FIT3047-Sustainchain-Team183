@@ -549,7 +549,6 @@ $this->assign('title', 'About SustainChain');
                     <span><strong>Quick answers</strong> - Get instant responses about orders, delivery, sustainability initiatives, and policies; any time, on any device.</span>
                 </li>
             </ul>
-            <?= $this->Html->link('Try the assistant →', ['prefix' => false, 'controller' => 'Products', 'action' => 'index'], ['class' => 'feature-link']) ?>
         </div>
         <div class="about-chatbot-visual" aria-hidden="true">
             <div class="chatbot-bubble chatbot-bubble--user">What's the most sustainable protein source on the platform?</div>

@@ -768,7 +768,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             ['class' => ($currentController === 'Products' ? 'active' : '')] ) ?></li>
             <?php endif; ?>
 
-            <?php if (!$identity || $identity->get('role') !== 'admin') && ($identity->get('role') !== 'buyer'): ?>
+            <?php if ($identity && ($identity->get('role') === 'seller' || $identity->get('role') === 'farmers')): ?>
             <li><?= $this->Html->link('Discover Innovators', ['plugin' => false, 'prefix' => false, 'controller' => 'Innovators', 'action' => 'index'],
             ['class' => ($currentController === 'Innovators' ? 'active' : '')]) ?></li>
             <?php endif; ?> 
