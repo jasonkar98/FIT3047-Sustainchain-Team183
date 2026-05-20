@@ -105,6 +105,12 @@ $this->assign('title', 'SustainChain');
             <p class="pillar-title">Certified & verified</p>
             <p class="pillar-desc">Every seller goes through our rigorous eco-certification process before joining the platform.</p>
         </div>
+
+        <div class="pillar pillar-forest">
+            <p class="t-label pillar-tag">AI Assistant</p>
+            <p class="pillar-title">Your sustainability guide</p>
+            <p class="pillar-desc">Ask our built-in AI anything - find the most eco-friendly option in a category, understand a seller's certifications, or get supply chain advice in seconds.</p>
+        </div>
     </div>
 </section>
 
@@ -131,6 +137,10 @@ $this->assign('title', 'SustainChain');
             <div class="modes-feature">
                 <span class="modes-feature-icon">🌍</span>
                 <span>Better for<br>Our Planet</span>
+            </div>
+            <div class="modes-feature">
+                <span class="modes-feature-icon">🤖</span>
+                <span>AI Shopping<br>Assistant</span>
             </div>
         </div>
     </div>

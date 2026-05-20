@@ -309,6 +309,115 @@ $this->assign('title', 'About SustainChain');
     justify-content: center;
     flex-wrap: wrap;
 }
+
+/* ── AI Chatbot section ── */
+.about-chatbot {
+    background: var(--g0);
+    padding: 5rem 1.5rem;
+}
+.about-chatbot-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+@media (max-width: 820px) {
+    .about-chatbot-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+.about-chatbot-text .about-section-tag { color: var(--e1); }
+.about-chatbot-title {
+    font-family: "Fraunces", serif;
+    font-size: clamp(1.7rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--e0);
+    margin-bottom: 1rem;
+}
+.about-chatbot-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--e1);
+}
+.about-chatbot-desc {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: rgba(254,250,224,.7);
+    margin-bottom: 1.75rem;
+}
+.chatbot-points {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.chatbot-points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: rgba(254,250,224,.75);
+}
+.chatbot-points li strong { color: var(--e0); font-weight: 700; }
+.chatbot-point-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+.about-chatbot-text .feature-link { color: var(--e1); font-size: 0.92rem; }
+
+/* Chat UI mockup */
+.about-chatbot-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--r24);
+    padding: 1.75rem;
+}
+.chatbot-bubble {
+    padding: 0.85rem 1.1rem;
+    border-radius: 18px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    max-width: 85%;
+}
+.chatbot-bubble--user {
+    background: var(--e1);
+    color: var(--g0);
+    font-weight: 600;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+.chatbot-bubble--ai {
+    background: rgba(255,255,255,0.1);
+    color: rgba(254,250,224,.9);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+.chatbot-bubble--typing {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.9rem 1.1rem;
+}
+.chatbot-bubble--typing span {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(254,250,224,.5);
+    animation: chatbot-bounce 1.2s infinite ease-in-out;
+}
+.chatbot-bubble--typing span:nth-child(2) { animation-delay: 0.2s; }
+.chatbot-bubble--typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes chatbot-bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+    40%           { transform: translateY(-6px); opacity: 1; }
+}
+
 </style>
 
 <!-- Hero -->
@@ -411,6 +520,46 @@ $this->assign('title', 'About SustainChain');
                 </p>
             </div>
 
+        </div>
+    </div>
+</section>
+
+<section class="about-chatbot">
+    <div class="about-chatbot-inner">
+        <div class="about-chatbot-text">
+            <p class="about-section-tag">AI Assistant</p>
+            <h2 class="about-chatbot-title">Meet your <em>sustainability</em> guide</h2>
+            <p class="about-chatbot-desc">
+                Not sure where to start? Our built-in AI assistant is trained on sustainable
+                commerce — ask it anything. Whether you're looking for the most eco-friendly
+                option in a category, want to understand a seller's certifications, or need help
+                navigating your supply chain, it gives you clear, honest answers in seconds.
+            </p>
+            <ul class="chatbot-points">
+                <li>
+                    <span class="chatbot-point-icon">🔍</span>
+                    <span><strong>Product guidance</strong> — Compare eco-credentials across listings and find the right fit for your values.</span>
+                </li>
+                <li>
+                    <span class="chatbot-point-icon">📦</span>
+                    <span><strong>Seller insights</strong> — Understand certifications, sourcing practices, and supply chain transparency at a glance.</span>
+                </li>
+                <li>
+                    <span class="chatbot-point-icon">💬</span>
+                    <span><strong>Always available</strong> — No wait times, no hold music. Get answers any time, on any device.</span>
+                </li>
+            </ul>
+            <?= $this->Html->link('Try the assistant →', ['prefix' => false, 'controller' => 'Products', 'action' => 'index'], ['class' => 'feature-link']) ?>
+        </div>
+        <div class="about-chatbot-visual" aria-hidden="true">
+            <div class="chatbot-bubble chatbot-bubble--user">What's the most sustainable protein source on the platform?</div>
+            <div class="chatbot-bubble chatbot-bubble--ai">
+                Based on current listings, certified organic legumes from our verified farmers have the lowest carbon footprint — around 0.9 kg CO₂ per kg. Want me to filter by your region?
+            </div>
+            <div class="chatbot-bubble chatbot-bubble--user">Yes, show me options near Melbourne.</div>
+            <div class="chatbot-bubble chatbot-bubble--ai chatbot-bubble--typing">
+                <span></span><span></span><span></span>
+            </div>
         </div>
     </div>
 </section>
