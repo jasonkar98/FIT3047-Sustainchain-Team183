@@ -91,7 +91,7 @@ a {
 
 /* hero */
 .hero {
-    min-height: 70vh;
+    min-height: 600px;
     background: var(--g0);
     display: grid;
     grid-template-rows: auto 1fr;
