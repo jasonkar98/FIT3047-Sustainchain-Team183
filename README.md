@@ -1,93 +1,254 @@
-# team183-app_fit3047
+# SustainChain
 
+A sustainable-commerce marketplace connecting buyers, sellers, manufacturers, and farmers. Built by Team 183 for FIT3047 on CakePHP 5.
 
+SustainChain pairs a public-facing eco-marketplace with role-aware dashboards for sellers and manufacturers, a Discover Innovators leaderboard that surfaces top manufacturers by recent sales, and an admin console for user moderation and listing management.
 
-## Getting started
+---
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Tech stack
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+| Layer | Choice |
+|---|---|
+| Framework | CakePHP 5.3 |
+| PHP | 8.2+ |
+| Database | MariaDB / MySQL (developed against MariaDB 11.8) |
+| Auth | `cakephp/authentication` 4.x |
+| Payments | Stripe (`stripe/stripe-php` 20.x) |
+| AI chat | Google Gemini API (used by the support chatbot) |
+| Sanitisation | `ezyang/htmlpurifier` |
+| Migrations | `cakephp/migrations` |
+| Local dev | XAMPP (Apache + MariaDB) |
+| Production | cPanel-hosted shared environment |
 
-## Add your files
+---
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+## Features
+
+### Marketplace
+- Public product browse with keyword search, category and price-range filters, multi-key sorting (newest, name, price, discount).
+- Product detail pages with sustainability filter tags, save-to-favourites, discount display.
+- Cart and checkout via Stripe (card payments, test-mode by default).
+- Per-product sales tracking through `order_items`.
+
+### Roles
+The platform supports five non-admin roles plus admins:
+
+| Role | What they do |
+|---|---|
+| Buyer | Browse, save, purchase products. |
+| Seller | List products, manage their own catalogue, fulfil orders. |
+| Manufacturer | Same as seller, plus a public innovator profile (goals, values, profile image) and eligibility for the Discover Innovators page. |
+| Farmer | Supply-side counterpart. Has a public detail page like a manufacturer. |
+| Admin | Platform-wide moderation tools. |
+
+Manufacturer and farmer signups require admin approval before they can log in.
+
+### Discover Innovators
+- `/innovators` — top 10 manufacturers ranked by units sold in the last 30 days. Vertical-rectangle cards in a 5×2 grid fitting the viewport.
+- `/innovators/{id}` — public detail page showing the manufacturer's goals, values, profile image, and top 3 most-sold products.
+- Homepage "Explore category" links route here.
+
+### Admin
+Admin dashboard at `/admin` exposes:
+
+- Stats row (enquiry counts).
+- Incoming enquiries list with read/resolved toggles.
+- Sidebar **Users** widget (newest 5 non-admin signups, clickable).
+- Sidebar **Approval Requests** panel (pending farmers + manufacturers).
+
+The full management surfaces:
+
+- **All users** (`/admin/users`) — paginated table with an "All" tab plus per-role filters (Buyers / Sellers / Manufacturers / Farmers), keyword search across name+email, sortable columns (signup date, listings count, name). Sidebar listing all admin accounts. Mobile-responsive (rows collapse to cards).
+- **Edit user** (`/admin/users/edit/{id}`) — change name + role, send password reset link, deactivate / reactivate (cascades to product listings), or permanently delete (full data cascade with enquiry detachment for audit retention).
+- **Approval queue** (`/admin/users/approvals`) — approve or reject pending manufacturer / farmer signups.
+- **Product moderation** — Edit, Unlist / Relist (`unlist_reason = 'admin'`), and Delete buttons appear on every product view page when the viewer is an admin.
+
+### Communication
+- Public enquiry form with admin response.
+- Site-wide AI chatbot powered by Gemini, accessible via the chat icon (bottom-right of every page).
+- Transactional emails for password reset and signup confirmation (SMTP, see `.env`).
+
+---
+
+## Local setup
+
+Prerequisites: PHP 8.2+, Composer, XAMPP (or equivalent Apache + MariaDB/MySQL).
+
+```bash
+# 1. Clone and install dependencies
+git clone <repo-url> team183-app_fit3047
+cd team183-app_fit3047
+composer install
+
+# 2. Environment
+cp config/.env.example config/.env
+# Then edit config/.env and fill in:
+#   - APP_NAME, SECURITY_SALT
+#   - DATABASE_URL (mysql://user:pass@localhost/sustainchain)
+#   - STRIPE_PUBLISHABLE_KEY + STRIPE_SECRET_KEY (test keys are fine)
+#   - GEMINI_API_KEY (optional, only needed for the chatbot)
+#   - SMTP_PASSWORD (optional, only needed to send real email)
+
+# 3. Database
+# Create an empty schema in phpMyAdmin (default name: sustainchain)
+# Then import every file in config/schema/ in this order:
+#   authentication.sql
+#   products.sql
+#   favourites.sql
+#   enquiries.sql
+#   orders.sql
+#   order_items.sql
+#   sessions.sql
+#   i18n.sql
+```
+
+If you start from an older database that's missing recent columns, see [`docs/deployment-schema.md`](#schema-deployment) or the consolidated deployment script your team lead maintains.
+
+Once everything is in place, point Apache at `webroot/` (or use XAMPP's default htdocs) and visit:
 
 ```
-cd existing_repo
-git remote add origin https://git.infotech.monash.edu/UGIE/ugie-2026/team183/team183-app_fit3047.git
-git branch -M main
-git push -uf origin main
+http://localhost/team183-app_fit3047/
 ```
 
-## Integrate with your tools
+### Default Apache base path
 
-* [Set up project integrations](https://git.infotech.monash.edu/UGIE/ugie-2026/team183/team183-app_fit3047/-/settings/integrations)
+The app is developed assuming it lives in a subdirectory (`/team183-app_fit3047/`). All internal links go through Cake's `$this->Url->build()` helper, so the base path is transparent — but if you mount it differently, you don't need to touch any templates.
 
-## Collaborate with your team
+---
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+## Schema deployment
 
-## Test and Deploy
+DB schema isn't tracked in git, only in the `config/schema/*.sql` dumps. When deploying to a server or pulling onto another machine, the columns and tables added since the original dump need to be applied manually.
 
-Use the built-in continuous integration in GitLab.
+See [`docs/schema-deployment.sql`](docs/schema-deployment.sql) for the consolidated migration that adds all schema changes made on this branch. Highlights:
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+- `users.role` ENUM expanded to include buyer / seller / manufacturer / farmer
+- `users.goals`, `users.business_values`, `users.profile` — manufacturer profile fields
+- `users.is_active` — account activation flag (admin moderation + pending-approval state)
+- `products.is_listed`, `products.unlist_reason` — listing-state flags for admin moderation
+- `order_items` table — per-product sales tracking for the Discover Innovators ranking
 
-***
+If that doc doesn't exist yet, regenerate it from your latest schema-changes notes before each production push.
 
-# Editing this README
+---
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## Branch strategy
 
-## Suggestions for a good README
+The team uses a four-tier flow:
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+```
+feat/{name}  →  rev  →  dev  →  prod  ↑ main (do not touch)
+```
 
-## Name
-Choose a self-explaining name for your project.
+| Branch | Purpose |
+|---|---|
+| `feat/*` | Active development on a single feature. Branched off `dev`. |
+| `rev` | Code under review. Merge `feat/*` here for inspection. |
+| `dev` | Stable integration. All passing reviewed code merges here. |
+| `prod` | What's running on the live cPanel server. Promoted from `dev`. |
+| `main` | Project root. Not modified during the iteration. |
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+When opening a PR, target `rev`. After review and approval, the reviewer merges to `dev`. `prod` is promoted by the team lead at release time.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+---
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Project layout (key folders)
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```
+config/
+  routes.php              # All URL routing
+  schema/                 # SQL dumps for fresh installs
+  .env.example            # Template — copy to .env and fill in keys
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+src/Controller/
+  Admin/                  # Admin-prefixed controllers (Users, Enquiries, Dashboard)
+  AuthController.php      # Register, login, edit profile, password reset
+  CartController.php      # Session-backed cart
+  ChatController.php      # Gemini chatbot proxy
+  InnovatorsController.php  # Discover Innovators landing + detail
+  PaymentsController.php  # Stripe checkout + order persistence
+  ProductsController.php  # Marketplace browse, add/edit/delete, save toggle
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+src/Model/
+  Entity/                 # User, Product, Order, OrderItem, Favourite, Enquiry, ...
+  Table/                  # Corresponding *Table.php with associations + validators
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+templates/
+  Admin/                  # Admin dashboard + user management pages
+  Auth/                   # Register / login / my-account / edit / password reset
+  Innovators/             # Discover Innovators landing + detail
+  Products/               # Marketplace, product detail, my-listings, add/edit
+  Cart/, Payments/        # Cart, checkout, success
+  element/                # Reusable partials (product_card, top_products, flash)
+  layout/                 # default.php (main layout w/ nav and footer)
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+webroot/
+  img/products/           # Product images (uploaded)
+  img/profiles/           # Manufacturer profile images (uploaded)
+  css/, js/, font/        # Static assets
+  index.php               # Front controller — Apache document root
+```
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+---
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+## Notable third-party integrations
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+### Stripe (test mode)
+Keys in `config/.env` as `STRIPE_PUBLISHABLE_KEY` and `STRIPE_SECRET_KEY`. The checkout uses Stripe Payment Intents with automatic payment methods. Production needs live keys.
+
+Test card numbers: `4242 4242 4242 4242` (success), any future expiry, any 3-digit CVC.
+
+### Google Gemini (chatbot)
+Key in `config/.env` as `GEMINI_API_KEY`. If unset, the chatbot icon still renders but conversations error gracefully.
+
+### SMTP (transactional email)
+Configured via Cake's standard mailer transport (see `config/app.php`). Local dev usually leaves SMTP unconfigured; the controllers will catch the delivery error and continue rather than crashing.
+
+---
+
+## Common deployment gotchas
+
+### "Missing Controller" after pulling new code on cPanel
+
+Symptom: visiting a route Cake says doesn't exist a controller that's clearly in `src/Controller/`. Cause: production composer install was run with `--optimize-autoloader`, freezing the classmap to what existed at install time.
+
+Fix:
+```bash
+composer dump-autoload
+rm -rf tmp/cache/models/* tmp/cache/persistent/*
+```
+
+Or, in cPanel File Manager, edit `vendor/composer/autoload_classmap.php` and add the missing `App\Controller\XController` entry pointing at the file.
+
+### "Unknown column" SQL errors
+
+Database is missing columns that newer code expects. Run the consolidated schema deployment SQL on the live database (see "Schema deployment" above).
+
+### Pending farmer / manufacturer can't log in
+
+By design — these roles require admin approval. As an admin, visit `/admin/users/approvals` and click Approve. Until then the user sees "Your account is awaiting admin approval."
+
+### Discover Innovators page shows the empty state
+
+`order_items` is empty or has no rows in the last 30 days. Either:
+- Run through Stripe checkout with a manufacturer-owned product in cart, or
+- Insert seed `order_items` rows directly in phpMyAdmin (see team docs).
+
+---
+
+## Team 183
+
+| Member | Focus area |
+|---|---|
+| Jason Kariuki | Admin management, Discover Innovators, schema design |
+| Naveen Sellathurai | User roles, register flow, content polish |
+| Other team members | Cart / payments / chat / docs |
+
+See the iteration reports under `docs/` for design rationale and acceptance criteria.
+
+---
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+This is a coursework project for FIT3047 at Monash University. Not licensed for redistribution.
